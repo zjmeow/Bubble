@@ -28,7 +28,7 @@ dependencies {
     compile 'com.amap.api:location:latest.integration'
 
     compile 'com.github.vondear:RxTools:v1.7.6'
-
+    compile 'com.amap.api:3dmap:latest.integration'
     compile 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile 'com.qmuiteam:qmui:1.0.4'

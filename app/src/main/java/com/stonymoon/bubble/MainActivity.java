@@ -2,6 +2,7 @@ package com.stonymoon.bubble;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -45,8 +46,8 @@ public class MainActivity extends AppCompatActivity
 
     @OnClick(R.id.fab)
     void submit() {
-        Snackbar.make(fab, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show();
+        Intent intent = new Intent(MainActivity.this, MapActivity.class);
+        startActivity(intent);
     }
 
 
