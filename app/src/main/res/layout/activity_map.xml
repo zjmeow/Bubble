@@ -4,7 +4,7 @@
     android:id="@+id/activity_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stonymoon.bubble.MapActivity">
+    tools:context="com.stonymoon.bubble.ui.MapActivity">
 
     <com.amap.api.maps.MapView
         android:id="@+id/map"

@@ -1,8 +1,9 @@
-package com.stonymoon.bubble;
+package com.stonymoon.bubble.ui;
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.Toast;
 
@@ -14,45 +15,29 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import com.stonymoon.bubble.R;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MapActivity extends AppCompatActivity {
 
+public class MapActivity extends AppCompatActivity {
     @BindView(R.id.map)
     MapView mapView;
+    //用marker的id绑定信息，为点击回调提供信息
+    private Map<String, MyMarker> markerMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //设置沉浸式状态栏
         QMUIStatusBarHelper.translucent(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
-        mapView.onCreate(savedInstanceState);
-        AMap aMap = mapView.getMap();
-
-        MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        //aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-
-        LatLng latLng = new LatLng(39.906901, 116.397972);
-        final Marker marker = aMap.addMarker(new MarkerOptions().position(latLng).title("北京").snippet("Infowindow"));
-        // 定义 Marker 点击事件监听
-        AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
-            // marker 对象被点击时回调的接口
-            // 返回 true 则表示接口已响应事件，否则返回false
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                showSimpleBottomSheetGrid();
-                return true;
-            }
-        };
-        // 绑定 Marker 被点击事件
-        aMap.setOnMarkerClickListener(markerClickListener);
 
     }
 
@@ -125,6 +110,80 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
+
+
+    private void setMap(Bundle savedInstanceState) {
+        mapView.onCreate(savedInstanceState);
+        final AMap aMap = mapView.getMap();
+        MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化
+        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
+        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
+        //aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
+        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
+        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
+        // 定义 Marker 点击事件监听
+        AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
+            MyMarker myMarker = new MyMarker(aMap, 1, 1, 0);
+
+            // marker 对象被点击时回调的接口
+            // 返回 true 则表示接口已响应事件，否则返回false
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                MyMarker myMarker = markerMap.get(marker.getId());
+                switch (myMarker.getType()) {
+                    case MyMarker.USER_MARKER:
+                        Toast.makeText(MapActivity.this, "user", Toast.LENGTH_SHORT).show();
+                        break;
+                    case MyMarker.TEXT_MARKER:
+                        Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
+                        break;
+                    default:
+                        break;
+                }
+
+                return true;
+            }
+
+
+        };
+        // 绑定 Marker 被点击事件
+
+        aMap.setOnMarkerClickListener(markerClickListener);
+
+
+    }
+
+
+    class MyMarker {
+        public static final int USER_MARKER = 0;
+        public static final int TEXT_MARKER = 1;
+        private int type;
+
+        public MyMarker(AMap aMap, double latitude, double longitude, int type) {
+            LatLng latLng = new LatLng(latitude, longitude);
+            Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+            this.type = type;
+            markerMap.put(marker.getId(), this);
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void addUserMarker(AMap aMap, double latitude, double longitude) {
+            LatLng latLng = new LatLng(latitude, longitude);
+            Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+            new MyMarker(aMap, latitude, longitude, USER_MARKER);
+        }
+
+
+    }
+
+
+
+
+
+
 
 }
 
