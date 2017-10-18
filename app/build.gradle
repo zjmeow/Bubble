@@ -26,7 +26,7 @@ dependencies {
     })
     //高德定位api
     compile 'com.amap.api:location:latest.integration'
-
+    compile 'com.tamic.novate:novate:1.5.2.3'
     compile 'com.github.vondear:RxTools:v1.7.6'
     compile 'com.amap.api:3dmap:latest.integration'
     compile 'com.jakewharton:butterknife:8.8.1'

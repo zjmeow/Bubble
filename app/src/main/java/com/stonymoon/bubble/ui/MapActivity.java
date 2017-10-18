@@ -24,6 +24,9 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.stonymoon.bubble.ui.MapActivity.MyMarker.TEXT_MARKER;
+import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
+
 
 public class MapActivity extends AppCompatActivity {
     @BindView(R.id.map)
@@ -38,6 +41,7 @@ public class MapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
+        setMap(savedInstanceState);
 
     }
 
@@ -123,7 +127,6 @@ public class MapActivity extends AppCompatActivity {
         aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
         // 定义 Marker 点击事件监听
         AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
-            MyMarker myMarker = new MyMarker(aMap, 1, 1, 0);
 
             // marker 对象被点击时回调的接口
             // 返回 true 则表示接口已响应事件，否则返回false
@@ -131,10 +134,10 @@ public class MapActivity extends AppCompatActivity {
             public boolean onMarkerClick(Marker marker) {
                 MyMarker myMarker = markerMap.get(marker.getId());
                 switch (myMarker.getType()) {
-                    case MyMarker.USER_MARKER:
+                    case USER_MARKER:
                         Toast.makeText(MapActivity.this, "user", Toast.LENGTH_SHORT).show();
                         break;
-                    case MyMarker.TEXT_MARKER:
+                    case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
                         break;
                     default:
@@ -149,7 +152,8 @@ public class MapActivity extends AppCompatActivity {
         // 绑定 Marker 被点击事件
 
         aMap.setOnMarkerClickListener(markerClickListener);
-
+        new MyMarker(aMap, 28, 28, USER_MARKER);
+        new MyMarker(aMap, 30, 30, TEXT_MARKER);
 
     }
 
@@ -175,8 +179,6 @@ public class MapActivity extends AppCompatActivity {
             Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
             new MyMarker(aMap, latitude, longitude, USER_MARKER);
         }
-
-
     }
 
 

@@ -28,13 +28,18 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.util.HttpUtil;
+import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxStringCallback;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -56,20 +61,21 @@ public class LoginActivity extends Activity {
     @BindView(R.id.login_password)
     EditText passwordView;
     @BindView(R.id.login_progress)
-    private View progressView;
-    private View loginFormView;
+    View progressView;
+    View loginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Set up the login form.
+        ButterKnife.bind(this);
+
 
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    attemptLogin("1310", "zjm");
                     return true;
                 }
                 return false;
@@ -80,7 +86,7 @@ public class LoginActivity extends Activity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin();
+                attemptLogin("1310", "zjm");
             }
         });
 
@@ -122,7 +128,27 @@ public class LoginActivity extends Activity {
     }
 
 
-    private void attemptLogin() {
+    private void attemptLogin(String phoneNum, String password) {
+        String url = phoneNum + "/" + password;
+        HttpUtil.sendHttpRequest(this)
+                .rxGet(url, null, new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Object tag, Throwable e) {
+                        Toast.makeText(LoginActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, Throwable e) {
+
+                    }
+                });
+
+
 
     }
 
