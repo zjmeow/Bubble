@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -40,7 +41,6 @@ public class MapActivity extends AppCompatActivity {
     MapView mapView;
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //设置沉浸式状态栏
@@ -143,12 +143,13 @@ public class MapActivity extends AppCompatActivity {
                 switch (myMarker.getType()) {
                     case USER_MARKER:
                         Toast.makeText(MapActivity.this, "user", Toast.LENGTH_SHORT).show();
+                        //点击后把镜头移动到气泡上
+                        zoomIn(aMap, marker, 30f);
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
-
+                        zoomIn(aMap, marker, 30f);
                         marker.startAnimation();
-
                         break;
                     default:
                         break;
@@ -167,6 +168,11 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    private void zoomIn(AMap aMap, Marker marker, float v) {
+        aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), v));
+
+
+    }
 
     class MyMarker {
         public static final int USER_MARKER = 0;
@@ -177,7 +183,7 @@ public class MapActivity extends AppCompatActivity {
             LatLng latLng = new LatLng(latitude, longitude);
             ImageView imageView = (ImageView) View.inflate(MapActivity.this, R.layout.test_view, null);
             Marker marker = aMap.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.fromView(imageView)).draggable(true));
+                    .icon(BitmapDescriptorFactory.fromView(imageView)));
 
             Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
             animation.setDuration(1000);
@@ -196,9 +202,6 @@ public class MapActivity extends AppCompatActivity {
             new MyMarker(aMap, latitude, longitude, USER_MARKER);
         }
     }
-
-
-
 
 
 
