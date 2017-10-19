@@ -31,7 +31,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -40,6 +43,7 @@ import com.tamic.novate.callback.RxStringCallback;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.http.QueryMap;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -50,11 +54,9 @@ public class LoginActivity extends Activity {
 
 
     private static final int REQUEST_READ_CONTACTS = 0;
-
-
     private static final String[] DUMMY_CREDENTIALS = new String[]{
     };
-
+    Map<String, Object> parameters = new HashMap<String, Object>();
     // UI references.
     @BindView(R.id.login_phone_number)
     AutoCompleteTextView phoneNumberView;
@@ -75,7 +77,7 @@ public class LoginActivity extends Activity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin("1310", "zjm");
+                    attemptLogin(phoneNumberView.getText().toString(), passwordView.getText().toString());
                     return true;
                 }
                 return false;
@@ -86,7 +88,7 @@ public class LoginActivity extends Activity {
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                attemptLogin("1310", "zjm");
+                attemptLogin(phoneNumberView.getText().toString(), passwordView.getText().toString());
             }
         });
 
@@ -130,8 +132,9 @@ public class LoginActivity extends Activity {
 
     private void attemptLogin(String phoneNum, String password) {
         String url = phoneNum + "/" + password;
+
         HttpUtil.sendHttpRequest(this)
-                .rxGet(url, null, new RxStringCallback() {
+                .rxGet(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
                         Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
@@ -140,6 +143,7 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(LoginActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
                     }
 
                     @Override
@@ -147,8 +151,6 @@ public class LoginActivity extends Activity {
 
                     }
                 });
-
-
 
     }
 

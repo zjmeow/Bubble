@@ -5,14 +5,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.animation.AlphaAnimation;
+import com.amap.api.maps.model.animation.Animation;
+import com.amap.api.maps.model.animation.RotateAnimation;
+import com.amap.api.maps.model.animation.ScaleAnimation;
+import com.amap.api.maps.model.animation.TranslateAnimation;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
@@ -139,6 +146,9 @@ public class MapActivity extends AppCompatActivity {
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
+
+                        marker.startAnimation();
+
                         break;
                     default:
                         break;
@@ -165,7 +175,13 @@ public class MapActivity extends AppCompatActivity {
 
         public MyMarker(AMap aMap, double latitude, double longitude, int type) {
             LatLng latLng = new LatLng(latitude, longitude);
-            Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
+            ImageView imageView = (ImageView) View.inflate(MapActivity.this, R.layout.test_view, null);
+            Marker marker = aMap.addMarker(new MarkerOptions().position(latLng)
+                    .icon(BitmapDescriptorFactory.fromView(imageView)).draggable(true));
+
+            Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
+            animation.setDuration(1000);
+            marker.setAnimation(animation);
             this.type = type;
             markerMap.put(marker.getId(), this);
         }

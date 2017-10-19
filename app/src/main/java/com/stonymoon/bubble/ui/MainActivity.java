@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity
 
     @OnClick(R.id.fab)
     void submit() {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(MainActivity.this, MapActivity.class);
         startActivity(intent);
     }
 
