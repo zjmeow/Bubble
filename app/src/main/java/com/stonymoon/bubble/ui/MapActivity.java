@@ -25,6 +25,9 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.util.HttpUtil;
+import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxStringCallback;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +42,7 @@ import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
 public class MapActivity extends AppCompatActivity {
     @BindView(R.id.map)
     MapView mapView;
+    private Map<String, Object> parameters = new HashMap<String, Object>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
     @Override
@@ -174,6 +178,31 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    private void getUsers() {
+        String url = "/user";
+        HttpUtil.sendHttpRequest(this)
+                .rxGet(url, parameters, new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+
+
+                        Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Object tag, Throwable e) {
+                        Toast.makeText(MapActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, Throwable e) {
+
+                    }
+                });
+
+    }
+
     class MyMarker {
         public static final int USER_MARKER = 0;
         public static final int TEXT_MARKER = 1;
@@ -204,8 +233,4 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-
-
 }
-
-

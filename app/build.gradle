@@ -25,6 +25,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     //高德定位api
+    compile 'com.google.code.gson:gson:2.7'
     compile 'com.amap.api:location:latest.integration'
     compile 'com.tamic.novate:novate:1.5.2.3'
     compile 'com.github.vondear:RxTools:v1.7.6'
