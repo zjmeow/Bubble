@@ -171,8 +171,8 @@ public class MapActivity extends AppCompatActivity {
         // 绑定 Marker 被点击事件
 
         aMap.setOnMarkerClickListener(markerClickListener);
-        new MyMarker(aMap, 119.22, 26, USER_MARKER);
-        new MyMarker(aMap, 119.3, 26, TEXT_MARKER);
+        new MyMarker(aMap, 26, 118.22, USER_MARKER);
+        new MyMarker(aMap, 26, 119.3, TEXT_MARKER);
 
     }
 

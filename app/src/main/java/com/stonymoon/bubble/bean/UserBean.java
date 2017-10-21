@@ -9,10 +9,11 @@ import java.util.List;
  */
 
 public class UserBean {
+
     /**
      * code : 0
      * message : success
-     * result : [{"longitude":0,"latitude":0,"timestamp":123456789,"user_image":"http://i0.hdslb.com/bfs/bangumi/8870e00ca6d3d38eed52bde82e4a84df8073973b.jpg","user_name":"血色苍穹","user_id":"123"},{"longitude":0,"latitude":0,"timestamp":123456789,"user_image":"http://i0.hdslb.com/bfs/bangumi/8870e00ca6d3d38eed52bde82e4a84df8073973b.jpg","user_name":"血色苍穹","user_id":"123"}]
+     * result : [{"longitude":119.18,"latitude":26.03,"timestamp":123456789,"user_image":"http://i0.hdslb.com/bfs/bangumi/8870e00ca6d3d38eed52bde82e4a84df8073973b.jpg","user_name":"血色苍穹","user_id":"123"},{"longitude":118.18,"latitude":25.02,"timestamp":123456789,"user_image":"http://i0.hdslb.com/bfs/bangumi/8870e00ca6d3d38eed52bde82e4a84df8073973b.jpg","user_name":"血色苍穹","user_id":"123"}]
      */
 
     private List<ResultBean> result;
@@ -27,17 +28,17 @@ public class UserBean {
 
     public static class ResultBean {
         /**
-         * longitude : 0
-         * latitude : 0
+         * longitude : 119.18
+         * latitude : 26.03
          * timestamp : 123456789
          * user_image : http://i0.hdslb.com/bfs/bangumi/8870e00ca6d3d38eed52bde82e4a84df8073973b.jpg
          * user_name : 血色苍穹
          * user_id : 123
          */
 
-        private int longitude;
-        private int latitude;
-        private int timestamp;
+        private double longitude;
+        private double latitude;
+        private long timestamp;
         @SerializedName("user_image")
         private String userImage;
         @SerializedName("user_name")
@@ -45,27 +46,27 @@ public class UserBean {
         @SerializedName("user_id")
         private String userId;
 
-        public int getLongitude() {
+        public double getLongitude() {
             return longitude;
         }
 
-        public void setLongitude(int longitude) {
+        public void setLongitude(double longitude) {
             this.longitude = longitude;
         }
 
-        public int getLatitude() {
+        public double getLatitude() {
             return latitude;
         }
 
-        public void setLatitude(int latitude) {
+        public void setLatitude(double latitude) {
             this.latitude = latitude;
         }
 
-        public int getTimestamp() {
+        public long getTimestamp() {
             return timestamp;
         }
 
-        public void setTimestamp(int timestamp) {
+        public void setTimestamp(long timestamp) {
             this.timestamp = timestamp;
         }
 
