@@ -21,10 +21,12 @@ import com.amap.api.maps.model.animation.Animation;
 import com.amap.api.maps.model.animation.RotateAnimation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
 import com.amap.api.maps.model.animation.TranslateAnimation;
+import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -45,6 +47,7 @@ public class MapActivity extends AppCompatActivity {
     private Map<String, Object> parameters = new HashMap<String, Object>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //设置沉浸式状态栏
@@ -53,6 +56,7 @@ public class MapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         setMap(savedInstanceState);
+        getUsers();
 
     }
 
@@ -167,8 +171,8 @@ public class MapActivity extends AppCompatActivity {
         // 绑定 Marker 被点击事件
 
         aMap.setOnMarkerClickListener(markerClickListener);
-        new MyMarker(aMap, 28, 28, USER_MARKER);
-        new MyMarker(aMap, 30, 30, TEXT_MARKER);
+        new MyMarker(aMap, 119.22, 26, USER_MARKER);
+        new MyMarker(aMap, 119.3, 26, TEXT_MARKER);
 
     }
 
@@ -179,19 +183,24 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void getUsers() {
-        String url = "/user";
+        String url = "u";
         HttpUtil.sendHttpRequest(this)
                 .rxGet(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
-
-
+                        Gson gson = new Gson();
+                        UserBean userBean = gson.fromJson(response, UserBean.class);
+                        final AMap aMap = mapView.getMap();
+                        for (UserBean.ResultBean bean : userBean.getResult()) {
+                            new MyMarker(aMap, bean.getLatitude(), bean.getLongitude(), USER_MARKER);
+                        }
                         Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(MapActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+
                         e.printStackTrace();
                     }
 
@@ -226,6 +235,7 @@ public class MapActivity extends AppCompatActivity {
         }
 
         public void addUserMarker(AMap aMap, double latitude, double longitude) {
+
             LatLng latLng = new LatLng(latitude, longitude);
             Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
             new MyMarker(aMap, latitude, longitude, USER_MARKER);
