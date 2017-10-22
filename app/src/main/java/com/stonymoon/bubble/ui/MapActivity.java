@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
@@ -219,9 +220,9 @@ public class MapActivity extends AppCompatActivity {
 
         public MyMarker(AMap aMap, double latitude, double longitude, int type) {
             LatLng latLng = new LatLng(latitude, longitude);
-            ImageView imageView = (ImageView) View.inflate(MapActivity.this, R.layout.test_view, null);
+            RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
             Marker marker = aMap.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.fromView(imageView)));
+                    .icon(BitmapDescriptorFactory.fromView(userLayout)));
 
             Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
             animation.setDuration(1000);

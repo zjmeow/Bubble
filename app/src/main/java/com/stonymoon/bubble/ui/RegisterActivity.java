@@ -28,8 +28,6 @@ public class RegisterActivity extends AppCompatActivity {
     EditText IdentificationText;
     @BindView(R.id.btn_register_register)
     QMUIRoundButton registerButton;
-    @BindView(R.id.pbar_login_progress)
-    ProgressBar loadingProgress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

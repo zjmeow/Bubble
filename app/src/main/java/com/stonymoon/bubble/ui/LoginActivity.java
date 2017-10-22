@@ -27,6 +27,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,7 @@ public class LoginActivity extends Activity {
     @BindView(R.id.et_login_password)
     EditText passwordView;
     @BindView(R.id.pbar_login_progress)
-    View progressView;
+    ProgressBar progressView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +82,6 @@ public class LoginActivity extends Activity {
             }
         });
 
-        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-        mEmailSignInButton.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                attemptLogin(phoneNumberView.getText().toString(), passwordView.getText().toString());
-            }
-        });
 
     }
 

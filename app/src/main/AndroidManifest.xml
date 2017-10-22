@@ -52,7 +52,10 @@
         <activity
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".ui.RegisterActivity"></activity>
+        <activity android:name=".ui.RegisterActivity" />
+        <activity
+            android:name=".ui.ProfileActivity"
+            android:label="@string/title_activity_profile"></activity>
     </application>
 
 </manifest>
