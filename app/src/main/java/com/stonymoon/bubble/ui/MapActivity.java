@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.maps.AMap;
@@ -58,7 +59,6 @@ public class MapActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setMap(savedInstanceState);
         getUsers();
-
     }
 
     @Override
@@ -90,7 +90,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    private void showSimpleBottomSheetGrid() {
+    private void showBottomSheetGrid() {
         final Context context = MapActivity.this;
         final int TAG_SHARE_WECHAT_FRIEND = 0;
         final int TAG_SHARE_WECHAT_MOMENT = 1;
@@ -139,17 +139,17 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 MyMarker myMarker = markerMap.get(marker.getId());
+                zoomIn(aMap, marker, 30f);
+                marker.startAnimation();
                 switch (myMarker.getType()) {
                     case USER_MARKER:
-                        Toast.makeText(MapActivity.this, "user", Toast.LENGTH_SHORT).show();
+                        UserBean.ResultBean bean = myMarker.getUserBean();
+                        Toast.makeText(MapActivity.this, bean.getUserName(), Toast.LENGTH_SHORT).show();
                         //点击后把镜头移动到气泡上
-                        zoomIn(aMap, marker, 30f);
-                        ProfileActivity.startActivity(MapActivity.this, "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1508654593&di=b048e3e1376132b936ea7c459976a30b&src=http://img5.duitang.com/uploads/item/201412/27/20141227204641_GSVQN.thumb.700_0.jpeg", "stony", "1");
+                        ProfileActivity.startActivity(MapActivity.this, bean.getUserImage(), bean.getUserName(), bean.getUserId());
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
-                        zoomIn(aMap, marker, 30f);
-                        marker.startAnimation();
                         break;
                     default:
                         break;
@@ -163,15 +163,12 @@ public class MapActivity extends AppCompatActivity {
         // 绑定 Marker 被点击事件
 
         aMap.setOnMarkerClickListener(markerClickListener);
-        new MyMarker(aMap, 26, 118.22, USER_MARKER);
-        new MyMarker(aMap, 26, 119.3, TEXT_MARKER);
 
     }
 
+    //根据marker来设置地图镜头移动
     private void zoomIn(AMap aMap, Marker marker, float v) {
         aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), v));
-
-
     }
 
     private void getUsers() {
@@ -184,7 +181,7 @@ public class MapActivity extends AppCompatActivity {
                         UserBean userBean = gson.fromJson(response, UserBean.class);
                         final AMap aMap = mapView.getMap();
                         for (UserBean.ResultBean bean : userBean.getResult()) {
-                            new MyMarker(aMap, bean.getLatitude(), bean.getLongitude(), USER_MARKER);
+                            addUserMarker(aMap, bean);
                         }
                         Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
                     }
@@ -192,7 +189,6 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(MapActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-
                         e.printStackTrace();
                     }
 
@@ -204,35 +200,43 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    //把用用户的bean来在地图上添加Marker
+    public MyMarker addUserMarker(AMap aMap, UserBean.ResultBean bean) {
+        RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
+        TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
+        usernameText.setText(bean.getUserName());
+        LatLng latLng = new LatLng(bean.getLatitude(), bean.getLongitude());
+        Marker marker = aMap.addMarker(new MarkerOptions().position(latLng)
+                .icon(BitmapDescriptorFactory.fromView(userLayout)));
+        Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
+        animation.setDuration(1000);
+        marker.setAnimation(animation);
+        MyMarker myMarker = new MyMarker(bean);
+        markerMap.put(marker.getId(), myMarker);
+        return myMarker;
+
+    }
+
+    //储存Marker中的信息，用Map把mark的id与它关联起来
     class MyMarker {
         public static final int USER_MARKER = 0;
         public static final int TEXT_MARKER = 1;
         private int type;
+        private UserBean.ResultBean userBean;
 
-        public MyMarker(AMap aMap, double latitude, double longitude, int type) {
-            LatLng latLng = new LatLng(latitude, longitude);
-            RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
-            Marker marker = aMap.addMarker(new MarkerOptions().position(latLng)
-                    .icon(BitmapDescriptorFactory.fromView(userLayout)));
+        public MyMarker(UserBean.ResultBean bean) {
+            this.userBean = bean;
+            type = USER_MARKER;
+        }
 
-            Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
-            animation.setDuration(1000);
-            marker.setAnimation(animation);
-            this.type = type;
-            markerMap.put(marker.getId(), this);
+        public UserBean.ResultBean getUserBean() {
+            return userBean;
         }
 
         public int getType() {
             return type;
         }
 
-        public void addUserMarker(AMap aMap, double latitude, double longitude) {
-
-            LatLng latLng = new LatLng(latitude, longitude);
-            Marker marker = aMap.addMarker(new MarkerOptions().position(latLng));
-            new MyMarker(aMap, latitude, longitude, USER_MARKER);
-        }
     }
-
 
 }

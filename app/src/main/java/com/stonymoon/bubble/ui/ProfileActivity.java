@@ -59,9 +59,8 @@ public class ProfileActivity extends AppCompatActivity {
         String userId = intent.getStringExtra("userId");
         Glide.with(this).load(url).into(userHeadImage);
 
-        //todo这里修改成intent拿到的名字
-        usernameText.setText("这里是姓名");
-        emojiText.setText("收到了123456个emoji");
+        usernameText.setText(userName);
+        emojiText.setText(userId);
 
     }
 
