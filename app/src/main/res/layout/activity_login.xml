@@ -11,10 +11,7 @@
     tools:context="com.stonymoon.bubble.ui.LoginActivity">
 
     <!-- Login progress -->
-    <ScrollView
-        android:id="@+id/login_form"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:id="@+id/email_login_form"
@@ -22,16 +19,16 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <AutoCompleteTextView
-                android:id="@+id/login_phone_number"
+            <EditText
+                android:id="@+id/et_login_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_email"
-                android:inputType="textEmailAddress"
+                android:hint="手机号码"
+                android:inputType="phone"
                 android:maxLines="1" />
 
             <EditText
-                android:id="@+id/login_password"
+                android:id="@+id/et_login_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/prompt_password"
@@ -42,7 +39,7 @@
                 android:maxLines="1" />
 
             <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                android:id="@+id/email_sign_in_button"
+                android:id="@+id/btn_login_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_gravity="center"
@@ -50,11 +47,19 @@
                 android:text="@string/action_sign_in"
                 android:textStyle="bold" />
 
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                android:id="@+id/btn_login_register"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:text="注册"
+                android:textStyle="bold" />
+
         </LinearLayout>
-    </ScrollView>
 
     <ProgressBar
-        android:id="@+id/login_progress"
+        android:id="@+id/pbarlogin_progress"
         style="?android:attr/progressBarStyleLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -51,7 +51,8 @@
         <activity android:name=".ui.MapActivity" />
         <activity
             android:name=".ui.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
+        <activity android:name=".ui.RegisterActivity"></activity>
     </application>
 
 </manifest>

@@ -47,9 +47,7 @@ import retrofit2.http.QueryMap;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
-/**
- * A login screen that offers login via email/password.
- */
+
 public class LoginActivity extends Activity {
 
 
@@ -57,14 +55,13 @@ public class LoginActivity extends Activity {
     private static final String[] DUMMY_CREDENTIALS = new String[]{
     };
     Map<String, Object> parameters = new HashMap<String, Object>();
-    // UI references.
-    @BindView(R.id.login_phone_number)
-    AutoCompleteTextView phoneNumberView;
-    @BindView(R.id.login_password)
+
+    @BindView(R.id.et_login_phone_number)
+    TextView phoneNumberView;
+    @BindView(R.id.et_login_password)
     EditText passwordView;
-    @BindView(R.id.login_progress)
+    @BindView(R.id.pbar_login_progress)
     View progressView;
-    View loginFormView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
