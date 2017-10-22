@@ -1,10 +1,18 @@
 package com.stonymoon.bubble.ui;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.qmuiteam.qmui.widget.QMUIAppBarLayout;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
+import com.qmuiteam.qmui.widget.QMUITopBar;
 import com.stonymoon.bubble.R;
 import com.vondear.rxtools.RxPhotoTool;
 
@@ -12,20 +20,49 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends AppCompatActivity {
 
     @BindView(R.id.radius_image_view_profile_user_head)
-    QMUIRadiusImageView UserHeadImage;
+    QMUIRadiusImageView userHeadImage;
     @BindView(R.id.tv_profile_username)
-    TextView UsernameText;
+    TextView usernameText;
     @BindView(R.id.tv_profile_emoji)
-    TextView EmojiText;
+    TextView emojiText;
+    @BindView(R.id.topbar_profile)
+    QMUITopBar topbar;
+
+    public static void startActivity(Context context, String url, String username, String userId) {
+        Intent intent = new Intent(context, ProfileActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("username", username);
+        intent.putExtra("userId", userId);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
+        topbar.setTitle("XXX的资料");
+//        setSupportActionBar(toolbar);
+//        ActionBar actionBar = getSupportActionBar();
+//        if (actionBar != null) {
+//            actionBar.setDisplayHomeAsUpEnabled(true);
+//            actionBar.setHomeButtonEnabled(true);
+//            actionBar.setDisplayShowHomeEnabled(true);
+//            actionBar.setDisplayShowTitleEnabled(true);
+//        }
+        Intent intent = getIntent();
+        String url = intent.getStringExtra("url");
+        String userName = intent.getStringExtra("userName");
+        String userId = intent.getStringExtra("userId");
+        Glide.with(this).load(url).into(userHeadImage);
+
+        //todo这里修改成intent拿到的名字
+        usernameText.setText("这里是姓名");
+        emojiText.setText("收到了123456个emoji");
+
     }
 
     @OnClick(R.id.radius_image_view_profile_user_head)
@@ -34,4 +71,6 @@ public class ProfileActivity extends Activity {
 
 
     }
+
+
 }

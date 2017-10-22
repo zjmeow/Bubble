@@ -95,14 +95,10 @@ public class MapActivity extends AppCompatActivity {
         final int TAG_SHARE_WECHAT_FRIEND = 0;
         final int TAG_SHARE_WECHAT_MOMENT = 1;
         final int TAG_SHARE_WEIBO = 2;
-        final int TAG_SHARE_CHAT = 3;
-        final int TAG_SHARE_LOCAL = 4;
         QMUIBottomSheet.BottomGridSheetBuilder builder = new QMUIBottomSheet.BottomGridSheetBuilder(context);
-        builder.addItem(R.mipmap.test, "分享到微信", TAG_SHARE_WECHAT_FRIEND, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .addItem(R.mipmap.test, "分享到朋友圈", TAG_SHARE_WECHAT_MOMENT, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .addItem(R.mipmap.test, "分享到微博", TAG_SHARE_WEIBO, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .addItem(R.mipmap.test, "分享到私信", TAG_SHARE_CHAT, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .addItem(R.mipmap.test, "保存到本地", TAG_SHARE_LOCAL, QMUIBottomSheet.BottomGridSheetBuilder.SECOND_LINE)
+        builder.addItem(R.mipmap.test, "查看用户信息", TAG_SHARE_WECHAT_FRIEND, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
+                .addItem(R.mipmap.test, "聊天", TAG_SHARE_WECHAT_MOMENT, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
+                .addItem(R.mipmap.test, "互动", TAG_SHARE_WEIBO, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
                 .setOnSheetItemClickListener(new QMUIBottomSheet.BottomGridSheetBuilder.OnSheetItemClickListener() {
                     @Override
                     public void onClick(QMUIBottomSheet dialog, View itemView) {
@@ -117,12 +113,6 @@ public class MapActivity extends AppCompatActivity {
                                 break;
                             case TAG_SHARE_WEIBO:
                                 Toast.makeText(context, "分享到微博", Toast.LENGTH_SHORT).show();
-                                break;
-                            case TAG_SHARE_CHAT:
-                                Toast.makeText(context, "分享到私信", Toast.LENGTH_SHORT).show();
-                                break;
-                            case TAG_SHARE_LOCAL:
-                                Toast.makeText(context, "保存到本地", Toast.LENGTH_SHORT).show();
                                 break;
                         }
                     }
@@ -154,6 +144,7 @@ public class MapActivity extends AppCompatActivity {
                         Toast.makeText(MapActivity.this, "user", Toast.LENGTH_SHORT).show();
                         //点击后把镜头移动到气泡上
                         zoomIn(aMap, marker, 30f);
+                        ProfileActivity.startActivity(MapActivity.this, "https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1508654593&di=b048e3e1376132b936ea7c459976a30b&src=http://img5.duitang.com/uploads/item/201412/27/20141227204641_GSVQN.thumb.700_0.jpeg", "stony", "1");
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();

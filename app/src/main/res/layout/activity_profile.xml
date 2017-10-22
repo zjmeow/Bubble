@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,6 +8,15 @@
     tools:context="com.stonymoon.bubble.ui.ProfileActivity"
 
     >
+
+    <com.qmuiteam.qmui.widget.QMUITopBar
+        android:id="@+id/topbar_profile"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        app:qmui_topbar_bg_color="@color/colorPrimary"
+
+        />
+
 
     <com.qmuiteam.qmui.widget.QMUIRadiusImageView
         android:id="@+id/radius_image_view_profile_user_head"
@@ -27,7 +37,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="收到了213个emoji"></TextView>
+        android:text="收到了213个emoji" />
 
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:text="他的好友" />
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:text="最近动态" />
 
 </LinearLayout>

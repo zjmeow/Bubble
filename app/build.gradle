@@ -25,6 +25,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+    compile 'jp.wasabeef:glide-transformations:2.0.2'
+
     //高德定位api
     compile 'com.google.code.gson:gson:2.7'
     compile 'com.amap.api:location:latest.integration'
