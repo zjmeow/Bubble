@@ -42,6 +42,8 @@ import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.http.QueryMap;
@@ -144,6 +146,14 @@ public class LoginActivity extends Activity {
                 });
 
     }
+
+    private String token(String phone, double latitude, double longitude) {
+        String key = phone + latitude + longitude + "stonymoon";
+
+        return DigestUtils.md5Hex(key);
+    }
+
+
 
 }
 
