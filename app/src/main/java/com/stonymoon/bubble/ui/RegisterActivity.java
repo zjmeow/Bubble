@@ -3,26 +3,29 @@ package com.stonymoon.bubble.ui;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.stonymoon.bubble.R;
-import com.vondear.rxtools.RxTool;
+import com.stonymoon.bubble.util.HttpUtil;
+import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxStringCallback;
 
+
+import org.apaches.commons.codec.digest.DigestUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static android.R.attr.countDown;
 import static com.vondear.rxtools.RxConstTool.REGEX_MOBILE_SIMPLE;
 
 public class RegisterActivity extends AppCompatActivity {
-
 
     @BindView(R.id.et_register_username)
     EditText usernameText;
@@ -38,6 +41,7 @@ public class RegisterActivity extends AppCompatActivity {
     EditText identificationText;
     @BindView(R.id.btn_register_register)
     QMUIRoundButton registerButton;
+    private Map<String, Object> parameters = new HashMap<>();
     private String phone = "";
 
 
@@ -73,8 +77,38 @@ public class RegisterActivity extends AppCompatActivity {
             Toast.makeText(RegisterActivity.this, "两次输入的密码不一致", Toast.LENGTH_SHORT).show();
             return;
         }
+        parameters.clear();
+        parameters.put("username", usernameText.getText().toString());
+        parameters.put("password", password);
+        parameters.put("token", token(phone));
+
+
+        String url = "create";
+        HttpUtil.sendHttpRequest(this)
+                .rxPost(url, parameters, new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+                        Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(Object tag, Throwable e) {
+                        Toast.makeText(RegisterActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, Throwable e) {
+
+                    }
+                });
 
     }
 
+
+    private String token(String phone) {
+        String key = phone + "stonymoon";
+        return DigestUtils.md5Hex(key);
+    }
 
 }

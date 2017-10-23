@@ -18,15 +18,11 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.animation.AlphaAnimation;
 import com.amap.api.maps.model.animation.Animation;
-import com.amap.api.maps.model.animation.RotateAnimation;
 import com.amap.api.maps.model.animation.ScaleAnimation;
-import com.amap.api.maps.model.animation.TranslateAnimation;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
-import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -46,7 +42,7 @@ import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
 public class MapActivity extends AppCompatActivity {
     @BindView(R.id.map)
     MapView mapView;
-    private Map<String, Object> parameters = new HashMap<String, Object>();
+    private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
 
