@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context="com.stonymoon.bubble.ui.MapActivity">
 
-    <com.amap.api.maps.MapView
+    <com.baidu.mapapi.map.MapView
         android:id="@+id/map"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:clickable="true" />
 </RelativeLayout>

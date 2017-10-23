@@ -4,20 +4,24 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.amap.api.maps.AMap;
-import com.amap.api.maps.CameraUpdateFactory;
-import com.amap.api.maps.MapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
-import com.amap.api.maps.model.LatLng;
-import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.maps.model.MyLocationStyle;
-import com.amap.api.maps.model.animation.Animation;
-import com.amap.api.maps.model.animation.ScaleAnimation;
+
+import com.baidu.mapapi.SDKInitializer;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.Marker;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
@@ -49,40 +53,33 @@ public class MapActivity extends AppCompatActivity {
         //设置沉浸式状态栏
         QMUIStatusBarHelper.translucent(this);
         super.onCreate(savedInstanceState);
+        //在使用SDK各组件之前初始化context信息，传入ApplicationContext
+        //注意该方法要再setContentView方法之前实现
+        SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
-        setMap(savedInstanceState);
+        setMap();
         getUsers();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
+        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mapView.onDestroy();
     }
-
     @Override
     protected void onResume() {
         super.onResume();
-        //在activity执行onResume时执行mMapView.onResume ()，重新绘制加载地图
+        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mapView.onResume();
     }
-
     @Override
     protected void onPause() {
         super.onPause();
-        //在activity执行onPause时执行mMapView.onPause ()，暂停地图的绘制
+        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mapView.onPause();
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //在activity执行onSaveInstanceState时执行mMapView.onSaveInstanceState (outState)，保存地图当前的状态
-        mapView.onSaveInstanceState(outState);
-    }
-
 
     private void showBottomSheetGrid() {
         final Context context = MapActivity.this;
@@ -116,25 +113,18 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    private void setMap(Bundle savedInstanceState) {
-        mapView.onCreate(savedInstanceState);
-        final AMap aMap = mapView.getMap();
-        MyLocationStyle myLocationStyle = new MyLocationStyle();//初始化
-        myLocationStyle.myLocationType(MyLocationStyle.LOCATION_TYPE_FOLLOW_NO_CENTER);
-        myLocationStyle.interval(2000); //设置连续定位模式下的定位间隔，只在连续定位模式下生效，单次定位模式下不会生效。单位为毫秒。
-        //aMap.getUiSettings().setMyLocationButtonEnabled(true);//设置默认定位按钮是否显示，非必需设置。
-        aMap.setMyLocationStyle(myLocationStyle);//设置定位蓝点的Style
-        aMap.setMyLocationEnabled(true);// 设置为true表示启动显示定位蓝点，false表示隐藏定位蓝点并不进行定位，默认是false。
-        // 定义 Marker 点击事件监听
-        AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
+    private void setMap() {
+        final BaiduMap baiduMap = mapView.getMap();
+        baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+
+        BaiduMap.OnMarkerClickListener markerClickListener = new BaiduMap.OnMarkerClickListener() {
 
             // marker 对象被点击时回调的接口
             // 返回 true 则表示接口已响应事件，否则返回false
             @Override
             public boolean onMarkerClick(Marker marker) {
                 MyMarker myMarker = markerMap.get(marker.getId());
-                zoomIn(aMap, marker, 30f);
-                marker.startAnimation();
+                zoomIn(baiduMap, marker, 30f);
                 switch (myMarker.getType()) {
                     case USER_MARKER:
                         UserBean.ResultBean bean = myMarker.getUserBean();
@@ -156,13 +146,18 @@ public class MapActivity extends AppCompatActivity {
         };
         // 绑定 Marker 被点击事件
 
-        aMap.setOnMarkerClickListener(markerClickListener);
+        baiduMap.setOnMarkerClickListener(markerClickListener);
 
     }
 
     //根据marker来设置地图镜头移动
-    private void zoomIn(AMap aMap, Marker marker, float v) {
-        aMap.animateCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), v));
+    private void zoomIn(BaiduMap baiduMap, Marker marker, float v) {
+        MapStatus mMapStatus = new MapStatus.Builder()
+                .target(marker.getPosition())
+                .zoom(v)
+                .build();
+        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+        baiduMap.animateMapStatus(mMapStatusUpdate);
     }
 
     private void getUsers() {
@@ -173,9 +168,9 @@ public class MapActivity extends AppCompatActivity {
                     public void onNext(Object tag, String response) {
                         Gson gson = new Gson();
                         UserBean userBean = gson.fromJson(response, UserBean.class);
-                        final AMap aMap = mapView.getMap();
+                        final BaiduMap baiduMap = mapView.getMap();
                         for (UserBean.ResultBean bean : userBean.getResult()) {
-                            addUserMarker(aMap, bean);
+                            addUserMarker(baiduMap, bean);
                         }
                         Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
                     }
@@ -195,16 +190,19 @@ public class MapActivity extends AppCompatActivity {
     }
 
     //把用用户的bean来在地图上添加Marker
-    public MyMarker addUserMarker(AMap aMap, UserBean.ResultBean bean) {
+    public MyMarker addUserMarker(BaiduMap baiduMap, UserBean.ResultBean bean) {
         RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
         TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
         usernameText.setText(bean.getUserName());
         LatLng latLng = new LatLng(bean.getLatitude(), bean.getLongitude());
-        Marker marker = aMap.addMarker(new MarkerOptions().position(latLng)
-                .icon(BitmapDescriptorFactory.fromView(userLayout)));
+
+
+        OverlayOptions options = new MarkerOptions().position(latLng)
+                .icon(BitmapDescriptorFactory.fromView(userLayout));
+        Marker marker = (Marker) baiduMap.addOverlay(options);
         Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
         animation.setDuration(1000);
-        marker.setAnimation(animation);
+        //todo marker动画 marker.setAnimation(animation);
         MyMarker myMarker = new MyMarker(bean);
         markerMap.put(marker.getId(), myMarker);
         return myMarker;
