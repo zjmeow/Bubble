@@ -279,7 +279,7 @@ public class SelectPhotoActivity extends ActivityBase {
                 .responseTimeout(60) // 服务器响应超时。默认 60秒
                 .recorder(recorder)  // recorder 分片上传时，已上传片记录器。默认 null
                 .recorder(recorder, null)  // keyGen 分片上传时，生成标识符，用于片记录器区分是那个文件的上传记录
-                .zone(Zone.zone0) // 设置区域，指定不同区域的上传域名、备用域名、备用IP。默认 Zone.zone0
+                // 设置区域，指定不同区域的上传域名、备用域名、备用IP。默认 Zone.zone0
                 .build();
         // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
         mUploadManager = new UploadManager(config);
@@ -293,7 +293,7 @@ public class SelectPhotoActivity extends ActivityBase {
 
         //data = <File对象、或 文件路径、或 字节数组>
         String key = "blog";                            //在七牛上显示的名字
-        String token = "iN7NgwM31j4-BZacMjPrOQBs34UG1maYCAQmhdCV:5DMVh5j3xupe-mmEX8Rdr-ddQWU=:eyJzY29wZSI6ImJsb2ciLCJkZWFkbGluZSI6MTUwODg1NjYwNH0=";                                    //上传token
+        String token = "zfTdGi-7kuIP0YH-FxFodCzd87-yBYg8io5z88VR:d-ig4m-PHVwTOPlCzaivTHQZ8v8=:eyJzY29wZSI6ImJsb2c6YmxvZyIsImRlYWRsaW5lIjoxNTA4ODU3NDYzfQ==";                                    //上传token
         mUploadManager.put(data, key, token,
                 new UpCompletionHandler() {
                     @Override
