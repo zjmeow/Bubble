@@ -6,16 +6,24 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.qiniu.android.common.Zone;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.Configuration;
+import com.qiniu.android.storage.Recorder;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadManager;
 import com.stonymoon.bubble.R;
 import com.vondear.rxtools.RxBarTool;
 import com.vondear.rxtools.RxPhotoTool;
@@ -26,6 +34,8 @@ import com.vondear.rxtools.view.dialog.RxDialogScaleView;
 import com.vondear.rxtools.view.dialog.RxDialogSureCancel;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -40,8 +50,6 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
 public class SelectPhotoActivity extends ActivityBase {
-
-
     @BindView(R.id.tv_bg)
     TextView mTvBg;
     @BindView(R.id.iv_avatar)
@@ -68,6 +76,7 @@ public class SelectPhotoActivity extends ActivityBase {
     Button mBtnExit;
     @BindView(R.id.activity_user)
     LinearLayout mActivityUser;
+    private UploadManager mUploadManager;
     private Uri resultUri;
 
     @Override
@@ -79,6 +88,7 @@ public class SelectPhotoActivity extends ActivityBase {
 
         ButterKnife.bind(this);
         initView();
+        initUpload();
     }
 
     protected void initView() {
@@ -147,7 +157,10 @@ public class SelectPhotoActivity extends ActivityBase {
                 if (resultCode == RESULT_OK) {
 
                     resultUri = UCrop.getOutput(data);
-                    roadImageView(resultUri, mIvAvatar);
+                    File image = roadImageView(resultUri, mIvAvatar);
+                    upload(image);
+
+
                     RxSPTool.putContent(mContext, "AVATAR", resultUri.toString());
                 } else if (resultCode == UCrop.RESULT_ERROR) {
                     final Throwable cropError = UCrop.getError(data);
@@ -239,4 +252,59 @@ public class SelectPhotoActivity extends ActivityBase {
         });
         rxDialogSureCancel.show();
     }
+
+
+    private void initUpload() {
+
+        Recorder recorder = new Recorder() {
+            @Override
+            public void set(String s, byte[] bytes) {
+            }
+
+            @Override
+            public byte[] get(String s) {
+                return new byte[0];
+            }
+
+            @Override
+            public void del(String s) {
+            }
+        };
+
+        //上传配置
+        Configuration config = new Configuration.Builder()
+                .chunkSize(256 * 1024)  //分片上传时，每片的大小。 默认 256K
+                .putThreshhold(512 * 1024)  // 启用分片上传阀值。默认 512K
+                .connectTimeout(10) // 链接超时。默认 10秒
+                .responseTimeout(60) // 服务器响应超时。默认 60秒
+                .recorder(recorder)  // recorder 分片上传时，已上传片记录器。默认 null
+                .recorder(recorder, null)  // keyGen 分片上传时，生成标识符，用于片记录器区分是那个文件的上传记录
+                .zone(Zone.zone0) // 设置区域，指定不同区域的上传域名、备用域名、备用IP。默认 Zone.zone0
+                .build();
+        // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
+        mUploadManager = new UploadManager(config);
+    }
+
+    /***
+     * 表单上传
+     */
+    private void upload(File data) {
+        // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
+
+        //data = <File对象、或 文件路径、或 字节数组>
+        String key = "blog";                            //在七牛上显示的名字
+        String token = "iN7NgwM31j4-BZacMjPrOQBs34UG1maYCAQmhdCV:5DMVh5j3xupe-mmEX8Rdr-ddQWU=:eyJzY29wZSI6ImJsb2ciLCJkZWFkbGluZSI6MTUwODg1NjYwNH0=";                                    //上传token
+        mUploadManager.put(data, key, token,
+                new UpCompletionHandler() {
+                    @Override
+                    public void complete(String key, ResponseInfo info, JSONObject res) {
+                        //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
+                        Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
+                        Toast.makeText(SelectPhotoActivity.this, "upload success !!!", Toast.LENGTH_SHORT).show();
+                    }
+                }, null);
+    }
+
+
+
 }
