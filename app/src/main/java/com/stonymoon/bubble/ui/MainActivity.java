@@ -122,6 +122,8 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
+            Intent intent = new Intent(MainActivity.this, SelectPhotoActivity.class);
+            startActivity(intent);
 
         } else if (id == R.id.nav_send) {
 
