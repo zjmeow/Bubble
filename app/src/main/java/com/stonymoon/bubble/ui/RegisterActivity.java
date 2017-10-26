@@ -81,6 +81,8 @@ public class RegisterActivity extends AppCompatActivity {
         parameters.put("username", usernameText.getText().toString());
         parameters.put("password", password);
         parameters.put("token", token(phone));
+        parameters.put("phone", phone);
+
 
 
         String url = "create";

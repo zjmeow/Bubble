@@ -31,4 +31,9 @@
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btn_main_locate"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
 </android.support.design.widget.CoordinatorLayout>

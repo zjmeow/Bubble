@@ -3,6 +3,8 @@ package com.stonymoon.bubble.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -47,6 +49,7 @@ import org.apaches.commons.codec.digest.DigestUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.http.QueryMap;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -54,8 +57,8 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 public class LoginActivity extends Activity {
 
-
     private static final int REQUEST_READ_CONTACTS = 0;
+
     private static final String[] DUMMY_CREDENTIALS = new String[]{
     };
     Map<String, Object> parameters = new HashMap<String, Object>();
@@ -66,6 +69,14 @@ public class LoginActivity extends Activity {
     EditText passwordView;
     @BindView(R.id.pbar_login_progress)
     ProgressBar progressView;
+
+    @OnClick(R.id.btn_login_sign_in)
+    void login() {
+        attemptLogin(phoneNumberView.getText().toString(), passwordView.getText().toString());
+
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,13 +136,25 @@ public class LoginActivity extends Activity {
 
 
     private void attemptLogin(String phoneNum, String password) {
-        String url = phoneNum + "/" + password;
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        //判断是否已经登录
+        String token = sharedPreferences.getString("token", "");
+        if (!token.equals("")) {
+            //已经登录过，直接进入定位页面
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
 
+        String url = "login";
+        parameters.put("phone", phoneNum);
+        parameters.put("password", password);
         HttpUtil.sendHttpRequest(this)
-                .rxGet(url, parameters, new RxStringCallback() {
+                .rxPost(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
                         Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+
+
                     }
 
                     @Override
@@ -154,6 +177,15 @@ public class LoginActivity extends Activity {
         return DigestUtils.md5Hex(key);
     }
 
+    private void saveUser(String phone, String password, String token) {
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("phone", phone);
+        editor.putString("password", password);
+        editor.putString("token", token);
+        editor.commit();
+
+    }
 
 
 }
