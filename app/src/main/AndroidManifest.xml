@@ -35,10 +35,12 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="q5qqfH9uWHdHSf1NIRVs7s5GkXcjEwnk" />
+
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"></service>
+            android:process=":remote" />
+
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
@@ -62,7 +64,8 @@
             android:name=".ui.ProfileActivity"
             android:label="@string/title_activity_profile" />
         <activity android:name=".ui.SelectPhotoActivity" />
-        <activity android:name=".ui.MapTestActivity"></activity>
+        <activity android:name=".ui.MapTestActivity" />
+        <activity android:name=".ui.HttpActivity"></activity>
     </application>
 
 </manifest>

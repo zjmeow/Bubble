@@ -94,4 +94,6 @@ public class UserBean {
             this.userId = userId;
         }
     }
+
+
 }

@@ -11,6 +11,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -26,6 +30,7 @@ import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
@@ -42,6 +47,8 @@ import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
 
 
 public class MapActivity extends AppCompatActivity {
+    public LocationClient mLocationClient = null;
+    public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.map)
     MapView mapView;
     private Map<String, Object> parameters = new HashMap<>();
@@ -59,7 +66,8 @@ public class MapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         setMap();
-        getUsers();
+        initLocate();
+        mLocationClient.start();
     }
 
     @Override
@@ -127,10 +135,10 @@ public class MapActivity extends AppCompatActivity {
                 zoomIn(baiduMap, marker, 30f);
                 switch (myMarker.getType()) {
                     case USER_MARKER:
-                        UserBean.ResultBean bean = myMarker.getUserBean();
-                        Toast.makeText(MapActivity.this, bean.getUserName(), Toast.LENGTH_SHORT).show();
+                        LocationBean.PoisBean bean = myMarker.getUserBean();
+                        Toast.makeText(MapActivity.this, bean.getUsername(), Toast.LENGTH_SHORT).show();
                         //点击后把镜头移动到气泡上
-                        ProfileActivity.startActivity(MapActivity.this, bean.getUserImage(), bean.getUserName(), bean.getUserId());
+                        //ProfileActivity.startActivity(MapActivity.this, bean.getUserImage(), bean.getUserName(), bean.getUserId());
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
@@ -160,42 +168,15 @@ public class MapActivity extends AppCompatActivity {
         baiduMap.animateMapStatus(mMapStatusUpdate);
     }
 
-    private void getUsers() {
-        String url = "u";
-        HttpUtil.sendHttpRequest(this)
-                .rxGet(url, parameters, new RxStringCallback() {
-                    @Override
-                    public void onNext(Object tag, String response) {
-                        Gson gson = new Gson();
-                        UserBean userBean = gson.fromJson(response, UserBean.class);
-                        final BaiduMap baiduMap = mapView.getMap();
-                        for (UserBean.ResultBean bean : userBean.getResult()) {
-                            addUserMarker(baiduMap, bean);
-                        }
-                        Toast.makeText(MapActivity.this, response, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Object tag, Throwable e) {
-                        Toast.makeText(MapActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onCancel(Object tag, Throwable e) {
-
-                    }
-                });
-
-    }
 
     //把用用户的bean来在地图上添加Marker
-    public MyMarker addUserMarker(BaiduMap baiduMap, UserBean.ResultBean bean) {
+    public MyMarker addUserMarker(BaiduMap baiduMap, LocationBean.PoisBean bean) {
+
+
         RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
         TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
-        usernameText.setText(bean.getUserName());
-        LatLng latLng = new LatLng(bean.getLatitude(), bean.getLongitude());
-
+        usernameText.setText(bean.getUsername());
+        LatLng latLng = new LatLng(bean.getLocation().get(0), bean.getLocation().get(1));
 
         OverlayOptions options = new MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.fromView(userLayout));
@@ -209,26 +190,95 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    private void initLocate() {
+        mLocationClient = new LocationClient(getApplicationContext());
+        //声明LocationClient类
+        mLocationClient.registerLocationListener(myListener);
+        //注册监听函数
+        LocationClientOption option = new LocationClientOption();
+        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
+        option.setCoorType("bd09ll");
+        //bd09：百度墨卡托坐标；
+        option.setScanSpan(2000);
+        //设置发起定位请求的间隔，int类型，单位ms
+        option.setOpenGps(true);
+        option.setLocationNotify(false);
+        //可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
+
+        option.setIgnoreKillProcess(false);
+        //可选，定位SDK内部是一个service，并放到了独立进程。
+        //设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
+
+        option.setEnableSimulateGps(false);
+//可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
+        mLocationClient.setLocOption(option);
+//mLocationClient为第二步初始化过的LocationClient对象
+
+
+    }
+
     //储存Marker中的信息，用Map把mark的id与它关联起来
     class MyMarker {
         public static final int USER_MARKER = 0;
         public static final int TEXT_MARKER = 1;
         private int type;
-        private UserBean.ResultBean userBean;
+        private LocationBean.PoisBean poisBean;
 
-        public MyMarker(UserBean.ResultBean bean) {
-            this.userBean = bean;
+        public MyMarker(LocationBean.PoisBean bean) {
+            this.poisBean = bean;
             type = USER_MARKER;
         }
 
-        public UserBean.ResultBean getUserBean() {
-            return userBean;
+        public LocationBean.PoisBean getUserBean() {
+            return poisBean;
         }
 
         public int getType() {
             return type;
         }
 
+    }
+
+    class MyLocationListener extends BDAbstractLocationListener {
+
+        @Override
+        public void onReceiveLocation(BDLocation location) {
+            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
+            //以下只列举部分获取经纬度相关（常用）的结果信息
+            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+
+            double latitude = location.getLatitude();    //获取纬度信息
+            double longitude = location.getLongitude();    //获取经度信息
+            parameters.put("latitude ", latitude);
+            parameters.put("longitude", longitude);
+            Toast.makeText(MapActivity.this, String.valueOf(latitude), Toast.LENGTH_SHORT).show();
+
+            HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
+                @Override
+                public void onNext(Object tag, String response) {
+                    Gson gson = new Gson();
+                    LocationBean bean = gson.fromJson(response, LocationBean.class);
+                    final BaiduMap baiduMap = mapView.getMap();
+                    for (LocationBean.PoisBean b : bean.getPois()) {
+                        addUserMarker(baiduMap, b);
+                    }
+
+                }
+
+                @Override
+                public void onError(Object tag, Throwable e) {
+                    Toast.makeText(MapActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onCancel(Object tag, Throwable e) {
+
+                }
+            }, latitude, longitude);
+
+
+        }
     }
 
 }

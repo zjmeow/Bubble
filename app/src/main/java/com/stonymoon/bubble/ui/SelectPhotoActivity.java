@@ -2,6 +2,7 @@ package com.stonymoon.bubble.ui;
 
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
@@ -25,6 +26,7 @@ import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.util.HttpUtil;
 import com.vondear.rxtools.RxBarTool;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxSPTool;
@@ -40,12 +42,16 @@ import org.json.JSONObject;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit2.http.HTTP;
 
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
@@ -78,7 +84,7 @@ public class SelectPhotoActivity extends ActivityBase {
     LinearLayout mActivityUser;
     private UploadManager mUploadManager;
     private Uri resultUri;
-
+    private Map<String, Object> parameters = new HashMap<String, Object>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -213,21 +219,7 @@ public class SelectPhotoActivity extends ActivityBase {
         //开始设置
         //设置最大缩放比例
         options.setMaxScaleMultiplier(5);
-        //设置图片在切换比例时的动画
         options.setImageToCropBoundsAnimDuration(666);
-        //设置裁剪窗口是否为椭圆
-        //options.setOvalDimmedLayer(true);
-        //设置是否展示矩形裁剪框
-        // options.setShowCropFrame(false);
-        //设置裁剪框横竖线的宽度
-        //options.setCropGridStrokeWidth(20);
-        //设置裁剪框横竖线的颜色
-        //options.setCropGridColor(Color.GREEN);
-        //设置竖线的数量
-        //options.setCropGridColumnCount(2);
-        //设置横线的数量
-        //options.setCropGridRowCount(1);
-
         UCrop.of(uri, destinationUri)
                 .withAspectRatio(1, 1)
                 .withMaxResultSize(1000, 1000)
@@ -305,6 +297,12 @@ public class SelectPhotoActivity extends ActivityBase {
                 }, null);
     }
 
+
+//    private String getUploadToken() {
+//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+//        HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost()
+//
+//    }
 
 
 }

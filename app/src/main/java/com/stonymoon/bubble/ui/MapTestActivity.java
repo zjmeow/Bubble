@@ -31,7 +31,7 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
 
     MapView mMapView;
     BaiduMap mBaiduMap;
-    MapStatus ms;
+    private MapStatus ms;
     private ClusterManager<MyItem> mClusterManager;
 
     @Override

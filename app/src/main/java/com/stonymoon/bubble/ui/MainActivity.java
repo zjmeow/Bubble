@@ -1,6 +1,7 @@
 package com.stonymoon.bubble.ui;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -37,21 +38,19 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
-    Map<String, Object> parameters = new HashMap<String, Object>();
     @BindView(R.id.text)
     TextView textView;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    private Map<String, Object> parameters = new HashMap<String, Object>();
 
     //定位并且发送坐标
     @OnClick(R.id.btn_main_locate)
     void locate() {
 
         mLocationClient.start();
-
-
         String url = "locate";
         HttpUtil.sendHttpRequest(this)
                 .rxPost(url, parameters, new RxStringCallback() {
@@ -170,7 +169,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {
-            Intent intent = new Intent(MainActivity.this, MapTestActivity.class);
+            Intent intent = new Intent(MainActivity.this, HttpActivity.class);
             startActivity(intent);
         }
 
@@ -189,7 +188,7 @@ public class MainActivity extends AppCompatActivity
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
         //bd09：百度墨卡托坐标；
-        option.setScanSpan(2000);
+        option.setScanSpan(5000);
         //设置发起定位请求的间隔，int类型，单位ms
         option.setOpenGps(true);
         option.setLocationNotify(false);
@@ -221,14 +220,9 @@ public class MainActivity extends AppCompatActivity
             parameters.put("longitude", longitude);
             Toast.makeText(MainActivity.this, String.valueOf(latitude), Toast.LENGTH_SHORT).show();
 
-            int errorCode = location.getLocType();
-            //获取定位类型、定位错误返回码，具体信息可参照类参考中BDLocation类中的说明
-            mLocationClient.stop();
+
         }
     }
-
-
-
 
 
 }
