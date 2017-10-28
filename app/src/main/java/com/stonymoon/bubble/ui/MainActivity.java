@@ -218,8 +218,6 @@ public class MainActivity extends AppCompatActivity
             double longitude = location.getLongitude();    //获取经度信息
             parameters.put("latitude ", latitude);
             parameters.put("longitude", longitude);
-            Toast.makeText(MainActivity.this, String.valueOf(latitude), Toast.LENGTH_SHORT).show();
-
 
         }
     }

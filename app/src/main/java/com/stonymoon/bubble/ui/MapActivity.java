@@ -1,4 +1,10 @@
+/*
+    在前面的Activity中拿到用户id，上传用户id和坐标到百度地图id
+
+ */
+
 package com.stonymoon.bubble.ui;
+
 
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
@@ -26,12 +32,18 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.radar.RadarNearbyResult;
+import com.baidu.mapapi.radar.RadarNearbySearchOption;
+import com.baidu.mapapi.radar.RadarSearchError;
+import com.baidu.mapapi.radar.RadarSearchListener;
+import com.baidu.mapapi.radar.RadarSearchManager;
+import com.baidu.mapapi.radar.RadarUploadInfo;
+import com.baidu.mapapi.radar.RadarUploadInfoCallback;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
-import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -45,15 +57,18 @@ import butterknife.ButterKnife;
 import static com.stonymoon.bubble.ui.MapActivity.MyMarker.TEXT_MARKER;
 import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
 
-
 public class MapActivity extends AppCompatActivity {
-    public LocationClient mLocationClient = null;
-    public BDAbstractLocationListener myListener = new MyLocationListener();
+
     @BindView(R.id.map)
     MapView mapView;
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
+    private LocationClient mLocationClient = null;
+    private BDAbstractLocationListener myListener = new MyLocationListener();
+    private RadarSearchManager mManager;
+    private LatLng pt = new LatLng(1.0, 1.0);
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +81,12 @@ public class MapActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         setMap();
+        //初始化定位设置
         initLocate();
+        //开始定位
         mLocationClient.start();
+        initRadarSearchManager();
+
     }
 
     @Override
@@ -176,7 +195,7 @@ public class MapActivity extends AppCompatActivity {
         RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
         TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
         usernameText.setText(bean.getUsername());
-        LatLng latLng = new LatLng(bean.getLocation().get(0), bean.getLocation().get(1));
+        LatLng latLng = new LatLng(bean.getLocation().get(1), bean.getLocation().get(0));
 
         OverlayOptions options = new MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.fromView(userLayout));
@@ -199,7 +218,7 @@ public class MapActivity extends AppCompatActivity {
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
         //bd09：百度墨卡托坐标；
-        option.setScanSpan(2000);
+        option.setScanSpan(5000);
         //设置发起定位请求的间隔，int类型，单位ms
         option.setOpenGps(true);
         option.setLocationNotify(false);
@@ -213,6 +232,27 @@ public class MapActivity extends AppCompatActivity {
 //可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
         mLocationClient.setLocOption(option);
 //mLocationClient为第二步初始化过的LocationClient对象
+
+    }
+
+    private void initRadarSearchManager() {
+        mManager.setUserID(userId);
+        LocationListener listener = new LocationListener();
+        mManager.addNearbyInfoListener(listener);
+
+        mManager = RadarSearchManager.getInstance();
+        mManager.addNearbyInfoListener(new LocationListener());
+        //开始自动定位，5秒一次
+        mManager.startUploadAuto(new RadarUploadInfoCallback() {
+            @Override
+            public RadarUploadInfo onUploadInfoCallback() {
+                RadarUploadInfo info = new RadarUploadInfo();
+                info.comments = "";
+                info.pt = pt;
+                return info;
+            }
+        }, 5000);
+
 
 
     }
@@ -243,22 +283,25 @@ public class MapActivity extends AppCompatActivity {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
-            //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
-            //以下只列举部分获取经纬度相关（常用）的结果信息
-            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
+            //定时定位并且把位置保存到服务器上
+            //重新定位时刷新附近的人的地理位置
+            double latitude = location.getLatitude();
+            double longitude = location.getLongitude();
+            pt = new LatLng(latitude, longitude);
+            RadarNearbySearchOption option = new RadarNearbySearchOption()
+                    .centerPt(pt).radius(2000).pageCapacity(20);
+            mManager.nearbyInfoRequest(option);
 
-            double latitude = location.getLatitude();    //获取纬度信息
-            double longitude = location.getLongitude();    //获取经度信息
-            parameters.put("latitude ", latitude);
-            parameters.put("longitude", longitude);
-            Toast.makeText(MapActivity.this, String.valueOf(latitude), Toast.LENGTH_SHORT).show();
 
             HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
                 @Override
                 public void onNext(Object tag, String response) {
+
                     Gson gson = new Gson();
                     LocationBean bean = gson.fromJson(response, LocationBean.class);
                     final BaiduMap baiduMap = mapView.getMap();
+                    baiduMap.clear();
+                    markerMap.clear();
                     for (LocationBean.PoisBean b : bean.getPois()) {
                         addUserMarker(baiduMap, b);
                     }
@@ -277,8 +320,61 @@ public class MapActivity extends AppCompatActivity {
                 }
             }, latitude, longitude);
 
-
         }
     }
+
+    //上传位置并且查找附近用户
+    class LocationListener implements RadarSearchListener {
+        @Override
+        public void onGetUploadState(RadarSearchError error) {
+
+            if (error == RadarSearchError.RADAR_NO_ERROR) {
+                //上传成功
+                Toast.makeText(MapActivity.this, "单次上传位置成功", Toast.LENGTH_LONG)
+                        .show();
+            } else {
+                //上传失败
+                Toast.makeText(MapActivity.this, "单次上传位置失败", Toast.LENGTH_LONG)
+                        .show();
+            }
+
+        }
+
+
+        @Override
+        public void onGetNearbyInfoList(RadarNearbyResult result,
+                                        RadarSearchError error) {
+
+
+            if (error == RadarSearchError.RADAR_NO_ERROR) {
+                Toast.makeText(MapActivity.this, "查询周边成功", Toast.LENGTH_LONG)
+                        .show();
+                //获取成功，处理数据
+            } else {
+                //获取失败
+                Toast.makeText(MapActivity.this, "查询周边失败", Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+
+
+        @Override
+        public void onGetClearInfoState(RadarSearchError error) {
+
+
+            if (error == RadarSearchError.RADAR_NO_ERROR) {
+                //清除成功
+                Toast.makeText(MapActivity.this, "清除位置成功", Toast.LENGTH_LONG)
+                        .show();
+            } else {
+                //清除失败
+                Toast.makeText(MapActivity.this, "清除位置失败", Toast.LENGTH_LONG)
+                        .show();
+            }
+        }
+
+
+    }
+
 
 }
