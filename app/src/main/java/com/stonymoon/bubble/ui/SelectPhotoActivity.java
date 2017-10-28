@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
 import com.qiniu.android.common.Zone;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
@@ -26,7 +27,10 @@ import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.HttpUtil;
+
+import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxBarTool;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxSPTool;
@@ -51,6 +55,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import retrofit2.http.HEAD;
 import retrofit2.http.HTTP;
 
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
@@ -85,6 +90,7 @@ public class SelectPhotoActivity extends ActivityBase {
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -164,7 +170,7 @@ public class SelectPhotoActivity extends ActivityBase {
 
                     resultUri = UCrop.getOutput(data);
                     File image = roadImageView(resultUri, mIvAvatar);
-                    upload(image);
+                    uploadHead(image);
 
 
                     RxSPTool.putContent(mContext, "AVATAR", resultUri.toString());
@@ -280,29 +286,86 @@ public class SelectPhotoActivity extends ActivityBase {
     /***
      * 表单上传
      */
-    private void upload(File data) {
+    private void upload(File data, String token) {
         // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
 
         //data = <File对象、或 文件路径、或 字节数组>
-        String key = "blog";                            //在七牛上显示的名字
-        String token = "zfTdGi-7kuIP0YH-FxFodCzd87-yBYg8io5z88VR:d-ig4m-PHVwTOPlCzaivTHQZ8v8=:eyJzY29wZSI6ImJsb2c6YmxvZyIsImRlYWRsaW5lIjoxNTA4ODU3NDYzfQ==";                                    //上传token
-        mUploadManager.put(data, key, token,
+        String name = "name";                            //在七牛上显示的名字
+
+        mUploadManager.put(data, name, token,
                 new UpCompletionHandler() {
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
-                        Toast.makeText(SelectPhotoActivity.this, "upload success !!!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SelectPhotoActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+
+                        //todo 拼接url上传到服务器
+                        uploadUrl(key, (String) parameters.get("token"));
+
                     }
                 }, null);
     }
 
 
-//    private String getUploadToken() {
-//        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-//        HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost()
-//
-//    }
+    private void uploadHead(final File file) {
+        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+        String url = "imageToken";
+        parameters.clear();
+        parameters.put("token", token);
+        parameters.put("name", "name");
+
+        HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost(url, parameters, new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+                        Gson gson = new Gson();
+                        String token = gson.fromJson(response, ContentBean.class).getContent();
+                        upload(file, token);
+
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, com.tamic.novate.Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onError(Object tag, com.tamic.novate.Throwable e) {
+
+                    }
+                }
+
+
+        );
+
+    }
+
+
+    //上传新的头像地址到服务器上
+    private void uploadUrl(String headUrl, String token) {
+        parameters.clear();
+        parameters.put("token", token);
+        parameters.put("url", headUrl);
+        String url = "image";
+        HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+
+            }
+
+            @Override
+            public void onCancel(Object tag, com.tamic.novate.Throwable e) {
+
+            }
+
+            @Override
+            public void onError(Object tag, com.tamic.novate.Throwable e) {
+                Toast.makeText(SelectPhotoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
 
 }

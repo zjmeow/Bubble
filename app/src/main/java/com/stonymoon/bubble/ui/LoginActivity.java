@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.app.Activity;
@@ -43,6 +44,7 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
+import com.stonymoon.bubble.bean.LoginBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Novate;
 import com.tamic.novate.Throwable;
@@ -157,7 +159,9 @@ public class LoginActivity extends Activity {
                 .rxPost(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
-                        Toast.makeText(LoginActivity.this, response, Toast.LENGTH_SHORT).show();
+                        Gson gson = new Gson();
+                        LoginBean bean = gson.fromJson(response, LoginBean.class);
+                        saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
 
 
                     }
@@ -179,13 +183,14 @@ public class LoginActivity extends Activity {
     }
 
 
-    private void saveUser(String phone, String password, String token) {
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+    private void saveUser(String phone, String password, String token, String id) {
+        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("phone", phone);
         editor.putString("password", password);
         editor.putString("token", token);
-        editor.commit();
+        editor.putString("id", id);
+        editor.apply();
 
 
     }

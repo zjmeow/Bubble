@@ -3,6 +3,7 @@ package com.stonymoon.bubble.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +32,7 @@ public class ProfileActivity extends AppCompatActivity {
     @BindView(R.id.topbar_profile)
     QMUITopBar topbar;
 
+
     public static void startActivity(Context context, String url, String username, String userId) {
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra("url", url);
@@ -44,15 +46,11 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
-        topbar.setTitle("XXX的资料");
-//        setSupportActionBar(toolbar);
-//        ActionBar actionBar = getSupportActionBar();
-//        if (actionBar != null) {
-//            actionBar.setDisplayHomeAsUpEnabled(true);
-//            actionBar.setHomeButtonEnabled(true);
-//            actionBar.setDisplayShowHomeEnabled(true);
-//            actionBar.setDisplayShowTitleEnabled(true);
-//        }
+        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
+
+
+
+
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
         String userName = intent.getStringExtra("userName");
