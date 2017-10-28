@@ -3,6 +3,7 @@ package com.stonymoon.bubble.ui;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -39,8 +40,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
+import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.tamic.novate.Novate;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -50,6 +54,7 @@ import org.apaches.commons.codec.digest.DigestUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.Call;
 import retrofit2.http.QueryMap;
 
 import static android.Manifest.permission.READ_CONTACTS;
@@ -135,7 +140,7 @@ public class LoginActivity extends Activity {
     }
 
 
-    private void attemptLogin(String phoneNum, String password) {
+    private void attemptLogin(final String phoneNum, final String password) {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
         //判断是否已经登录
         String token = sharedPreferences.getString("token", "");
@@ -157,6 +162,7 @@ public class LoginActivity extends Activity {
 
                     }
 
+
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(LoginActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
@@ -169,13 +175,9 @@ public class LoginActivity extends Activity {
                     }
                 });
 
+
     }
 
-    private String token(String phone, double latitude, double longitude) {
-        String key = phone + latitude + longitude + "stonymoon";
-
-        return DigestUtils.md5Hex(key);
-    }
 
     private void saveUser(String phone, String password, String token) {
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
@@ -184,6 +186,7 @@ public class LoginActivity extends Activity {
         editor.putString("password", password);
         editor.putString("token", token);
         editor.commit();
+
 
     }
 

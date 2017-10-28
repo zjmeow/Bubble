@@ -73,19 +73,16 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        //在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
         mapView.onDestroy();
     }
     @Override
     protected void onResume() {
         super.onResume();
-        //在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
         mapView.onResume();
     }
     @Override
     protected void onPause() {
         super.onPause();
-        //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mapView.onPause();
     }
 
@@ -176,7 +173,7 @@ public class MapActivity extends AppCompatActivity {
         RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
         TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
         usernameText.setText(bean.getUsername());
-        LatLng latLng = new LatLng(bean.getLocation().get(0), bean.getLocation().get(1));
+        LatLng latLng = new LatLng(bean.getLocation().get(1), bean.getLocation().get(0));
 
         OverlayOptions options = new MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.fromView(userLayout));
@@ -199,7 +196,7 @@ public class MapActivity extends AppCompatActivity {
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
         option.setCoorType("bd09ll");
         //bd09：百度墨卡托坐标；
-        option.setScanSpan(2000);
+        option.setScanSpan(5000);
         //设置发起定位请求的间隔，int类型，单位ms
         option.setOpenGps(true);
         option.setLocationNotify(false);
@@ -209,7 +206,7 @@ public class MapActivity extends AppCompatActivity {
         //可选，定位SDK内部是一个service，并放到了独立进程。
         //设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
 
-        option.setEnableSimulateGps(false);
+        option.setEnableSimulateGps(true);
 //可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
         mLocationClient.setLocOption(option);
 //mLocationClient为第二步初始化过的LocationClient对象
@@ -244,14 +241,12 @@ public class MapActivity extends AppCompatActivity {
         @Override
         public void onReceiveLocation(BDLocation location) {
             //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
-            //以下只列举部分获取经纬度相关（常用）的结果信息
-            //更多结果信息获取说明，请参照类参考中BDLocation类中的说明
 
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
-            parameters.put("latitude ", latitude);
-            parameters.put("longitude", longitude);
-            Toast.makeText(MapActivity.this, String.valueOf(latitude), Toast.LENGTH_SHORT).show();
+//            parameters.put("latitude ", latitude);
+//            parameters.put("longitude", longitude);
+            HttpUtil.updateLocate(MapActivity.this, "924114652353298922", latitude, longitude);
 
             HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
                 @Override
@@ -259,6 +254,8 @@ public class MapActivity extends AppCompatActivity {
                     Gson gson = new Gson();
                     LocationBean bean = gson.fromJson(response, LocationBean.class);
                     final BaiduMap baiduMap = mapView.getMap();
+                    parameters.clear();
+                    baiduMap.clear();
                     for (LocationBean.PoisBean b : bean.getPois()) {
                         addUserMarker(baiduMap, b);
                     }
