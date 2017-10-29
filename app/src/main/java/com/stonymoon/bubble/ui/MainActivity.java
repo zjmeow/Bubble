@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
+        //todo 处理拒绝请求
         RxPermissionsTool.with(this).addPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
                 .addPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)

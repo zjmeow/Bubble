@@ -1,6 +1,8 @@
 package com.stonymoon.bubble.ui;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -31,9 +33,9 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
-import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxResultCallback;
 import com.tamic.novate.callback.RxStringCallback;
 
 import java.util.HashMap;
@@ -46,14 +48,28 @@ import static com.stonymoon.bubble.ui.MapActivity.MyMarker.TEXT_MARKER;
 import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
 
 
+
 public class MapActivity extends AppCompatActivity {
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.map)
     MapView mapView;
+    private String locationId;
+    private String token;
+    private String id;
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
+
+    public static void startActivity(Context context, String id, String token, String locationId) {
+        Intent intent = new Intent(context, MapActivity.class);
+        intent.putExtra("id", id);
+        intent.putExtra("token", token);
+        intent.putExtra("locationId", locationId);
+        context.startActivity(intent);
+
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +81,13 @@ public class MapActivity extends AppCompatActivity {
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        token = intent.getStringExtra("token");
+        id = intent.getStringExtra("id");
+        locationId = intent.getStringExtra("locationId");
         setMap();
         initLocate();
+
         mLocationClient.start();
     }
 
@@ -75,11 +96,13 @@ public class MapActivity extends AppCompatActivity {
         super.onDestroy();
         mapView.onDestroy();
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume();
     }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -116,7 +139,6 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
-
 
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
@@ -164,7 +186,6 @@ public class MapActivity extends AppCompatActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         baiduMap.animateMapStatus(mMapStatusUpdate);
     }
-
 
     //把用用户的bean来在地图上添加Marker
     public MyMarker addUserMarker(BaiduMap baiduMap, LocationBean.PoisBean bean) {
@@ -239,14 +260,42 @@ public class MapActivity extends AppCompatActivity {
     class MyLocationListener extends BDAbstractLocationListener {
 
         @Override
-        public void onReceiveLocation(BDLocation location) {
+        public void onReceiveLocation(final BDLocation location) {
             //此处的BDLocation为定位结果信息类，通过它的各种get方法可获取定位相关的全部结果
 
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
-//            parameters.put("latitude ", latitude);
-//            parameters.put("longitude", longitude);
-            HttpUtil.updateLocate(MapActivity.this, "924114652353298922", latitude, longitude);
+            //拿到百度地图上定位的id
+            if (locationId == null || locationId.equals("")) {
+                HttpUtil.getUser(MapActivity.this, id, new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+                        Gson gson = new Gson();
+                        LocationBean bean = gson.fromJson(response, LocationBean.class);
+                        locationId = bean.getPois().get(0).getId();
+                        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putString("locationId", locationId);
+                        editor.apply();
+                    }
+
+                    @Override
+                    public void onError(Object tag, Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, Throwable e) {
+
+                    }
+                });
+            } else {
+                HttpUtil.updateLocate(MapActivity.this, locationId, latitude, longitude);
+
+
+            }
+
+
 
             HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
                 @Override
@@ -256,6 +305,9 @@ public class MapActivity extends AppCompatActivity {
                     final BaiduMap baiduMap = mapView.getMap();
                     parameters.clear();
                     baiduMap.clear();
+                    if (bean.getPois() == null) {
+                        return;
+                    }
                     for (LocationBean.PoisBean b : bean.getPois()) {
                         addUserMarker(baiduMap, b);
                     }
@@ -277,5 +329,6 @@ public class MapActivity extends AppCompatActivity {
 
         }
     }
+
 
 }

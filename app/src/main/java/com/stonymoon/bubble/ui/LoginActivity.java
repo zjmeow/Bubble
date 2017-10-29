@@ -79,7 +79,7 @@ public class LoginActivity extends Activity {
 
     @OnClick(R.id.btn_login_sign_in)
     void login() {
-        attemptLogin(phoneNumberView.getText().toString(), passwordView.getText().toString());
+        login(phoneNumberView.getText().toString(), passwordView.getText().toString());
 
     }
 
@@ -96,12 +96,13 @@ public class LoginActivity extends Activity {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin(phoneNumberView.getText().toString(), passwordView.getText().toString());
+                    login(phoneNumberView.getText().toString(), passwordView.getText().toString());
                     return true;
                 }
                 return false;
             }
         });
+        attemptLogin();
 
 
     }
@@ -129,9 +130,7 @@ public class LoginActivity extends Activity {
         return false;
     }
 
-    /**
-     * Callback received when a permissions request has been completed.
-     */
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -142,15 +141,7 @@ public class LoginActivity extends Activity {
     }
 
 
-    private void attemptLogin(final String phoneNum, final String password) {
-        SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-        //判断是否已经登录
-        String token = sharedPreferences.getString("token", "");
-        if (!token.equals("")) {
-            //已经登录过，直接进入定位页面
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
+    private void login(final String phoneNum, final String password) {
 
         String url = "login";
         parameters.put("phone", phoneNum);
@@ -162,14 +153,15 @@ public class LoginActivity extends Activity {
                         Gson gson = new Gson();
                         LoginBean bean = gson.fromJson(response, LoginBean.class);
                         saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
-
-
+                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), bean.getContent().getToken(), "");
+                        finish();
                     }
 
 
                     @Override
                     public void onError(Object tag, Throwable e) {
-                        Toast.makeText(LoginActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
 
@@ -180,9 +172,27 @@ public class LoginActivity extends Activity {
                 });
 
 
+
     }
 
 
+    //如果登录过则直接进入主页面
+    private void attemptLogin() {
+        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
+        //判断是否已经登录
+        String token = sharedPreferences.getString("token", "");
+        String id = sharedPreferences.getString("id", "");
+        String locationId = sharedPreferences.getString("locationId", "");
+        if (!token.equals("") && !id.equals("")) {
+            //已经登录过，直接进入定位页面
+            MapActivity.startActivity(this, id, token, locationId);
+            finish();
+        }
+
+
+    }
+
+    //保存用户信息
     private void saveUser(String phone, String password, String token, String id) {
         SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -192,9 +202,7 @@ public class LoginActivity extends Activity {
         editor.putString("id", id);
         editor.apply();
 
-
     }
-
 
 }
 

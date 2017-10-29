@@ -1,7 +1,5 @@
 package com.stonymoon.bubble.bean;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.List;
 
 /**
@@ -14,8 +12,8 @@ public class LocationBean {
     /**
      * status : 0
      * message : 成功
-     * size : 10
-     * pois : [{"id":"923906845016359286","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:51","modify_time":"2017-10-27 21:38:51"},{"id":"923906844236218074","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:51","modify_time":"2017-10-27 21:38:51"},{"id":"923906843556738212","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:51","modify_time":"2017-10-27 21:38:51"},{"id":"923906842776600280","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:51","modify_time":"2017-10-27 21:38:51"},{"id":"923906841929350870","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:51","modify_time":"2017-10-27 21:38:51"},{"id":"923906841111458978","geotable_id":"1000002164","location":[10,10],"gcj_location":[9.993480703470995,9.993991630060519],"province":"Bauchi","city":"Alkaleri","district":"","city_id":"75745","username":"stony","create_time":"2017-10-27 21:38:50","modify_time":"2017-10-27 21:40:30"},{"id":"923906840402622784","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:50","modify_time":"2017-10-27 21:38:50"},{"id":"923906837953148064","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:50","modify_time":"2017-10-27 21:38:50"},{"id":"923906836329955700","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:49","modify_time":"2017-10-27 21:38:49"},{"id":"923906781250356762","geotable_id":"1000002164","location":[1,1],"gcj_location":[0.9934856269655112,0.993986706569649],"province":"","city":"","district":"","city_id":"0","username":"stony","create_time":"2017-10-27 21:38:36","modify_time":"2017-10-27 21:38:36"}]
+     * size : 1
+     * pois : [{"id":"924528024416712288","geotable_id":"1000002164","location":[119.198768,26.056791],"gcj_location":[119.19224827941872,26.050831076722915],"province":"福建省","city":"福州市","district":"闽侯县","city_id":"300","uid":2,"username":"stony","url":"http://api.map.baidu.com/geodata/v4/poi/create","create_time":"2017-10-29 14:47:12","modify_time":"2017-10-29 14:47:12"}]
      */
 
     private List<PoisBean> pois;
@@ -30,22 +28,28 @@ public class LocationBean {
 
     public static class PoisBean {
         /**
-         * id : 923906845016359286
+         * id : 924528024416712288
          * geotable_id : 1000002164
-         * location : [1,1]
-         * gcj_location : [0.9934856269655112,0.993986706569649]
-         * province :
-         * city :
-         * district :
-         * city_id : 0
+         * location : [119.198768,26.056791]
+         * gcj_location : [119.19224827941872,26.050831076722915]
+         * province : 福建省
+         * city : 福州市
+         * district : 闽侯县
+         * city_id : 300
+         * uid : 2
          * username : stony
-         * create_time : 2017-10-27 21:38:51
-         * modify_time : 2017-10-27 21:38:51
+         * url : http://api.map.baidu.com/geodata/v4/poi/create
+         * create_time : 2017-10-29 14:47:12
+         * modify_time : 2017-10-29 14:47:12
          */
 
         private String id;
+        private String province;
+        private String city;
+        private String district;
+        private int uid;
         private String username;
-        @SerializedName("modify_time")
+        private String url;
         private String modifyTime;
         private List<Double> location;
 
@@ -57,6 +61,38 @@ public class LocationBean {
             this.id = id;
         }
 
+        public String getProvince() {
+            return province;
+        }
+
+        public void setProvince(String province) {
+            this.province = province;
+        }
+
+        public String getCity() {
+            return city;
+        }
+
+        public void setCity(String city) {
+            this.city = city;
+        }
+
+        public String getDistrict() {
+            return district;
+        }
+
+        public void setDistrict(String district) {
+            this.district = district;
+        }
+
+        public int getUid() {
+            return uid;
+        }
+
+        public void setUid(int uid) {
+            this.uid = uid;
+        }
+
         public String getUsername() {
             return username;
         }
@@ -65,11 +101,19 @@ public class LocationBean {
             this.username = username;
         }
 
-        public String getModifyTime() {
+        public String getUrl() {
+            return url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public String getModifTime() {
             return modifyTime;
         }
 
-        public void setModifyTime(String modifyTime) {
+        public void getModifTime(String modifyTime) {
             this.modifyTime = modifyTime;
         }
 
