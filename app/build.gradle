@@ -10,7 +10,19 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            //选择要添加的对应cpu类型的.so库。
+            abiFilters 'armeabi', 'armeabi-v7a', 'armeabi-v8a'
+            // 还可以添加 'x86', 'x86_64', 'mips', 'mips64'
     }
+        manifestPlaceholders = [
+                JPUSH_PKGNAME: "com.stonymoon.bubble",
+                JPUSH_APPKEY : "5ea265d3bb081fc58ff16a41", //JPush上注册的包名对应的appkey.
+                JPUSH_CHANNEL: "developer-default", //暂时填写默认值即可.
+        ]
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,6 +36,8 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'cn.jiguang.sdk:jmessage:2.3.0'  // 此处以JMessage 2.3.0 版本为例。
+    compile 'cn.jiguang.sdk:jcore:1.1.7'  // 此处以JCore 1.1.7 版本为例。
     compile 'com.github.yalantis:ucrop:2.2.1-native'
     compile 'com.qiniu:qiniu-android-sdk:7.3.+'
     compile 'jp.wasabeef:glide-transformations:2.0.2'

@@ -47,14 +47,11 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         SharedPreferences sharedPreferences = getPreferences(MODE_PRIVATE);
-
-
-
-
         Intent intent = getIntent();
         String url = intent.getStringExtra("url");
         String userName = intent.getStringExtra("userName");
         String userId = intent.getStringExtra("userId");
+
         Glide.with(this).load(url).into(userHeadImage);
 
         usernameText.setText(userName);

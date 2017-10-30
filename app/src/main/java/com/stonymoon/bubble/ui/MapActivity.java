@@ -109,37 +109,6 @@ public class MapActivity extends AppCompatActivity {
         mapView.onPause();
     }
 
-    private void showBottomSheetGrid() {
-        final Context context = MapActivity.this;
-        final int TAG_SHARE_WECHAT_FRIEND = 0;
-        final int TAG_SHARE_WECHAT_MOMENT = 1;
-        final int TAG_SHARE_WEIBO = 2;
-        QMUIBottomSheet.BottomGridSheetBuilder builder = new QMUIBottomSheet.BottomGridSheetBuilder(context);
-        builder.addItem(R.mipmap.test, "查看用户信息", TAG_SHARE_WECHAT_FRIEND, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .addItem(R.mipmap.test, "聊天", TAG_SHARE_WECHAT_MOMENT, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .addItem(R.mipmap.test, "互动", TAG_SHARE_WEIBO, QMUIBottomSheet.BottomGridSheetBuilder.FIRST_LINE)
-                .setOnSheetItemClickListener(new QMUIBottomSheet.BottomGridSheetBuilder.OnSheetItemClickListener() {
-                    @Override
-                    public void onClick(QMUIBottomSheet dialog, View itemView) {
-                        dialog.dismiss();
-                        int tag = (int) itemView.getTag();
-                        switch (tag) {
-                            case TAG_SHARE_WECHAT_FRIEND:
-                                Toast.makeText(context, "分享到微信", Toast.LENGTH_SHORT).show();
-                                break;
-                            case TAG_SHARE_WECHAT_MOMENT:
-                                Toast.makeText(context, "分享到朋友圈", Toast.LENGTH_SHORT).show();
-                                break;
-                            case TAG_SHARE_WEIBO:
-                                Toast.makeText(context, "分享到微博", Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                    }
-                }).build().show();
-
-
-    }
-
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
         baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
@@ -156,8 +125,8 @@ public class MapActivity extends AppCompatActivity {
                     case USER_MARKER:
                         LocationBean.PoisBean bean = myMarker.getUserBean();
                         Toast.makeText(MapActivity.this, bean.getUsername(), Toast.LENGTH_SHORT).show();
-                        //点击后把镜头移动到气泡上
-                        //ProfileActivity.startActivity(MapActivity.this, bean.getUserImage(), bean.getUserName(), bean.getUserId());
+
+//                        ProfileActivity.startActivity(MapActivity.this, bean.getUrl(), bean.getUsername(), bean.getId());
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
