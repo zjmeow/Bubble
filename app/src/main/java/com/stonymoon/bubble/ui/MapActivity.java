@@ -3,6 +3,7 @@ package com.stonymoon.bubble.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -43,6 +44,11 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.event.LoginStateChangeEvent;
+import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.model.Message;
 
 import static com.stonymoon.bubble.ui.MapActivity.MyMarker.TEXT_MARKER;
 import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
@@ -54,9 +60,11 @@ public class MapActivity extends AppCompatActivity {
     public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.map)
     MapView mapView;
+
     private String locationId;
     private String token;
     private String id;
+    private String phone;
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
@@ -66,7 +74,22 @@ public class MapActivity extends AppCompatActivity {
         intent.putExtra("id", id);
         intent.putExtra("token", token);
         intent.putExtra("locationId", locationId);
+
         context.startActivity(intent);
+
+
+    }
+
+    //todo 发消息给指定用户
+    @OnClick(R.id.btn_map_send_message)
+    void sendMessage() {
+        Message message = JMessageClient.createSingleTextMessage("13101411917", "hello");
+        JMessageClient.sendMessage(message);
+    }
+
+    //接收到事件的处理
+    public void onEventMainThread(MessageEvent event) {
+        Toast.makeText(MapActivity.this, event.getMessage().toString() + "接收成功", Toast.LENGTH_SHORT).show();
 
 
     }
@@ -81,6 +104,7 @@ public class MapActivity extends AppCompatActivity {
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
+        JMessageClient.registerEventReceiver(this);
         Intent intent = getIntent();
         token = intent.getStringExtra("token");
         id = intent.getStringExtra("id");

@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
 
-
     <!-- 用于进行网络定位 -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 用于访问GPS定位 -->
@@ -46,9 +45,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-
-        <!--极光推送引入-->
-        <!-- Required SDK 核心功能-->
+        <!-- 极光推送引入 -->
+        <!-- Required SDK 核心功能 -->
         <!-- 可配置android:process参数将PushService放在其他进程中 -->
         <service
             android:name="cn.jpush.android.service.PushService"
@@ -62,13 +60,14 @@
             </intent-filter>
         </service>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.PushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter android:priority="1000">
                 <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED_PROXY" />
+
                 <category android:name="com.stonymoon.bubble" />
             </intent-filter>
             <intent-filter>
@@ -84,18 +83,18 @@
             </intent-filter>
         </receiver>
 
-        <!-- Required SDK核心功能-->
+        <!-- Required SDK核心功能 -->
         <receiver
             android:name="cn.jpush.android.service.AlarmReceiver"
             android:exported="false" />
 
-        <!-- Required since JCore 1.1.7. SDK 核心功能-->
+        <!-- Required since JCore 1.1.7. SDK 核心功能 -->
         <provider
             android:name="cn.jpush.android.service.DataProvider"
             android:authorities="com.stonymoon.bubble.DataProvider"
             android:exported="true" />
 
-        <!-- Required JMessage SDK核心功能-->
+        <!-- Required JMessage SDK核心功能 -->
         <receiver
             android:name="cn.jpush.im.android.helpers.IMReceiver"
             android:enabled="true"
@@ -109,11 +108,11 @@
         </receiver>
 
         <!-- Required. For publish channel feature -->
-        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。-->
+        <!-- JPUSH_CHANNEL 是为了方便开发者统计APK分发渠道。 -->
         <!-- 例如: -->
         <!-- 发到 Google Play 的APK可以设置为 google-play; -->
         <!-- 发到其他市场的 APK 可以设置为 xxx-market。 -->
-        <!-- 目前这个渠道统计功能的报表还未开放。-->
+        <!-- 目前这个渠道统计功能的报表还未开放。 -->
         <meta-data
             android:name="JPUSH_CHANNEL"
             android:value="developer-default" />
@@ -123,8 +122,7 @@
             android:name="JPUSH_APPKEY"
             android:value="5ea265d3bb081fc58ff16a41" />
 
-
-        <!--极光推送结束-->
+        <!-- 极光推送结束 -->
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
@@ -159,7 +157,12 @@
             android:label="@string/title_activity_profile" />
         <activity android:name=".ui.SelectPhotoActivity" />
         <activity android:name=".ui.MapTestActivity" />
-        <activity android:name=".ui.HttpActivity"></activity>
+        <activity android:name=".ui.HttpActivity" />
+
+        <receiver
+            android:name=".receiver.MessageReceiver"
+            android:enabled="true"
+            android:exported="true"></receiver>
     </application>
 
 </manifest>
