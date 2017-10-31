@@ -37,3 +37,23 @@
  -dontwarn com.yalantis.ucrop**
  -keep class com.yalantis.ucrop** { *; }
  -keep interface com.yalantis.ucrop** { *; }
+
+ -dontoptimize
+ -dontpreverify
+ -keepattributes  EnclosingMethod,Signature
+ -dontwarn cn.jpush.**
+ -keep class cn.jpush.** { *; }
+
+ -dontwarn cn.jiguang.**
+ -keep class cn.jiguang.** { *; }
+
+  -keepclassmembers class ** {
+      public void onEvent*(**);
+  }
+
+ #========================gson================================
+ -dontwarn com.google.**
+ -keep class com.google.gson.** {*;}
+
+ #========================protobuf================================
+ -keep class com.google.protobuf.** {*;}

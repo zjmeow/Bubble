@@ -33,6 +33,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -104,6 +105,10 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        //todo 极光debug，发布时要去掉
+        JMessageClient.setDebugMode(true);
+        //初始化极光推送,是否开启缓存消息
+        JMessageClient.init(MainActivity.this, true);
     }
 
     @Override

@@ -22,6 +22,8 @@ import java.util.regex.Pattern;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 
 import static com.vondear.rxtools.RxConstTool.REGEX_MOBILE_SIMPLE;
 
@@ -90,8 +92,18 @@ public class RegisterActivity extends AppCompatActivity {
                 .rxPost(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
-                        Toast.makeText(RegisterActivity.this, response, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+                        //注册聊天帐号
+                        JMessageClient.register(
+                                phoneNumberText.getText().toString(),
+                                passwordText.getText().toString(), new BasicCallback() {
+                                    @Override
+                                    public void gotResult(int i, String s) {
+                                        Toast.makeText(RegisterActivity.this, "测试极光推送" + s, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
+
 
                     @Override
                     public void onError(Object tag, Throwable e) {

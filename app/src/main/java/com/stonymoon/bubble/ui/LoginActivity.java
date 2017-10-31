@@ -56,6 +56,8 @@ import org.apaches.commons.codec.digest.DigestUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.api.BasicCallback;
 import okhttp3.Call;
 import retrofit2.http.QueryMap;
 
@@ -102,7 +104,7 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
-        attemptLogin();
+        //attemptLogin();
 
 
     }
@@ -155,9 +157,15 @@ public class LoginActivity extends Activity {
                         saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
                         Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                         MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), bean.getContent().getToken(), "");
+                        JMessageClient.login(phoneNum, password, new BasicCallback() {
+                            @Override
+                            public void gotResult(int i, String s) {
+                                Toast.makeText(LoginActivity.this, "测试极光推送" + s, Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
                         finish();
                     }
-
 
                     @Override
                     public void onError(Object tag, Throwable e) {
@@ -182,10 +190,20 @@ public class LoginActivity extends Activity {
         //判断是否已经登录
         String token = sharedPreferences.getString("token", "");
         String id = sharedPreferences.getString("id", "");
+        String phone = sharedPreferences.getString("phone", "");
+        String password = sharedPreferences.getString("password", "");
+
+
         String locationId = sharedPreferences.getString("locationId", "");
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
             MapActivity.startActivity(this, id, token, locationId);
+            JMessageClient.login(phone, password, new BasicCallback() {
+                @Override
+                public void gotResult(int i, String s) {
+                    Toast.makeText(LoginActivity.this, "测试极光推送" + s, Toast.LENGTH_SHORT).show();
+                }
+            });
             finish();
         }
 
