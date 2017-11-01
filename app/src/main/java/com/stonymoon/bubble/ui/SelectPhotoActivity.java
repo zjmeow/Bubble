@@ -41,6 +41,7 @@ import com.vondear.rxtools.view.dialog.RxDialogSureCancel;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
+import org.apaches.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -49,44 +50,17 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import retrofit2.http.HEAD;
-import retrofit2.http.HTTP;
-
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
 public class SelectPhotoActivity extends ActivityBase {
-    @BindView(R.id.tv_bg)
-    TextView mTvBg;
     @BindView(R.id.iv_avatar)
     ImageView mIvAvatar;
-    @BindView(R.id.ll_anchor_left)
-    LinearLayout mLlAnchorLeft;
-    @BindView(R.id.rl_avatar)
-    RelativeLayout mRlAvatar;
-    @BindView(R.id.tv_name)
-    TextView mTvName;
-    @BindView(R.id.tv_constellation)
-    TextView mTvConstellation;
-    @BindView(R.id.tv_birthday)
-    TextView mTvBirthday;
-    @BindView(R.id.tv_address)
-    TextView mTvAddress;
-    @BindView(R.id.tv_lables)
-    TextView mTvLables;
-    @BindView(R.id.textView2)
-    TextView mTextView2;
-    @BindView(R.id.editText2)
-    TextView mEditText2;
-    @BindView(R.id.btn_exit)
-    Button mBtnExit;
-    @BindView(R.id.activity_user)
-    LinearLayout mActivityUser;
+
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
@@ -314,7 +288,8 @@ public class SelectPhotoActivity extends ActivityBase {
         String url = "imageToken";
         parameters.clear();
         parameters.put("token", token);
-        parameters.put("name", "name");
+        String name = generateName(token);
+        parameters.put("name", name);
 
         HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost(url, parameters, new RxStringCallback() {
                     @Override
@@ -364,6 +339,13 @@ public class SelectPhotoActivity extends ActivityBase {
                 Toast.makeText(SelectPhotoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    //根据用户信息来生成头像名字
+    private String generateName(String token) {
+        //todo
+        return "a";
 
     }
 

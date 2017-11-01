@@ -118,6 +118,7 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        JMessageClient.unRegisterEventReceiver(this);
         mapView.onDestroy();
     }
 
@@ -149,8 +150,10 @@ public class MapActivity extends AppCompatActivity {
                     case USER_MARKER:
                         LocationBean.PoisBean bean = myMarker.getUserBean();
                         Toast.makeText(MapActivity.this, bean.getUsername(), Toast.LENGTH_SHORT).show();
-
-//                        ProfileActivity.startActivity(MapActivity.this, bean.getUrl(), bean.getUsername(), bean.getId());
+//                        ProfileActivity.startActivity(MapActivity.this,
+//                                bean.getUrl(),
+//                                bean.getUsername(),
+//                                bean.getId());
                         break;
                     case TEXT_MARKER:
                         Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
