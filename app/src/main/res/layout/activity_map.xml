@@ -1,16 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_map"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.stonymoon.bubble.ui.MapActivity">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
     <com.baidu.mapapi.map.MapView
         android:id="@+id/map"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clickable="true" />
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_map_send_message"
@@ -18,5 +24,11 @@
         android:layout_height="56dp"
         android:layout_gravity="bottom|right"
         android:layout_margin="16dp" />
-
 </FrameLayout>
+
+    <EditText
+        android:id="@+id/et_map_message"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:maxLines="1" />
+</LinearLayout>

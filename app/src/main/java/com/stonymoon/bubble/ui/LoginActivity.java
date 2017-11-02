@@ -92,7 +92,8 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-
+        //初始化极光推送,是否开启缓存消息
+        JMessageClient.init(LoginActivity.this, true);
 
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -160,7 +161,7 @@ public class LoginActivity extends Activity {
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
-                                Toast.makeText(LoginActivity.this, "测试极光推送" + s, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "极光推送:" + s, Toast.LENGTH_SHORT).show();
 
                             }
                         });

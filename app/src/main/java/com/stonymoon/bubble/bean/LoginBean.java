@@ -10,7 +10,7 @@ public class LoginBean {
     /**
      * code : 1
      * message : 登陆成功！
-     * content : {"id":8,"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJpZFwiOjgsXCJ1c2VybmFtZVwiOlwic3Rvbnltb29uXCIsXCJwYXNzd29yZFwiOlwiJDJhJDEwJEdPMTR6cldxTlpldXhvMmVMMWQ1WXVzL1NTWUkwVTdLd1NKcWNKOHl2TFlzaVRwOENHaUdXXCIsXCJwaG9uZVwiOlwiMTMxMDE0MTE5MTFcIn0iLCJleHAiOjE1MDkyNjc4NDV9.wLb6RlxcC1_RUHHMnIfySMO-peM73bOwmzOjaV1HdAMOXlx7eNL_vXk4B8Ibmu8TnpllaTVGnvv3hDa8SRU7mQ"}
+     * content : {"id":22,"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJpZFwiOjIyLFwidXNlcm5hbWVcIjpcInN0b255XCIsXCJwYXNzd29yZFwiOlwiJDJhJDEwJHouZXI0VlBCa3N0VXVOL2JrY2NMQ2VrYXh3WlhaNnJjNEF2cEoubEhoeDJnNGZpaVBwSmlpXCIsXCJwaG9uZVwiOlwiMTMxMDE0MTE5MTFcIn0iLCJleHAiOjE1MDk3MDQyNDN9.IWTie_i6col1mJcmaEJ8RaXmQKxFviRJsF-ukv5K2pXjfV2NxmDHid6j87h1uCgx4BkJdJiZJjsrQE0TNSjT5Q"}
      */
 
     private ContentBean content;
@@ -25,8 +25,8 @@ public class LoginBean {
 
     public static class ContentBean {
         /**
-         * id : 8
-         * token : eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJpZFwiOjgsXCJ1c2VybmFtZVwiOlwic3Rvbnltb29uXCIsXCJwYXNzd29yZFwiOlwiJDJhJDEwJEdPMTR6cldxTlpldXhvMmVMMWQ1WXVzL1NTWUkwVTdLd1NKcWNKOHl2TFlzaVRwOENHaUdXXCIsXCJwaG9uZVwiOlwiMTMxMDE0MTE5MTFcIn0iLCJleHAiOjE1MDkyNjc4NDV9.wLb6RlxcC1_RUHHMnIfySMO-peM73bOwmzOjaV1HdAMOXlx7eNL_vXk4B8Ibmu8TnpllaTVGnvv3hDa8SRU7mQ
+         * id : 22
+         * token : eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJpZFwiOjIyLFwidXNlcm5hbWVcIjpcInN0b255XCIsXCJwYXNzd29yZFwiOlwiJDJhJDEwJHouZXI0VlBCa3N0VXVOL2JrY2NMQ2VrYXh3WlhaNnJjNEF2cEoubEhoeDJnNGZpaVBwSmlpXCIsXCJwaG9uZVwiOlwiMTMxMDE0MTE5MTFcIn0iLCJleHAiOjE1MDk3MDQyNDN9.IWTie_i6col1mJcmaEJ8RaXmQKxFviRJsF-ukv5K2pXjfV2NxmDHid6j87h1uCgx4BkJdJiZJjsrQE0TNSjT5Q
          */
 
         private int id;

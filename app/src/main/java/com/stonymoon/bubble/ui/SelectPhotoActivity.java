@@ -26,6 +26,7 @@ import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -67,14 +68,15 @@ public class SelectPhotoActivity extends ActivityBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
-        RxBarTool.noTitle(this);
-
+        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_select_photo);
-
         ButterKnife.bind(this);
         initView();
         initUpload();
+
+
     }
 
     protected void initView() {
@@ -207,7 +209,8 @@ public class SelectPhotoActivity extends ActivityBase {
                 .start(this);
     }
 
-    @OnClick(R.id.btn_exit)
+    //todo删除多了按钮
+    //@OnClick(R.id.btn_exit)
     public void onClick() {
         final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(this);
         rxDialogSureCancel.getCancelView().setOnClickListener(new View.OnClickListener() {

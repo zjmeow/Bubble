@@ -4,15 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#EAEAEA"
-    android:orientation="vertical"
-
+    android:orientation="horizontal"
     >
 
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="28dp"
+        android:src="@drawable/arrow" />
 
     <FrameLayout
         android:id="@+id/fl_profile_detail"
         android:layout_width="match_parent"
-        android:layout_height="360dp"
+        android:layout_height="400dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="16dp">
 
@@ -83,7 +88,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="5dp"
                     android:layout_gravity="bottom"
-                    android:layout_marginTop="100dp"
+                    android:layout_marginTop="140dp"
                     android:background="#EAEAEA" />
 
                 <LinearLayout
@@ -108,7 +113,8 @@
                         android:layout_height="0dp"
                         android:layout_weight="1" />
 
-                    <Button
+                    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+
                         android:layout_width="110dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="16dp"

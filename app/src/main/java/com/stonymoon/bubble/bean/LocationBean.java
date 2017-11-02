@@ -51,7 +51,16 @@ public class LocationBean {
         private String username;
         private String url;
         private String modifyTime;
+        private String phone;
         private List<Double> location;
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
+        }
 
         public String getId() {
             return id;

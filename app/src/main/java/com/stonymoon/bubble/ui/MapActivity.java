@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,11 +61,14 @@ public class MapActivity extends AppCompatActivity {
     public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.map)
     MapView mapView;
+    @BindView(R.id.et_map_message)
+    EditText messageEditText;
 
     private String locationId;
     private String token;
     private String id;
     private String phone;
+    private LocationBean.PoisBean chosenUserBean;
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
@@ -83,7 +87,11 @@ public class MapActivity extends AppCompatActivity {
     //todo 发消息给指定用户
     @OnClick(R.id.btn_map_send_message)
     void sendMessage() {
-        Message message = JMessageClient.createSingleTextMessage("13101411917", "hello");
+        if (chosenUserBean == null) {
+            return;
+        }
+        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
+
         JMessageClient.sendMessage(message);
     }
 
@@ -149,7 +157,8 @@ public class MapActivity extends AppCompatActivity {
                 switch (myMarker.getType()) {
                     case USER_MARKER:
                         LocationBean.PoisBean bean = myMarker.getUserBean();
-                        Toast.makeText(MapActivity.this, bean.getUsername(), Toast.LENGTH_SHORT).show();
+                        chosenUserBean = bean;
+                        Toast.makeText(MapActivity.this, bean.getPhone(), Toast.LENGTH_SHORT).show();
 //                        ProfileActivity.startActivity(MapActivity.this,
 //                                bean.getUrl(),
 //                                bean.getUsername(),
