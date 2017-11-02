@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,9 +31,11 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
+import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -55,7 +58,6 @@ import static com.stonymoon.bubble.ui.MapActivity.MyMarker.TEXT_MARKER;
 import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
 
 
-
 public class MapActivity extends AppCompatActivity {
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
@@ -63,7 +65,7 @@ public class MapActivity extends AppCompatActivity {
     MapView mapView;
     @BindView(R.id.et_map_message)
     EditText messageEditText;
-
+    //todo 设置屏幕退出时不刷新页面 
     private String locationId;
     private String token;
     private String id;
@@ -152,6 +154,7 @@ public class MapActivity extends AppCompatActivity {
             // 返回 true 则表示接口已响应事件，否则返回false
             @Override
             public boolean onMarkerClick(Marker marker) {
+                marker.setToTop();
                 MyMarker myMarker = markerMap.get(marker.getId());
                 zoomIn(baiduMap, marker, 30f);
                 switch (myMarker.getType()) {
@@ -195,9 +198,13 @@ public class MapActivity extends AppCompatActivity {
     //把用用户的bean来在地图上添加Marker
     public MyMarker addUserMarker(BaiduMap baiduMap, LocationBean.PoisBean bean) {
 
-
         RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
         TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
+        ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
+        //加载小图
+        Picasso.with(this).
+                load(bean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+
         usernameText.setText(bean.getUsername());
         LatLng latLng = new LatLng(bean.getLocation().get(1), bean.getLocation().get(0));
 
@@ -299,7 +306,6 @@ public class MapActivity extends AppCompatActivity {
 
 
             }
-
 
 
             HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {

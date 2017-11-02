@@ -5,8 +5,9 @@
     android:layout_height="wrap_content">
 
     <ImageView
-    android:layout_width="25dp"
-    android:layout_height="25dp"
+        android:id="@+id/iv_bubble_head"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:gravity="center"
         android:src="@mipmap/bubble"
 
@@ -21,5 +22,5 @@
 
         />
 
-
+    5
 </RelativeLayout>
