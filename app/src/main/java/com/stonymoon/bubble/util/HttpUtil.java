@@ -122,7 +122,31 @@ public class HttpUtil {
 
     }
 
+    public static void updateHead(final Context context, String locationId, String url) {
+        updateLocateParameters.clear();
+        updateLocateParameters.put("id", locationId);
+        updateLocateParameters.put("geotable_id", tableId);
+        updateLocateParameters.put("ak", ak);
+        updateLocateParameters.put("url", url);
+        Novate novate = new Novate.Builder(context).baseUrl("http://api.map.baidu.com/").build();
+        novate.rxPost("geodata/v4/poi/update", updateLocateParameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                //Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+            }
 
+            @Override
+            public void onError(Object tag, Throwable e) {
+                Toast.makeText(context, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
+    }
 
 
 }

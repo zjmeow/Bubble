@@ -1,6 +1,7 @@
 package com.stonymoon.bubble.ui;
 
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -65,6 +66,16 @@ public class SelectPhotoActivity extends ActivityBase {
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
+    private String userId = "25";
+    private String locationId = "926042754864151714";
+
+    public static void startActivity(Context context, String url, String username, String userId) {
+        Intent intent = new Intent(context, SelectPhotoActivity.class);
+        intent.putExtra("url", url);
+        intent.putExtra("username", username);
+        intent.putExtra("userId", userId);
+        context.startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +86,6 @@ public class SelectPhotoActivity extends ActivityBase {
         ButterKnife.bind(this);
         initView();
         initUpload();
-
 
     }
 
@@ -154,7 +164,7 @@ public class SelectPhotoActivity extends ActivityBase {
                     final Throwable cropError = UCrop.getError(data);
                 }
                 break;
-            case UCrop.RESULT_ERROR://UCrop裁剪错误之后的处理
+            case UCrop.RESULT_ERROR: //UCrop裁剪错误之后的处理
                 final Throwable cropError = UCrop.getError(data);
                 break;
             default:
@@ -228,7 +238,6 @@ public class SelectPhotoActivity extends ActivityBase {
         rxDialogSureCancel.show();
     }
 
-
     private void initUpload() {
 
         Recorder recorder = new Recorder() {
@@ -263,11 +272,10 @@ public class SelectPhotoActivity extends ActivityBase {
     /***
      * 表单上传
      */
-    private void upload(File data, String token) {
+    private void upload(File data, String token, String name) {
         // 重用 uploadManager。一般地，只需要创建一个 uploadManager 对象
 
         //data = <File对象、或 文件路径、或 字节数组>
-        String name = "name";                            //在七牛上显示的名字
 
         mUploadManager.put(data, name, token,
                 new UpCompletionHandler() {
@@ -277,13 +285,11 @@ public class SelectPhotoActivity extends ActivityBase {
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
                         Toast.makeText(SelectPhotoActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 
-                        //todo 拼接url上传到服务器
-                        uploadUrl(key, (String) parameters.get("token"));
+                        uploadUrl("http://oupl6wdxc.bkt.clouddn.com/" + key, (String) parameters.get("token"));
 
                     }
                 }, null);
     }
-
 
     private void uploadHead(final File file) {
         SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
@@ -291,7 +297,7 @@ public class SelectPhotoActivity extends ActivityBase {
         String url = "imageToken";
         parameters.clear();
         parameters.put("token", token);
-        String name = generateName(token);
+        final String name = generateName(userId);
         parameters.put("name", name);
 
         HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost(url, parameters, new RxStringCallback() {
@@ -299,7 +305,7 @@ public class SelectPhotoActivity extends ActivityBase {
                     public void onNext(Object tag, String response) {
                         Gson gson = new Gson();
                         String token = gson.fromJson(response, ContentBean.class).getContent();
-                        upload(file, token);
+                        upload(file, token, name);
 
                     }
 
@@ -318,7 +324,6 @@ public class SelectPhotoActivity extends ActivityBase {
         );
 
     }
-
 
     //上传新的头像地址到服务器上
     private void uploadUrl(String headUrl, String token) {
@@ -342,14 +347,19 @@ public class SelectPhotoActivity extends ActivityBase {
                 Toast.makeText(SelectPhotoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
+        HttpUtil.updateHead(this, locationId, headUrl);
 
     }
 
     //根据用户信息来生成头像名字
-    private String generateName(String token) {
-        //todo
-        return "a";
-
+    private String generateName(String id) {
+        int result = 0x93499820 ^ (7 * Integer.valueOf(id) - 1);
+        String key = result + "";
+        StringBuilder builder = new StringBuilder();
+        for (byte b : key.getBytes()) {
+            builder.append((char) (b + 20));
+        }
+        return builder.toString() + System.currentTimeMillis();
     }
 
 
