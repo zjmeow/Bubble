@@ -1,13 +1,20 @@
 package com.stonymoon.bubble.ui;
 
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -61,6 +68,13 @@ public class MapActivity extends AppCompatActivity {
     MapView mapView;
     @BindView(R.id.et_map_message)
     EditText messageEditText;
+    @BindView(R.id.map_bubble)
+    RelativeLayout bubble;
+    @BindView(R.id.iv_map_bubble_head)
+    ImageView headImage;
+    @BindView(R.id.tv_map_bubble_username)
+    TextView usernameText;
+
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
@@ -72,7 +86,7 @@ public class MapActivity extends AppCompatActivity {
     private String id;
     private String phone;
     private LocationBean.PoisBean chosenUserBean;
-
+    private AlphaAnimation alphaAnimation;
 
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
@@ -124,6 +138,7 @@ public class MapActivity extends AppCompatActivity {
         setMap();
         initLocate();
         mLocationClient.start();
+        initAlphaAnimation();
     }
 
     @Override
@@ -157,15 +172,31 @@ public class MapActivity extends AppCompatActivity {
             //TODO 点击marker上拉弹窗启动onPause，然后地图停止刷新，关闭弹窗地图继续刷新
             @Override
             public boolean onClusterItemClick(MyItem item) {
+
                 zoomIn(baiduMap, item.getPosition(), 30f);
+                Point p = baiduMap.getProjection().toScreenLocation(item.getPosition());
                 LocationBean.PoisBean bean = item.getPoisBean();
                 chosenUserBean = bean;
-                selectedItem = new HugeItem(item.getPoisBean());
+                //selectedItem = new HugeItem(item.getPoisBean());
                 mClusterManager.clearItems();
-                chooseMarker(selectedItem);
+                //chooseMarker(selectedItem);
                 Toast.makeText(MapActivity.this, bean.getPhone(), Toast.LENGTH_SHORT).show();
+                //当点击item时删除全部item并且把自定义view引入
+                //此时为选中状态，当用户离开选中状态时，隐藏自定义view
+                //加载小图
+                Picasso.with(MapActivity.this).
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(headImage);
+                usernameText.setText(bean.getUsername());
+                bubble.setVisibility(View.VISIBLE);
+                isSelected = true;
+                bubble.setAnimation(alphaAnimation);
+                alphaAnimation.start();
 
 
+//                ViewGroup.MarginLayoutParams margin = new ViewGroup.MarginLayoutParams(userLayout.getLayoutParams());
+//                margin.setMargins(p.x, p.y, p.x + margin.width, p.y + margin.height);
+//                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(margin);
+//                userLayout.setLayoutParams(layoutParams);
                 return false;
             }
 
@@ -181,6 +212,18 @@ public class MapActivity extends AppCompatActivity {
         // 绑定 Marker 被点击事件
         baiduMap.setOnMarkerClickListener(mClusterManager);
 
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        if (isSelected) {
+            mLocationClient.start();
+            bubble.clearAnimation();
+            bubble.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
     }
 
     //根据marker来设置地图镜头移动
@@ -262,6 +305,14 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    private void initAlphaAnimation() {
+        alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
+        alphaAnimation.setDuration(3000);
+        alphaAnimation.setRepeatCount(Animation.INFINITE);
+        alphaAnimation.setRepeatMode(Animation.REVERSE);
+
+    }
+
     //储存Marker中的信息，用Map把mark的id与它关联起来
     class MyMarker {
         private LocationBean.PoisBean poisBean;
@@ -327,7 +378,6 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-
     class MyLocationListener extends BDAbstractLocationListener {
 
         @Override
@@ -370,6 +420,7 @@ public class MapActivity extends AppCompatActivity {
                     LocationBean bean = gson.fromJson(response, LocationBean.class);
                     final BaiduMap baiduMap = mapView.getMap();
                     parameters.clear();
+                    mLocationClient.stop();
                     if (bean.getPois() == null) {
                         return;
                     }
@@ -397,6 +448,8 @@ public class MapActivity extends AppCompatActivity {
 
 
         }
+
+
     }
 
 

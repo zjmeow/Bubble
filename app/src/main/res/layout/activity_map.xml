@@ -11,13 +11,42 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
     <com.baidu.mapapi.map.MapView
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" />
 
+            <RelativeLayout
+                android:id="@+id/map_bubble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone">
 
+                <ImageView
+                    android:id="@+id/iv_map_bubble_head"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:gravity="center"
+                    android:src="@mipmap/bubble"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_map_bubble_username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+
+                    />
+
+            </RelativeLayout>
+        </FrameLayout>
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_map_send_message"
         android:layout_width="56dp"
