@@ -3,12 +3,9 @@ package com.stonymoon.bubble.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -22,6 +19,7 @@ import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
@@ -31,33 +29,31 @@ import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-import com.qmuiteam.qmui.widget.dialog.QMUIBottomSheet;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
+import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
 import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxResultCallback;
 import com.tamic.novate.callback.RxStringCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.event.LoginStateChangeEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Message;
 
-import static com.stonymoon.bubble.ui.MapActivity.MyMarker.TEXT_MARKER;
-import static com.stonymoon.bubble.ui.MapActivity.MyMarker.USER_MARKER;
-
-
+//本地图显示附近的人
+//动态地图另外开一个地图显示
 public class MapActivity extends AppCompatActivity {
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
@@ -65,12 +61,19 @@ public class MapActivity extends AppCompatActivity {
     MapView mapView;
     @BindView(R.id.et_map_message)
     EditText messageEditText;
-    //todo 设置屏幕退出时不刷新页面 
+    //管理聚合地图
+    private ClusterManager<MyItem> mClusterManager;
+    private List<MyItem> myItems = new ArrayList<>();
+    private HugeItem selectedItem;
+    //todo 设置是否选中marker状态,当选中时不刷新
+    private boolean isSelected = false;
     private String locationId;
     private String token;
     private String id;
     private String phone;
     private LocationBean.PoisBean chosenUserBean;
+
+
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
@@ -80,27 +83,26 @@ public class MapActivity extends AppCompatActivity {
         intent.putExtra("id", id);
         intent.putExtra("token", token);
         intent.putExtra("locationId", locationId);
-
         context.startActivity(intent);
-
 
     }
 
-    //todo 发消息给指定用户
     @OnClick(R.id.btn_map_send_message)
     void sendMessage() {
         if (chosenUserBean == null) {
             return;
         }
+        if (messageEditText.getText().equals("")) {
+            return;
+        }
         Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
-
+        messageEditText.setText("");
         JMessageClient.sendMessage(message);
     }
 
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
         Toast.makeText(MapActivity.this, event.getMessage().toString() + "接收成功", Toast.LENGTH_SHORT).show();
-
 
     }
 
@@ -121,7 +123,6 @@ public class MapActivity extends AppCompatActivity {
         locationId = intent.getStringExtra("locationId");
         setMap();
         initLocate();
-
         mLocationClient.start();
     }
 
@@ -136,59 +137,56 @@ public class MapActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        mLocationClient.start();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
+        mLocationClient.stop();
     }
 
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
+        mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
+        baiduMap.setOnMapStatusChangeListener(mClusterManager);
         baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 
-        BaiduMap.OnMarkerClickListener markerClickListener = new BaiduMap.OnMarkerClickListener() {
-
-            // marker 对象被点击时回调的接口
-            // 返回 true 则表示接口已响应事件，否则返回false
+        mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
+            //TODO 点击marker上拉弹窗启动onPause，然后地图停止刷新，关闭弹窗地图继续刷新
             @Override
-            public boolean onMarkerClick(Marker marker) {
-                marker.setToTop();
-                MyMarker myMarker = markerMap.get(marker.getId());
-                zoomIn(baiduMap, marker, 30f);
-                switch (myMarker.getType()) {
-                    case USER_MARKER:
-                        LocationBean.PoisBean bean = myMarker.getUserBean();
-                        chosenUserBean = bean;
-                        Toast.makeText(MapActivity.this, bean.getPhone(), Toast.LENGTH_SHORT).show();
-//                        ProfileActivity.startActivity(MapActivity.this,
-//                                bean.getUrl(),
-//                                bean.getUsername(),
-//                                bean.getId());
-                        break;
-                    case TEXT_MARKER:
-                        Toast.makeText(MapActivity.this, "text", Toast.LENGTH_SHORT).show();
-                        break;
-                    default:
-                        break;
-                }
+            public boolean onClusterItemClick(MyItem item) {
+                zoomIn(baiduMap, item.getPosition(), 30f);
+                LocationBean.PoisBean bean = item.getPoisBean();
+                chosenUserBean = bean;
+                selectedItem = new HugeItem(item.getPoisBean());
+                mClusterManager.clearItems();
+                chooseMarker(selectedItem);
+                Toast.makeText(MapActivity.this, bean.getPhone(), Toast.LENGTH_SHORT).show();
 
-                return true;
+
+                return false;
             }
 
+//                ProfileActivity.startActivity(MapActivity.this,
+//                        bean.getUrl(),
+//                        bean.getUsername(),
+//                        bean.getId());
 
-        };
+
+        });
+
+
         // 绑定 Marker 被点击事件
-
-        baiduMap.setOnMarkerClickListener(markerClickListener);
+        baiduMap.setOnMarkerClickListener(mClusterManager);
 
     }
 
     //根据marker来设置地图镜头移动
-    private void zoomIn(BaiduMap baiduMap, Marker marker, float v) {
+    private void zoomIn(BaiduMap baiduMap, LatLng latLng, float v) {
         MapStatus mMapStatus = new MapStatus.Builder()
-                .target(marker.getPosition())
+                .target(latLng)
                 .zoom(v)
                 .build();
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
@@ -198,7 +196,7 @@ public class MapActivity extends AppCompatActivity {
     //把用用户的bean来在地图上添加Marker
     public MyMarker addUserMarker(BaiduMap baiduMap, LocationBean.PoisBean bean) {
 
-        RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.test_view, null);
+        RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
         TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
         ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
         //加载小图
@@ -211,14 +209,31 @@ public class MapActivity extends AppCompatActivity {
         OverlayOptions options = new MarkerOptions().position(latLng)
                 .icon(BitmapDescriptorFactory.fromView(userLayout));
         Marker marker = (Marker) baiduMap.addOverlay(options);
-        Animation animation = new ScaleAnimation(1, 0.5f, 1, 0.5f);
-        animation.setDuration(1000);
-        //todo marker动画 marker.setAnimation(animation);
+
         MyMarker myMarker = new MyMarker(bean);
         markerMap.put(marker.getId(), myMarker);
         return myMarker;
 
     }
+
+
+    public void addMarkers(List<MyItem> items) {
+        // 添加Marker点
+        //addItems添加一组
+        mClusterManager.addItems(items);
+        mClusterManager.cluster();
+
+    }
+
+    public void chooseMarker(MyItem item) {
+        // 添加Marker点
+        //addItems添加一组
+
+        mClusterManager.addItem(item);
+        mClusterManager.cluster();
+
+    }
+
 
     private void initLocate() {
         mLocationClient = new LocationClient(getApplicationContext());
@@ -249,25 +264,69 @@ public class MapActivity extends AppCompatActivity {
 
     //储存Marker中的信息，用Map把mark的id与它关联起来
     class MyMarker {
-        public static final int USER_MARKER = 0;
-        public static final int TEXT_MARKER = 1;
-        private int type;
         private LocationBean.PoisBean poisBean;
 
         public MyMarker(LocationBean.PoisBean bean) {
             this.poisBean = bean;
-            type = USER_MARKER;
         }
 
         public LocationBean.PoisBean getUserBean() {
             return poisBean;
         }
 
-        public int getType() {
-            return type;
+
+    }
+
+    private class MyItem implements ClusterItem {
+        private final LatLng mPosition;
+        private final LocationBean.PoisBean poisBean;
+
+        public MyItem(LocationBean.PoisBean bean) {
+            mPosition = new LatLng(bean.getLocation().get(1), bean.getLocation().get(0));
+            this.poisBean = bean;
+        }
+
+        public LocationBean.PoisBean getPoisBean() {
+            return poisBean;
+        }
+
+        @Override
+        public LatLng getPosition() {
+            return mPosition;
+        }
+
+        @Override
+        public BitmapDescriptor getBitmapDescriptor() {
+            RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
+            TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
+            ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
+            //加载小图
+            Picasso.with(MapActivity.this).
+                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+            return BitmapDescriptorFactory.fromView(userLayout);
+        }
+
+
+    }
+
+    private class HugeItem extends MyItem {
+        public HugeItem(LocationBean.PoisBean bean) {
+            super(bean);
+        }
+
+        @Override
+        public BitmapDescriptor getBitmapDescriptor() {
+            RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_huge_bubble, null);
+            TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_huge_bubble_username);
+            ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_huge_bubble_head);
+            //加载小图
+            Picasso.with(MapActivity.this).
+                    load(super.poisBean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+            return BitmapDescriptorFactory.fromView(userLayout);
         }
 
     }
+
 
     class MyLocationListener extends BDAbstractLocationListener {
 
@@ -303,11 +362,7 @@ public class MapActivity extends AppCompatActivity {
                 });
             } else {
                 HttpUtil.updateLocate(MapActivity.this, locationId, latitude, longitude);
-
-
             }
-
-
             HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
                 @Override
                 public void onNext(Object tag, String response) {
@@ -315,13 +370,16 @@ public class MapActivity extends AppCompatActivity {
                     LocationBean bean = gson.fromJson(response, LocationBean.class);
                     final BaiduMap baiduMap = mapView.getMap();
                     parameters.clear();
-                    baiduMap.clear();
                     if (bean.getPois() == null) {
                         return;
                     }
+                    baiduMap.clear();
+                    mClusterManager.clearItems();
+                    myItems.clear();
                     for (LocationBean.PoisBean b : bean.getPois()) {
-                        addUserMarker(baiduMap, b);
+                        myItems.add(new MyItem(b));
                     }
+                    addMarkers(myItems);
 
                 }
 

@@ -169,7 +169,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {
-            Intent intent = new Intent(MainActivity.this, HttpActivity.class);
+            Intent intent = new Intent(MainActivity.this, MapTestActivity.class);
             startActivity(intent);
         }
 
