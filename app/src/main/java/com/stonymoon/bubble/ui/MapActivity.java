@@ -1,5 +1,6 @@
 package com.stonymoon.bubble.ui;
 
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +11,11 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -42,6 +46,7 @@ import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
 import com.tamic.novate.Throwable;
@@ -86,7 +91,7 @@ public class MapActivity extends AppCompatActivity {
     private String id;
     private String phone;
     private LocationBean.PoisBean chosenUserBean;
-    private AlphaAnimation alphaAnimation;
+    private AnimatorSet set;
 
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
@@ -138,7 +143,7 @@ public class MapActivity extends AppCompatActivity {
         setMap();
         initLocate();
         mLocationClient.start();
-        initAlphaAnimation();
+        initAnimation();
     }
 
     @Override
@@ -177,26 +182,20 @@ public class MapActivity extends AppCompatActivity {
                 Point p = baiduMap.getProjection().toScreenLocation(item.getPosition());
                 LocationBean.PoisBean bean = item.getPoisBean();
                 chosenUserBean = bean;
-                //selectedItem = new HugeItem(item.getPoisBean());
                 mClusterManager.clearItems();
-                //chooseMarker(selectedItem);
-                Toast.makeText(MapActivity.this, bean.getPhone(), Toast.LENGTH_SHORT).show();
+                mClusterManager.cluster();
+                mLocationClient.stop();
+
                 //当点击item时删除全部item并且把自定义view引入
                 //此时为选中状态，当用户离开选中状态时，隐藏自定义view
                 //加载小图
+
                 Picasso.with(MapActivity.this).
                         load(bean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(headImage);
                 usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
-                bubble.setAnimation(alphaAnimation);
-                alphaAnimation.start();
-
-
-//                ViewGroup.MarginLayoutParams margin = new ViewGroup.MarginLayoutParams(userLayout.getLayoutParams());
-//                margin.setMargins(p.x, p.y, p.x + margin.width, p.y + margin.height);
-//                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(margin);
-//                userLayout.setLayoutParams(layoutParams);
+                set.start();
                 return false;
             }
 
@@ -305,13 +304,20 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    private void initAlphaAnimation() {
-        alphaAnimation = new AlphaAnimation(0.1f, 1.0f);
-        alphaAnimation.setDuration(3000);
-        alphaAnimation.setRepeatCount(Animation.INFINITE);
-        alphaAnimation.setRepeatMode(Animation.REVERSE);
+
+    private void initAnimation() {
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(bubble, "scaleX", 1.0f, 1.8f);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(bubble, "scaleY", 1.0f, 1.8f);
+        set = new AnimatorSet();
+        set.setDuration(1000);
+        set.setInterpolator(new SpringScaleInterpolator(0.4f));
+        set.playTogether(animatorX, animatorY);
+        //set.setRepeatCount(Animation.INFINITE);
+        //set.setRepeatMode(Animation.REVERSE);
+
 
     }
+
 
     //储存Marker中的信息，用Map把mark的id与它关联起来
     class MyMarker {
