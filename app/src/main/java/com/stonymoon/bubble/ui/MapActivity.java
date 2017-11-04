@@ -196,6 +196,7 @@ public class MapActivity extends AppCompatActivity {
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
                 set.start();
+
                 return false;
             }
 
@@ -318,6 +319,16 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    //todo 打开界面
+    @OnClick(R.id.map_bubble)
+    void startProfile() {
+        SelectPhotoActivity.startActivity(MapActivity.this,
+                chosenUserBean.getUrl(),
+                chosenUserBean.getUsername(),
+                "" + chosenUserBean.getUid(),
+                chosenUserBean.getId());
+
+    }
 
     //储存Marker中的信息，用Map把mark的id与它关联起来
     class MyMarker {

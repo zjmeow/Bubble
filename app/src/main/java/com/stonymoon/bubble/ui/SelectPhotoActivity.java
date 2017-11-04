@@ -56,12 +56,15 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.callback.GetGroupIDListCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
 public class SelectPhotoActivity extends ActivityBase {
     @BindView(R.id.iv_avatar)
     ImageView mIvAvatar;
+    @BindView(R.id.tv_profile_username)
+    TextView tvUsername;
 
     private UploadManager mUploadManager;
     private Uri resultUri;
@@ -69,11 +72,12 @@ public class SelectPhotoActivity extends ActivityBase {
     private String userId = "25";
     private String locationId = "926042754864151714";
 
-    public static void startActivity(Context context, String url, String username, String userId) {
+    public static void startActivity(Context context, String url, String username, String userId, String locationId) {
         Intent intent = new Intent(context, SelectPhotoActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("username", username);
         intent.putExtra("userId", userId);
+        intent.putExtra("locationId", locationId);
         context.startActivity(intent);
     }
 
@@ -86,7 +90,13 @@ public class SelectPhotoActivity extends ActivityBase {
         ButterKnife.bind(this);
         initView();
         initUpload();
-
+        Intent intent = getIntent();
+        userId = intent.getStringExtra("userId");
+        locationId = intent.getStringExtra("locationId");
+        String url = intent.getStringExtra("url");
+        String username = intent.getStringExtra("username");
+        Glide.with(this).load(url).into(mIvAvatar);
+        tvUsername.setText(username);
     }
 
     protected void initView() {
