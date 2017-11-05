@@ -48,6 +48,7 @@ import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MyCallback;
 import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
@@ -132,6 +133,10 @@ public class MapActivity extends AppCompatActivity {
         Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
         messageEditText.setText("");
         JMessageClient.sendMessage(message);
+        // TODO 测试好友列表
+        Intent intent = new Intent(MapActivity.this, FriendActivity.class);
+        startActivity(intent);
+
     }
 
     //接收到事件的处理
@@ -149,6 +154,7 @@ public class MapActivity extends AppCompatActivity {
 
     public void onEvent(ContactNotifyEvent event) {
         //获取事件发生的会话对象
+        LogUtil.v("MapActivity", "receive friend" + event.toString());
         String target = JMessageClient.getMyInfo().getUserName();
         showMessagePositiveDialog(event.getFromUsername(), target);
 
