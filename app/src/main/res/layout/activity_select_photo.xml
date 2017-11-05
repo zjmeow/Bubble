@@ -115,7 +115,7 @@
                         android:layout_weight="1" />
 
                     <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-
+                        android:id="@+id/btn_profile_make_friend"
                         android:layout_width="110dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="16dp"

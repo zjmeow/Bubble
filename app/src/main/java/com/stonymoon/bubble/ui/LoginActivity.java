@@ -171,6 +171,8 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+
+
                         e.printStackTrace();
                     }
 

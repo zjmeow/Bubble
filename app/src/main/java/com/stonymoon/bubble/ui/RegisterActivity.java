@@ -23,6 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.android.api.options.RegisterOptionalUserInfo;
 import cn.jpush.im.api.BasicCallback;
 
 import static com.vondear.rxtools.RxConstTool.REGEX_MOBILE_SIMPLE;
@@ -94,14 +96,19 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onNext(Object tag, String response) {
                         Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                         //注册聊天帐号
+                        RegisterOptionalUserInfo userInfo = new RegisterOptionalUserInfo();
+
+                        userInfo.setNickname(usernameText.getText().toString());
                         JMessageClient.register(
                                 phoneNumberText.getText().toString(),
-                                passwordText.getText().toString(), new BasicCallback() {
+                                passwordText.getText().toString(), userInfo, new BasicCallback() {
                                     @Override
                                     public void gotResult(int i, String s) {
                                         Toast.makeText(RegisterActivity.this, "测试极光推送" + s, Toast.LENGTH_SHORT).show();
                                     }
                                 });
+
+
                     }
 
 

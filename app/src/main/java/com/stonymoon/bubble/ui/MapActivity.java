@@ -42,10 +42,13 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.MyCallback;
 import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
@@ -55,14 +58,20 @@ import com.tamic.novate.callback.RxStringCallback;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.event.OfflineMessageEvent;
+import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.api.BasicCallback;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
@@ -97,6 +106,12 @@ public class MapActivity extends AppCompatActivity {
     //用marker的id绑定信息，为点击回调提供信息
     private Map<String, MyMarker> markerMap = new HashMap<>();
 
+    private MyCallback callback = new MyCallback(this);
+
+
+
+
+
     public static void startActivity(Context context, String id, String token, String locationId) {
         Intent intent = new Intent(context, MapActivity.class);
         intent.putExtra("id", id);
@@ -124,6 +139,23 @@ public class MapActivity extends AppCompatActivity {
         Toast.makeText(MapActivity.this, event.getMessage().toString() + "接收成功", Toast.LENGTH_SHORT).show();
 
     }
+
+    public void onEvent(OfflineMessageEvent event) {
+        //获取事件发生的会话对象
+        Conversation conversation = event.getConversation();
+        List<Message> newMessageList = event.getOfflineMessageList();//获取此次离线期间会话收到的新消息列表
+        System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
+    }
+
+    public void onEvent(ContactNotifyEvent event) {
+        //获取事件发生的会话对象
+        String target = JMessageClient.getMyInfo().getUserName();
+        showMessagePositiveDialog(event.getFromUsername(), target);
+
+    }
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,6 +253,8 @@ public class MapActivity extends AppCompatActivity {
             mLocationClient.start();
             bubble.clearAnimation();
             bubble.setVisibility(View.GONE);
+            isSelected = false;
+
         } else {
             super.onBackPressed();
         }
@@ -319,15 +353,44 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    //todo 打开界面
     @OnClick(R.id.map_bubble)
     void startProfile() {
         SelectPhotoActivity.startActivity(MapActivity.this,
                 chosenUserBean.getUrl(),
                 chosenUserBean.getUsername(),
                 "" + chosenUserBean.getUid(),
-                chosenUserBean.getId());
+                chosenUserBean.getId(),
+                chosenUserBean.getPhone()
+        );
 
+    }
+
+    private void showMessagePositiveDialog(final String username, final String targetUsername) {
+        new QMUIDialog.MessageDialogBuilder(MapActivity.this)
+                .setTitle(username + "请求加你为好友")
+                .setMessage("要同意吗？")
+                .addAction("拒绝", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("接受", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        switch (index) {
+                            case 0:
+                                ContactManager.declineInvitation(username, "", targetUsername + "拒绝了你的请求", callback);
+                                break;
+                            case 1:
+                                ContactManager.acceptInvitation(targetUsername, "", callback);
+                                break;
+                        }
+                        dialog.dismiss();
+
+                    }
+                })
+                .show();
     }
 
     //储存Marker中的信息，用Map把mark的id与它关联起来

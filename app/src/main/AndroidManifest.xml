@@ -155,7 +155,11 @@
         <activity
             android:name=".ui.ProfileActivity"
             android:label="@string/title_activity_profile" />
-        <activity android:name=".ui.SelectPhotoActivity" />
+        <activity
+            android:name=".ui.SelectPhotoActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+
+            />
         <activity android:name=".ui.MapTestActivity" />
         <activity android:name=".ui.HttpActivity" />
 

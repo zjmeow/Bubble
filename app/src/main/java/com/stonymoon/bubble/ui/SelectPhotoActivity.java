@@ -28,8 +28,10 @@ import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
+import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.util.HttpUtil;
 
 import com.tamic.novate.callback.RxStringCallback;
@@ -56,29 +58,54 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.im.android.api.ContactManager;
+import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetGroupIDListCallback;
+import cn.jpush.im.android.api.model.UserInfo;
+import cn.jpush.im.api.BasicCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
 public class SelectPhotoActivity extends ActivityBase {
+    //此处有bug，拿到token可能能给别人的用户替换头像
+
+
     @BindView(R.id.iv_avatar)
     ImageView mIvAvatar;
     @BindView(R.id.tv_profile_username)
     TextView tvUsername;
-
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
     private String userId = "25";
     private String locationId = "926042754864151714";
+    private String phone;
 
-    public static void startActivity(Context context, String url, String username, String userId, String locationId) {
+    public static void startActivity(Context context, String url, String username, String userId, String locationId, String phone) {
         Intent intent = new Intent(context, SelectPhotoActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("username", username);
         intent.putExtra("userId", userId);
         intent.putExtra("locationId", locationId);
+        intent.putExtra("phone", phone);
         context.startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_profile_make_friend)
+    void sendMessage() {
+        ContactManager.sendInvitationRequest(phone, "", "请求加你为好友", new BasicCallback() {
+            @Override
+            public void gotResult(int responseCode, String responseMessage) {
+                Log.v("SelectPhoto", responseMessage);
+                Toast.makeText(SelectPhotoActivity.this, responseMessage, Toast.LENGTH_SHORT);
+                if (0 == responseCode) {
+                    //好友请求请求发送成功
+                } else {
+                    Toast.makeText(SelectPhotoActivity.this, "请求发送失败", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+
     }
 
     @Override
@@ -95,6 +122,7 @@ public class SelectPhotoActivity extends ActivityBase {
         locationId = intent.getStringExtra("locationId");
         String url = intent.getStringExtra("url");
         String username = intent.getStringExtra("username");
+        phone = intent.getStringExtra("phone");
         Glide.with(this).load(url).into(mIvAvatar);
         tvUsername.setText(username);
     }
@@ -335,12 +363,22 @@ public class SelectPhotoActivity extends ActivityBase {
 
     }
 
-    //上传新的头像地址到服务器上
-    private void uploadUrl(String headUrl, String token) {
+    //上传新的头像地址到java服务器和极光服务器上
+    private void uploadUrl(final String headUrl, String token) {
         parameters.clear();
         parameters.put("token", token);
         parameters.put("url", headUrl);
         String url = "image";
+        JUserBean bean = new JUserBean();
+        bean.setUserExtras("url", headUrl);
+        JMessageClient.updateMyInfo(UserInfo.Field.extras, bean, new BasicCallback() {
+            @Override
+            public void gotResult(int i, String s) {
+
+            }
+        });
+
+
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
