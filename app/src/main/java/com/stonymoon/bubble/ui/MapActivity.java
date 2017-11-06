@@ -8,17 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Gravity;
+
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.AccelerateInterpolator;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
-import android.view.animation.ScaleAnimation;
+
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,9 +30,6 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
@@ -102,6 +93,7 @@ public class MapActivity extends AppCompatActivity {
     private String phone;
     private LocationBean.PoisBean chosenUserBean;
     private AnimatorSet set;
+
 
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
@@ -229,7 +221,7 @@ public class MapActivity extends AppCompatActivity {
                 //加载小图
 
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(headImage);
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(headImage);
                 usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
@@ -275,30 +267,6 @@ public class MapActivity extends AppCompatActivity {
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
         baiduMap.animateMapStatus(mMapStatusUpdate);
     }
-
-    //把用用户的bean来在地图上添加Marker
-    public MyMarker addUserMarker(BaiduMap baiduMap, LocationBean.PoisBean bean) {
-
-        RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
-        TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
-        ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
-        //加载小图
-        Picasso.with(this).
-                load(bean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
-
-        usernameText.setText(bean.getUsername());
-        LatLng latLng = new LatLng(bean.getLocation().get(1), bean.getLocation().get(0));
-
-        OverlayOptions options = new MarkerOptions().position(latLng)
-                .icon(BitmapDescriptorFactory.fromView(userLayout));
-        Marker marker = (Marker) baiduMap.addOverlay(options);
-
-        MyMarker myMarker = new MyMarker(bean);
-        markerMap.put(marker.getId(), myMarker);
-        return myMarker;
-
-    }
-
 
     public void addMarkers(List<MyItem> items) {
         // 添加Marker点
@@ -439,7 +407,7 @@ public class MapActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).
-                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!100x100r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 
@@ -458,7 +426,7 @@ public class MapActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_huge_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).
-                    load(super.poisBean.getUrl() + "?imageMogr2/thumbnail/!75x75r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+                    load(super.poisBean.getUrl() + "?imageMogr2/thumbnail/!100x100r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 
@@ -473,6 +441,8 @@ public class MapActivity extends AppCompatActivity {
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
             //拿到百度地图上定位的id
+            //todo 不会自动恢复= =
+            zoomIn(mapView.getMap(), new LatLng(location.getLatitude(), location.getLongitude()), 30f);
             if (locationId == null || locationId.equals("")) {
                 HttpUtil.getUser(MapActivity.this, id, new RxStringCallback() {
                     @Override

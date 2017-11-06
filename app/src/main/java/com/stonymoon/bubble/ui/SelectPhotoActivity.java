@@ -29,6 +29,7 @@ import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
+import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
@@ -80,7 +81,7 @@ public class SelectPhotoActivity extends ActivityBase {
     private String userId = "25";
     private String locationId = "926042754864151714";
     private String phone;
-
+    private String url;
     public static void startActivity(Context context, String url, String username, String userId, String locationId, String phone) {
         Intent intent = new Intent(context, SelectPhotoActivity.class);
         intent.putExtra("url", url);
@@ -120,7 +121,7 @@ public class SelectPhotoActivity extends ActivityBase {
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
         locationId = intent.getStringExtra("locationId");
-        String url = intent.getStringExtra("url");
+        url = intent.getStringExtra("url");
         String username = intent.getStringExtra("username");
         phone = intent.getStringExtra("phone");
         Glide.with(this).load(url).into(mIvAvatar);
@@ -128,28 +129,24 @@ public class SelectPhotoActivity extends ActivityBase {
     }
 
     protected void initView() {
-        Resources r = mContext.getResources();
-        resultUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"
-                + r.getResourcePackageName(R.drawable.circle_elves_ball) + "/"
-                + r.getResourceTypeName(R.drawable.circle_elves_ball) + "/"
-                + r.getResourceEntryName(R.drawable.circle_elves_ball));
-
+        Picasso.with(SelectPhotoActivity.this).load(url).into(mIvAvatar);
         mIvAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 initDialogChooseImage();
             }
         });
-        mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-//                RxImageTool.showBigImageView(mContext, resultUri);
-                RxDialogScaleView rxDialogScaleView = new RxDialogScaleView(mContext);
-                rxDialogScaleView.setImageUri(resultUri);
-                rxDialogScaleView.show();
-                return false;
-            }
-        });
+        //todo 查看大图
+//        mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
+//            @Override
+//            public boolean onLongClick(View view) {
+////                RxImageTool.showBigImageView(mContext, resultUri);
+//                RxDialogScaleView rxDialogScaleView = new RxDialogScaleView(mContext);
+//
+//                rxDialogScaleView.show();
+//                return false;
+//            }
+//        });
     }
 
     private void initDialogChooseImage() {
