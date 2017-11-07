@@ -35,6 +35,7 @@ import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.util.HttpUtil;
 
+import com.stonymoon.bubble.util.LogUtil;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxBarTool;
 import com.vondear.rxtools.RxPhotoTool;
@@ -371,7 +372,7 @@ public class SelectPhotoActivity extends ActivityBase {
         JMessageClient.updateMyInfo(UserInfo.Field.extras, bean, new BasicCallback() {
             @Override
             public void gotResult(int i, String s) {
-
+                LogUtil.v("SelectPhoto", s);
             }
         });
 

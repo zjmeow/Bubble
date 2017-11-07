@@ -407,7 +407,7 @@ public class MapActivity extends AppCompatActivity {
             ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).
-                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!100x100r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 
@@ -501,7 +501,6 @@ public class MapActivity extends AppCompatActivity {
 
                 }
             }, latitude, longitude);
-
 
         }
 

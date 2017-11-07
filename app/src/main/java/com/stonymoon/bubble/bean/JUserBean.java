@@ -99,10 +99,14 @@ public class JUserBean extends UserInfo {
     @Override
     public void setUserExtras(Map<String, String> map) {
 
+
     }
 
     @Override
     public void setUserExtras(String s, String s1) {
+        extras.put(s, s1);
+
+
 
     }
 

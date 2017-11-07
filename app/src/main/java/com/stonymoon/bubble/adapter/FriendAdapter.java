@@ -14,12 +14,14 @@ import com.stonymoon.bubble.bean.JUserBean;
 
 import java.util.List;
 
+import cn.jpush.im.android.api.model.UserInfo;
+
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder> {
-    private List<JUserBean> userList;
+    private List<UserInfo> userList;
     private Context mContext;
 
-    public FriendAdapter(List<JUserBean> list) {
+    public FriendAdapter(List<UserInfo> list) {
         this.userList = list;
     }
 
@@ -34,7 +36,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                JUserBean bean = userList.get(position);
+                UserInfo bean = userList.get(position);
 
             }
 
@@ -51,7 +53,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        JUserBean bean = userList.get(position);
+        UserInfo bean = userList.get(position);
         Picasso.with(mContext)
                 .load(bean.getExtra("url"))
                 .into(holder.imageView);

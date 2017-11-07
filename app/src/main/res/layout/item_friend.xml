@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-
     >
 
     <ImageView
@@ -17,6 +16,7 @@
         android:id="@+id/tv_friend_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginRight="16dp"
         android:maxLines="1"
         android:textColor="@color/primaryText"
