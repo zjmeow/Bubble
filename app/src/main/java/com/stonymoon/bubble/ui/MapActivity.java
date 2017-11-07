@@ -6,12 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import android.view.View;
 
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -81,12 +88,15 @@ public class MapActivity extends AppCompatActivity {
     QMUIRadiusImageView headImage;
     @BindView(R.id.tv_map_bubble_username)
     TextView usernameText;
+    @BindView(R.id.iv_map_emoji)
+    ImageView emojiImage;
+    @BindView(R.id.btn_map_send_message)
+    FloatingActionButton button;
+
 
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
-    //用于关闭地图上的用户显示
-    private List<MyItem> emptyList = new ArrayList<>();
 
     private boolean isSelected = false;
     private String locationId;
@@ -94,7 +104,9 @@ public class MapActivity extends AppCompatActivity {
     private String id;
     private String phone;
     private LocationBean.PoisBean chosenUserBean;
-    private AnimatorSet set;
+    private AnimatorSet showBubbleSet;
+    private AnimatorSet receiveEmojiSet;
+    private AnimationSet sendEmojiSet = new AnimationSet(true);
 
 
     private Map<String, Object> parameters = new HashMap<>();
@@ -117,14 +129,17 @@ public class MapActivity extends AppCompatActivity {
         if (chosenUserBean == null) {
             return;
         }
-        if (messageEditText.getText().equals("")) {
-            return;
-        }
-        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
-        messageEditText.setText("");
-        JMessageClient.sendMessage(message);
-        Intent intent = new Intent(MapActivity.this, FriendActivity.class);
-        startActivity(intent);
+        button.startAnimation(sendEmojiSet);
+
+
+//        if (messageEditText.getText().equals("")) {
+//            return;
+//        }
+//        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
+//        messageEditText.setText("");
+//        JMessageClient.sendMessage(message);
+//        Intent intent = new Intent(MapActivity.this, FriendActivity.class);
+//        startActivity(intent);
 
     }
 
@@ -221,11 +236,22 @@ public class MapActivity extends AppCompatActivity {
                 Picasso.with(MapActivity.this).
                         load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
                         .into(headImage);
-                usernameText.setText(bean.getUsername());
+                //usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
-                set.start();
+                showBubbleSet.start();
 
+                //todo 设置动画
+                float x = bubble.getX();
+                float y = bubble.getY();
+                sendEmojiSet = null;
+                sendEmojiSet = new AnimationSet(true);
+                TranslateAnimation translateAnimation = new TranslateAnimation(0, -x, 0, -y);
+                ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
+                sendEmojiSet.addAnimation(translateAnimation);
+                sendEmojiSet.addAnimation(scaleAnimation);
+                sendEmojiSet.setDuration(2000);
+                sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
                 return false;
             }
 
@@ -251,8 +277,6 @@ public class MapActivity extends AppCompatActivity {
             bubble.setVisibility(View.GONE);
             isSelected = false;
             addMarkers(myItems);
-
-
 
 
         } else {
@@ -311,10 +335,10 @@ public class MapActivity extends AppCompatActivity {
     private void initAnimation() {
         ObjectAnimator animatorX = ObjectAnimator.ofFloat(bubble, "scaleX", 1.0f, 1.8f);
         ObjectAnimator animatorY = ObjectAnimator.ofFloat(bubble, "scaleY", 1.0f, 1.8f);
-        set = new AnimatorSet();
-        set.setDuration(1000);
-        set.setInterpolator(new SpringScaleInterpolator(0.4f));
-        set.playTogether(animatorX, animatorY);
+        showBubbleSet = new AnimatorSet();
+        showBubbleSet.setDuration(1000);
+        showBubbleSet.setInterpolator(new SpringScaleInterpolator(0.4f));
+        showBubbleSet.playTogether(animatorX, animatorY);
         //set.setRepeatCount(Animation.INFINITE);
         //set.setRepeatMode(Animation.REVERSE);
 
@@ -397,7 +421,6 @@ public class MapActivity extends AppCompatActivity {
         @Override
         public BitmapDescriptor getBitmapDescriptor() {
             RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
-            TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
             QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).

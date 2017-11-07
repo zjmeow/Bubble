@@ -22,6 +22,7 @@
         android:clickable="true" />
 
             <RelativeLayout
+
                 android:id="@+id/map_bubble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -34,7 +35,6 @@
                     android:layout_height="100dp"
                     android:gravity="center"
                     android:src="@mipmap/bubble"
-
                     />
 
                 <TextView
@@ -46,18 +46,27 @@
                     />
 
             </RelativeLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/btn_map_send_message"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="bottom|right"
+                android:layout_margin="16dp" />
+
         </FrameLayout>
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/btn_map_send_message"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|right"
-        android:layout_margin="16dp" />
-</FrameLayout>
+
+    </FrameLayout>
 
     <EditText
         android:id="@+id/et_map_message"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:maxLines="1" />
+
+
+    <ImageView
+        android:id="@+id/iv_map_emoji"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
 </LinearLayout>
