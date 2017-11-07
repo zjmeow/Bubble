@@ -12,15 +12,26 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
+import com.google.gson.Gson;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
+import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
+import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxStringCallback;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -28,12 +39,12 @@ import android.widget.Toast;
  * 此Demo用来说明点聚合功能
  */
 public class MapTestActivity extends Activity implements OnMapLoadedCallback {
-
     MapView mMapView;
     BaiduMap mBaiduMap;
+    private Map parameters = new HashMap();
     private MapStatus ms;
     private ClusterManager<MyItem> mClusterManager;
-
+    private List<MyItem> itemList = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,8 +58,6 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
         // 定义点聚合管理类ClusterManager
         mClusterManager = new ClusterManager<MyItem>(this, mBaiduMap);
-        // 添加Marker点
-        addMarkers();
         // 设置地图监听，当地图状态发生改变时，进行点聚合运算
         mBaiduMap.setOnMapStatusChangeListener(mClusterManager);
         // 设置maker点击时的响应
@@ -72,6 +81,8 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
                 return false;
             }
         });
+
+        initBubble();
     }
 
     @Override
@@ -95,44 +106,59 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     /**
      * 向地图添加Marker点
      */
-    public void addMarkers() {
-        // 添加Marker点
-        LatLng llA = new LatLng(39.963175, 116.400244);
-        LatLng llB = new LatLng(39.942821, 116.369199);
-        LatLng llC = new LatLng(39.939723, 116.425541);
-        LatLng llD = new LatLng(39.906965, 116.401394);
-        LatLng llE = new LatLng(39.956965, 116.331394);
-        LatLng llF = new LatLng(39.886965, 116.441394);
-        LatLng llG = new LatLng(39.996965, 116.411394);
-
-        List<MyItem> items = new ArrayList<MyItem>();
-        items.add(new MyItem(llA));
-        items.add(new MyItem(llB));
-        items.add(new MyItem(llC));
-        items.add(new MyItem(llD));
-        items.add(new MyItem(llE));
-        items.add(new MyItem(llF));
-        items.add(new MyItem(llG));
-
+    public void addMarkers(List<MyItem> items) {
         mClusterManager.addItems(items);
-
+        mClusterManager.cluster();
     }
 
     @Override
     public void onMapLoaded() {
-        // TODO Auto-generated method stub
         ms = new MapStatus.Builder().zoom(9).build();
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+    }
+
+    private void initBubble() {
+        String url = "map/bubble";
+        HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                Gson gson = new Gson();
+                BubbleBean bean = gson.fromJson(response, BubbleBean.class);
+                for (BubbleBean.ResultBean b : bean.getResult()) {
+                    itemList.add(new MyItem(b));
+                }
+
+                addMarkers(itemList);
+            }
+
+            @Override
+            public void onError(Object tag, Throwable e) {
+
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
+
+
     }
 
     /**
      * 每个Marker点，包含Marker点坐标以及图标
      */
-    public class MyItem implements ClusterItem {
+    private class MyItem implements ClusterItem {
         private final LatLng mPosition;
+        private final BubbleBean.ResultBean bean;
 
-        public MyItem(LatLng latLng) {
-            mPosition = latLng;
+        public MyItem(BubbleBean.ResultBean bean) {
+            mPosition = new LatLng(bean.getLatitude(), bean.getLongitude());
+            this.bean = bean;
+        }
+
+        public BubbleBean.ResultBean getBean() {
+            return bean;
         }
 
         @Override
@@ -142,9 +168,11 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
 
         @Override
         public BitmapDescriptor getBitmapDescriptor() {
-            return BitmapDescriptorFactory
-                    .fromResource(R.mipmap.bubble);
+            return BitmapDescriptorFactory.fromResource(R.mipmap.bubble);
         }
+
+
     }
+
 
 }

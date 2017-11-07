@@ -33,7 +33,9 @@ public class HttpUtil {
     }
 
     public static Novate sendHttpRequest(Context context) {
-        Novate novate = new Novate.Builder(context).baseUrl("http://123.207.26.208:8080/Bubble/api/v1/").build();
+        String baseUrl = "http://120.24.238.200:7899/";
+        //String baseUrl = "http://123.207.26.208:8080/Bubble/api/v1/"
+        Novate novate = new Novate.Builder(context).baseUrl(baseUrl).build();
         return novate;
     }
 
