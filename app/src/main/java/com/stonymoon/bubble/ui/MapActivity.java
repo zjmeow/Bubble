@@ -12,7 +12,6 @@ import android.os.Bundle;
 import android.view.View;
 
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,6 +32,7 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
@@ -67,6 +67,7 @@ import cn.jpush.im.api.BasicCallback;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
+//todo 关闭屏幕时继续定位，不获取其他用户信息
 public class MapActivity extends AppCompatActivity {
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
@@ -77,15 +78,16 @@ public class MapActivity extends AppCompatActivity {
     @BindView(R.id.map_bubble)
     RelativeLayout bubble;
     @BindView(R.id.iv_map_bubble_head)
-    ImageView headImage;
+    QMUIRadiusImageView headImage;
     @BindView(R.id.tv_map_bubble_username)
     TextView usernameText;
 
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
-    private HugeItem selectedItem;
-    //todo 设置是否选中marker状态,当选中时不刷新
+    //用于关闭地图上的用户显示
+    private List<MyItem> emptyList = new ArrayList<>();
+
     private boolean isSelected = false;
     private String locationId;
     private String token;
@@ -100,10 +102,6 @@ public class MapActivity extends AppCompatActivity {
     private Map<String, MyMarker> markerMap = new HashMap<>();
 
     private MyCallback callback = new MyCallback(this);
-
-
-
-
 
     public static void startActivity(Context context, String id, String token, String locationId) {
         Intent intent = new Intent(context, MapActivity.class);
@@ -125,7 +123,6 @@ public class MapActivity extends AppCompatActivity {
         Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
         messageEditText.setText("");
         JMessageClient.sendMessage(message);
-        // TODO 测试好友列表
         Intent intent = new Intent(MapActivity.this, FriendActivity.class);
         startActivity(intent);
 
@@ -213,6 +210,7 @@ public class MapActivity extends AppCompatActivity {
                 LocationBean.PoisBean bean = item.getPoisBean();
                 chosenUserBean = bean;
                 mClusterManager.clearItems();
+                baiduMap.clear();
                 mClusterManager.cluster();
                 mLocationClient.stop();
 
@@ -221,7 +219,8 @@ public class MapActivity extends AppCompatActivity {
                 //加载小图
 
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(headImage);
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        .into(headImage);
                 usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
@@ -238,7 +237,6 @@ public class MapActivity extends AppCompatActivity {
 
         });
 
-
         // 绑定 Marker 被点击事件
         baiduMap.setOnMarkerClickListener(mClusterManager);
 
@@ -252,6 +250,10 @@ public class MapActivity extends AppCompatActivity {
             bubble.clearAnimation();
             bubble.setVisibility(View.GONE);
             isSelected = false;
+            addMarkers(myItems);
+
+
+
 
         } else {
             super.onBackPressed();
@@ -276,14 +278,6 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    public void chooseMarker(MyItem item) {
-        // 添加Marker点
-        //addItems添加一组
-
-        mClusterManager.addItem(item);
-        mClusterManager.cluster();
-
-    }
 
 
     private void initLocate() {
@@ -404,7 +398,7 @@ public class MapActivity extends AppCompatActivity {
         public BitmapDescriptor getBitmapDescriptor() {
             RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
             TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_bubble_username);
-            ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_bubble_head);
+            QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).
                     load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
@@ -414,23 +408,7 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    private class HugeItem extends MyItem {
-        public HugeItem(LocationBean.PoisBean bean) {
-            super(bean);
-        }
 
-        @Override
-        public BitmapDescriptor getBitmapDescriptor() {
-            RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_huge_bubble, null);
-            TextView usernameText = (TextView) userLayout.findViewById(R.id.tv_huge_bubble_username);
-            ImageView imageView = (ImageView) userLayout.findViewById(R.id.iv_huge_bubble_head);
-            //加载小图
-            Picasso.with(MapActivity.this).
-                    load(super.poisBean.getUrl() + "?imageMogr2/thumbnail/!100x100r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
-            return BitmapDescriptorFactory.fromView(userLayout);
-        }
-
-    }
 
     class MyLocationListener extends BDAbstractLocationListener {
 
