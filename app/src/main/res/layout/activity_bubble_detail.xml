@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.stonymoon.bubble.ui.BubbleDetailActivity"
+
+    >
+
+    <ImageView
+        android:id="@+id/iv_bubble_detail"
+        android:layout_width="match_parent"
+        android:layout_height="180dp" />
+
+    <TextView
+        android:id="@+id/tv_bubble_detail_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/primaryText"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/tv_bubble_detail_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textColor="@color/primaryText"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/iv_bubble_detail_head"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
+    <TextView
+        android:id="@+id/tv_bubble_detail_author_name"
+        android:layout_width="18sp"
+        android:layout_height="18sp" />
+
+
+</LinearLayout>

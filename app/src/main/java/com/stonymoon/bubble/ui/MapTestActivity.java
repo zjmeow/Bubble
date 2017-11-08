@@ -1,6 +1,8 @@
 package com.stonymoon.bubble.ui;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -13,10 +15,9 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
-import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
-import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleDetailBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
@@ -30,8 +31,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.view.View;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
@@ -39,12 +38,14 @@ import android.widget.Toast;
  * 此Demo用来说明点聚合功能
  */
 public class MapTestActivity extends Activity implements OnMapLoadedCallback {
-    MapView mMapView;
-    BaiduMap mBaiduMap;
+    private MapView mMapView;
+    private BaiduMap mBaiduMap;
     private Map parameters = new HashMap();
     private MapStatus ms;
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> itemList = new ArrayList<>();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,9 +76,7 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
             public boolean onClusterItemClick(MyItem item) {
-                Toast.makeText(MapTestActivity.this,
-                        "点击单个Item", Toast.LENGTH_SHORT).show();
-
+                BubbleDetailActivity.startActivity(MapTestActivity.this, item.getBean().getId() + "");
                 return false;
             }
         });
@@ -170,7 +169,6 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
         public BitmapDescriptor getBitmapDescriptor() {
             return BitmapDescriptorFactory.fromResource(R.mipmap.bubble);
         }
-
 
     }
 

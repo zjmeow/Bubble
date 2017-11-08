@@ -2,9 +2,6 @@ package com.stonymoon.bubble.bean;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2017/11/7.
- */
 
 public class BubbleBean {
     private List<ResultBean> result;
