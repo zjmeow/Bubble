@@ -7,68 +7,102 @@ package com.stonymoon.bubble.bean;
 public class BubbleDetailBean {
 
     /**
-     * uid : 1
-     * latitude : 26.0652
-     * timestamp : Tue, 07 Nov 2017 23:30:27 -0000
-     * id : 2
-     * longitude : 119.209
-     * content : asdasdasd
-     * image : www.baidu.com
-     * title : ooooo
+     * resource : {"content":"test","id":240,"uid":1,"timestamp":"Wed, 08 Nov 2017 13:32:39 -0000","title":"test","image":"http://oupl6wdxc.bkt.clouddn.com/nene.png","latitude":21.4945,"longitude":60.1309}
      */
 
-    private int uid;
-    private String timestamp;
-    private int id;
-    private String content;
-    private String image;
-    private String title;
+    private ResourceBean resource;
 
-    public int getUid() {
-        return uid;
+    public ResourceBean getResource() {
+        return resource;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setResource(ResourceBean resource) {
+        this.resource = resource;
     }
 
-    public String getTimestamp() {
-        return timestamp;
-    }
+    public static class ResourceBean {
+        /**
+         * content : test
+         * id : 240
+         * uid : 1
+         * timestamp : Wed, 08 Nov 2017 13:32:39 -0000
+         * title : test
+         * image : http://oupl6wdxc.bkt.clouddn.com/nene.png
+         * latitude : 21.4945
+         * longitude : 60.1309
+         */
 
-    public void setTimestamp(String timestamp) {
-        this.timestamp = timestamp;
-    }
+        private String content;
+        private int id;
+        private int uid;
+        private String timestamp;
+        private String title;
+        private String image;
+        private double latitude;
+        private double longitude;
 
-    public int getId() {
-        return id;
-    }
+        public String getContent() {
+            return content;
+        }
 
-    public void setId(int id) {
-        this.id = id;
-    }
+        public void setContent(String content) {
+            this.content = content;
+        }
 
-    public String getContent() {
-        return content;
-    }
+        public int getId() {
+            return id;
+        }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
+        public void setId(int id) {
+            this.id = id;
+        }
 
-    public String getImage() {
-        return image;
-    }
+        public int getUid() {
+            return uid;
+        }
 
-    public void setImage(String image) {
-        this.image = image;
-    }
+        public void setUid(int uid) {
+            this.uid = uid;
+        }
 
-    public String getTitle() {
-        return title;
-    }
+        public String getTimestamp() {
+            return timestamp;
+        }
 
-    public void setTitle(String title) {
-        this.title = title;
+        public void setTimestamp(String timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public double getLatitude() {
+            return latitude;
+        }
+
+        public void setLatitude(double latitude) {
+            this.latitude = latitude;
+        }
+
+        public double getLongitude() {
+            return longitude;
+        }
+
+        public void setLongitude(double longitude) {
+            this.longitude = longitude;
+        }
     }
 }

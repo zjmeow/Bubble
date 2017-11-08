@@ -1,9 +1,12 @@
 package com.stonymoon.bubble.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 
 public class BubbleBean {
+    @SerializedName("resource")
     private List<ResultBean> result;
 
     public List<ResultBean> getResult() {

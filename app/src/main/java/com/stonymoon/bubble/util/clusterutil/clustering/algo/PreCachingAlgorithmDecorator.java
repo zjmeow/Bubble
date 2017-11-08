@@ -14,9 +14,7 @@ import java.util.Set;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-/**
- * Optimistically fetch clusters for adjacent zoom levels, caching them as necessary.
- */
+
 public class PreCachingAlgorithmDecorator<T extends ClusterItem> implements Algorithm<T> {
     private final Algorithm<T> mAlgorithm;
 

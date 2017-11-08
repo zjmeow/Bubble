@@ -49,21 +49,21 @@ public class BubbleDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bubble_detail);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
-        Intent intent = new Intent();
+        Intent intent = getIntent();
         String id = intent.getStringExtra("id");
         initBubble(id);
     }
 
     private void initBubble(String id) {
-        String url = "map/bubble/" + id;
+        String url = "bubble/" + id;
         HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 BubbleDetailBean bean = gson.fromJson(response, BubbleDetailBean.class);
-                Glide.with(mContext).load(bean.getImage()).into(ivBubbleDetail);
-                tvTitle.setText(bean.getTitle());
-                tvContent.setText(bean.getContent());
+                Glide.with(mContext).load(bean.getResource().getImage()).into(ivBubbleDetail);
+                tvTitle.setText(bean.getResource().getTitle());
+                tvContent.setText(bean.getResource().getContent());
 
             }
 
