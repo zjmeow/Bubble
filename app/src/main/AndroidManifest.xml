@@ -167,7 +167,8 @@
             android:exported="true" />
 
         <activity android:name=".ui.FriendActivity" />
-        <activity android:name=".ui.BubbleDetailActivity"></activity>
+        <activity android:name=".ui.BubbleDetailActivity" />
+        <activity android:name=".ui.ChatActivity"></activity>
     </application>
 
 </manifest>

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     @OnClick(R.id.fab)
     void submit() {
-        Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+        Intent intent = new Intent(MainActivity.this, ChatActivity.class);
         startActivity(intent);
     }
 
