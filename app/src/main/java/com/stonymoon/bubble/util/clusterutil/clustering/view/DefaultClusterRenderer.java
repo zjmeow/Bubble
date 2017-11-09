@@ -72,7 +72,7 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
     /**
      * If cluster size is less than this size, display individual markers.
      */
-    private static final int MIN_CLUSTER_SIZE = 1;
+    private static final int MIN_CLUSTER_SIZE = 2;
     private static final TimeInterpolator ANIMATION_INTERP = new DecelerateInterpolator();
     private final BaiduMap mMap;
     private final IconGenerator mIconGenerator;

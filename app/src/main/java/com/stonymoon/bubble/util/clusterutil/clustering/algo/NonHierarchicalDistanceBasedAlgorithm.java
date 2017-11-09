@@ -88,7 +88,7 @@ public class NonHierarchicalDistanceBasedAlgorithm<T extends ClusterItem> implem
     public Set<? extends Cluster<T>> getClusters(double zoom) {
 
         final int discreteZoom = (int) zoom;
-
+        MAX_DISTANCE_AT_ZOOM = -41 * discreteZoom + 964;
         final double zoomSpecificSpan = MAX_DISTANCE_AT_ZOOM / Math.pow(2, discreteZoom) / 256;
 
         final Set<QuadItem<T>> visitedCandidates = new HashSet<QuadItem<T>>();

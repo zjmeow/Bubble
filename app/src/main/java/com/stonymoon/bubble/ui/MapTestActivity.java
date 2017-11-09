@@ -84,7 +84,6 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
                 return false;
             }
         });
-        mClusterManager.setClusterDistance(700);
 
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
