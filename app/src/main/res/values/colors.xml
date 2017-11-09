@@ -5,4 +5,12 @@
     <color name="colorAccent">#FF4081</color>
     <color name="primaryText">#666666</color>
     <color name="secondText">#949494</color>
+
+    <color name="blue_btn_cannot_pressed">#6CDEDD</color>
+    <color name="blue_btn_normal">#2DD0CF</color>
+    <color name="blue_btn_pressed">#02BDBC</color>
+
+    <color name="blue_btn_text_70">#E0F8F8</color>
+    <color name="blue_btn_text_press">#99E4E4</color>
+
 </resources>

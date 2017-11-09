@@ -1,69 +1,198 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.stonymoon.bubble.ui.LoginActivity">
+    android:background="#fff">
 
-    <!-- Login progress -->
+    <RelativeLayout
+        android:id="@+id/titlebar"
+    android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#2DD0CF"
+        android:visibility="gone">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="14dp"
+            android:clickable="true"
+            android:text="JChat"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/new_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="12.33dp"
+            android:clickable="true"
+            android:text="新用户"
+            android:textColor="#fff"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_name_psw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/email_login_form"
+            android:id="@+id/translate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="78.67dp"
             android:orientation="vertical">
 
+            <ImageView
+                android:id="@+id/de_login_logo"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="52.67dp"
+                android:text="Welcome" />
+
+            <View
+                android:id="@+id/view"
+            android:layout_width="match_parent"
+                android:layout_height="42dp"
+                android:background="#fff"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/liner1"
+                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+                android:layout_marginLeft="30dip"
+                android:layout_marginRight="30dip"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="horizontal">
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_login_phone_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="4dp">
             <EditText
                 android:id="@+id/et_login_phone_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="手机号码"
-                android:inputType="phone"
-                android:maxLines="1" />
+                android:layout_marginLeft="46dp"
+                android:background="@null"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="请输入手机号"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#2C2C2C"
+                android:textColorHint="#808080"
+                android:textSize="16sp" />
 
-            <EditText
-                android:id="@+id/et_login_password"
+
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:id="@+id/user_line"
+                    android:layout_width="match_parent"
+                    android:layout_height="0.67dp"
+                    android:layout_below="@id/wrapper_login_phone_number"
+                    android:layout_marginTop="10dp"
+                    android:background="#57D9D9" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/liner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/prompt_password"
-                android:imeActionId="@+id/login"
-                android:imeActionLabel="@string/action_sign_in_short"
-                android:imeOptions="actionUnspecified"
-                android:inputType="textPassword"
-                android:maxLines="1" />
+                android:layout_marginLeft="30dip"
+                android:layout_marginRight="30dip"
+                android:layout_marginTop="23dip"
+                android:orientation="horizontal">
 
-            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/wrapper_login_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginTop="4dp">
+            <EditText
+                android:id="@+id/et_login_password"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="46dp"
+                android:background="@null"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="请输入密码"
+                android:inputType="textPassword"
+                android:maxLines="1"
+                android:textColor="#2C2C2C"
+                android:textColorHint="#808080"
+                android:textSize="16sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <View
+                    android:id="@+id/psw_line"
+                android:layout_width="match_parent"
+                    android:layout_height="0.67dp"
+                    android:layout_below="@id/wrapper_login_password"
+                    android:layout_marginTop="10dp"
+                    android:background="#57D9D9" />
+
+            </RelativeLayout>
+
+            <Button
                 android:id="@+id/btn_login_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="@string/action_sign_in"
-                android:textStyle="bold" />
-
-            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                android:id="@+id/btn_login_register"
-                android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="注册"
-                android:textStyle="bold" />
-
+                android:layout_marginLeft="30dip"
+                android:layout_marginRight="30dip"
+                android:layout_marginTop="36dip"
+                android:background="@drawable/blue_btn_selector"
+                android:text="登录"
+                android:textColor="@drawable/blue_text_selector"
+                android:textSize="16sp" />
         </LinearLayout>
+    </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/pbar_login_progress"
-        style="?android:attr/progressBarStyleLarge"
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:visibility="gone" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="38dp">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/login_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="还没有账号?"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_login_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="立即注册"
+            android:textColor="#57D9D9"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>
