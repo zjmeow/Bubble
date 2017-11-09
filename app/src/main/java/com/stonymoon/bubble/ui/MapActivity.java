@@ -97,7 +97,7 @@ public class MapActivity extends AppCompatActivity {
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
-
+    private boolean isFirstLoacted = true;
     private boolean isSelected = false;
     private String locationId;
     private String token;
@@ -212,6 +212,7 @@ public class MapActivity extends AppCompatActivity {
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
+        mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
         baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
 
@@ -442,8 +443,10 @@ public class MapActivity extends AppCompatActivity {
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
             //拿到百度地图上定位的id
-            //todo 不会自动恢复= =
-            zoomIn(mapView.getMap(), new LatLng(location.getLatitude(), location.getLongitude()), 30f);
+            if (isFirstLoacted) {
+                zoomIn(mapView.getMap(), new LatLng(location.getLatitude(), location.getLongitude()), 30f);
+                isFirstLoacted = false;
+            }
             if (locationId == null || locationId.equals("")) {
                 HttpUtil.getUser(MapActivity.this, id, new RxStringCallback() {
                     @Override

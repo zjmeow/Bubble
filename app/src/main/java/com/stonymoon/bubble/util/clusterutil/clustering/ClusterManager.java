@@ -46,7 +46,7 @@ public class ClusterManager<T extends ClusterItem> implements
     private OnClusterInfoWindowClickListener<T> mOnClusterInfoWindowClickListener;
     private OnClusterItemInfoWindowClickListener<T> mOnClusterItemInfoWindowClickListener;
     private OnClusterClickListener<T> mOnClusterClickListener;
-
+    private NonHierarchicalDistanceBasedAlgorithm<T> nonHierarchicalDistanceBasedAlgorithm = new NonHierarchicalDistanceBasedAlgorithm<T>();
     public ClusterManager(Context context, BaiduMap map) {
         this(context, map, new MarkerManager(map));
     }
@@ -57,7 +57,9 @@ public class ClusterManager<T extends ClusterItem> implements
         mClusterMarkers = markerManager.newCollection();
         mMarkers = markerManager.newCollection();
         mRenderer = new DefaultClusterRenderer<T>(context, map, this);
-        mAlgorithm = new PreCachingAlgorithmDecorator<T>(new NonHierarchicalDistanceBasedAlgorithm<T>());
+        //修改百度算法，动态改变聚合距离
+
+        mAlgorithm = new PreCachingAlgorithmDecorator<T>(nonHierarchicalDistanceBasedAlgorithm);
         mClusterTask = new ClusterTask();
         mRenderer.onAdd();
     }
@@ -232,6 +234,12 @@ public class ClusterManager<T extends ClusterItem> implements
         mRenderer.setOnClusterItemInfoWindowClickListener(listener);
     }
 
+    public void setClusterDistance(int n) {
+
+        nonHierarchicalDistanceBasedAlgorithm.MAX_DISTANCE_AT_ZOOM = n;
+
+    }
+
     /**
      * Called when a Cluster is clicked.
      */
@@ -279,4 +287,6 @@ public class ClusterManager<T extends ClusterItem> implements
             mRenderer.onClustersChanged(clusters);
         }
     }
+
+
 }
