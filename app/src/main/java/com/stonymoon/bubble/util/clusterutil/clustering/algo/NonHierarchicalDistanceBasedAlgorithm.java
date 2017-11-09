@@ -37,7 +37,7 @@ import java.util.Set;
  * Clusters have the center of the first element (not the centroid of the items within it).
  */
 public class NonHierarchicalDistanceBasedAlgorithm<T extends ClusterItem> implements Algorithm<T> {
-    public static final int MAX_DISTANCE_AT_ZOOM = 100; // essentially 100 dp.
+    public static final int MAX_DISTANCE_AT_ZOOM = 600; // essentially 100 dp.
     private static final SphericalMercatorProjection PROJECTION = new SphericalMercatorProjection(1);
     /**
      * Any modifications should be synchronized on mQuadTree.
@@ -86,6 +86,7 @@ public class NonHierarchicalDistanceBasedAlgorithm<T extends ClusterItem> implem
      */
     @Override
     public Set<? extends Cluster<T>> getClusters(double zoom) {
+
         final int discreteZoom = (int) zoom;
 
         final double zoomSpecificSpan = MAX_DISTANCE_AT_ZOOM / Math.pow(2, discreteZoom) / 256;

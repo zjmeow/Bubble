@@ -99,12 +99,12 @@ public class PreCachingAlgorithmDecorator<T extends ClusterItem> implements Algo
 
         @Override
         public void run() {
-            try {
-                // Wait between 500 - 1000 ms.
-                Thread.sleep((long) (Math.random() * 500 + 500));
-            } catch (InterruptedException e) {
-                // ignore. keep going.
-            }
+//            try {
+//                // Wait between 500 - 1000 ms.
+//                Thread.sleep((long) (Math.random() * 500 ));
+//            } catch (InterruptedException e) {
+//                // ignore. keep going.
+//            }
             getClustersInternal(mZoom);
         }
     }
