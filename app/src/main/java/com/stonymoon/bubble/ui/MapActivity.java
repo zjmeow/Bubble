@@ -6,23 +6,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v4.widget.NestedScrollView;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
@@ -70,11 +66,9 @@ import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
-import cn.jpush.im.api.BasicCallback;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
-//todo 关闭屏幕时继续定位，不获取其他用户信息
 public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
@@ -89,6 +83,8 @@ public class MapActivity extends AppCompatActivity {
     TextView usernameText;
     @BindView(R.id.btn_map_send_message)
     FloatingActionButton button;
+    @BindView(R.id.nested_scroll_map)
+    NestedScrollView nestedScroll;
 
 
     //管理聚合地图
@@ -123,20 +119,6 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btn_map_send_message)
-    void sendMessage() {
-        if (chosenUserBean == null) {
-            return;
-        }
-        button.startAnimation(sendEmojiSet);
-
-//        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
-//        messageEditText.setText("");
-//        JMessageClient.sendMessage(message);
-//        Intent intent = new Intent(MapActivity.this, FriendActivity.class);
-//        startActivity(intent);
-
-    }
 
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
@@ -158,8 +140,6 @@ public class MapActivity extends AppCompatActivity {
         showMessagePositiveDialog(event.getFromUsername(), target);
 
     }
-
-
 
 
     @Override
@@ -217,6 +197,29 @@ public class MapActivity extends AppCompatActivity {
         mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
         baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
+        baiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
+            @Override
+            public void onMapStatusChangeStart(MapStatus mapStatus) {
+                closeBubble();
+            }
+
+            @Override
+            public void onMapStatusChangeStart(MapStatus mapStatus, int i) {
+
+            }
+
+            @Override
+            public void onMapStatusChange(MapStatus mapStatus) {
+
+            }
+
+            @Override
+            public void onMapStatusChangeFinish(MapStatus mapStatus) {
+
+            }
+        });
+
+
 
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             //TODO 点击marker上拉弹窗启动onPause，然后地图停止刷新，关闭弹窗地图继续刷新
@@ -306,7 +309,6 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-
     private void initLocate() {
         mLocationClient = new LocationClient(getApplicationContext());
         //声明LocationClient类
@@ -348,19 +350,6 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.map_bubble)
-    void startProfile() {
-//        SelectPhotoActivity.startActivity(MapActivity.this,
-//                chosenUserBean.getUrl(),
-//                chosenUserBean.getUsername(),
-//                "" + chosenUserBean.getUid(),
-//                chosenUserBean.getId(),
-//                chosenUserBean.getPhone()
-//        );
-        ChatActivity.startActivity(this, chosenUserBean.getPhone(), chosenUserBean.getUsername(), chosenUserBean.getUrl());
-
-
-    }
 
     private void showMessagePositiveDialog(final String username, final String targetUsername) {
         new QMUIDialog.MessageDialogBuilder(MapActivity.this)
@@ -388,6 +377,59 @@ public class MapActivity extends AppCompatActivity {
                     }
                 })
                 .show();
+    }
+
+    @OnClick(R.id.btn_map_send_message)
+    void sendMessage() {
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
+        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+        } else {
+            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+        }
+
+
+        if (chosenUserBean == null) {
+            return;
+        }
+        button.startAnimation(sendEmojiSet);
+
+//        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
+//        messageEditText.setText("");
+//        JMessageClient.sendMessage(message);
+//        Intent intent = new Intent(MapActivity.this, FriendActivity.class);
+//        startActivity(intent);
+
+    }
+
+    @OnClick(R.id.map_bubble)
+    void startProfile() {
+//        SelectPhotoActivity.startActivity(MapActivity.this,
+//                chosenUserBean.getUrl(),
+//                chosenUserBean.getUsername(),
+//                "" + chosenUserBean.getUid(),
+//                chosenUserBean.getId(),
+//                chosenUserBean.getPhone()
+//        );
+
+        ChatActivity.startActivity(this, chosenUserBean.getPhone(), chosenUserBean.getUsername(), chosenUserBean.getUrl());
+
+    }
+
+    void closeBubble() {
+        if (isSelected) {
+            mLocationClient.start();
+            bubble.clearAnimation();
+            bubble.setVisibility(View.GONE);
+            isSelected = false;
+            //addMarkers(myItems);
+
+            BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
+            if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+            }
+        }
     }
 
     //储存Marker中的信息，用Map把mark的id与它关联起来
@@ -435,8 +477,6 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
-
-
 
     class MyLocationListener extends BDAbstractLocationListener {
 
