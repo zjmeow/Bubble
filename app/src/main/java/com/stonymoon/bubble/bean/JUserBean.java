@@ -8,9 +8,6 @@ import cn.jpush.im.android.api.callback.GetAvatarBitmapCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 
-/**
- * Created by Administrator on 2017/11/5.
- */
 
 public class JUserBean extends UserInfo {
 

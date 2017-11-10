@@ -28,6 +28,8 @@ import com.stonymoon.bubble.bean.MyMessage;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.view.ChatView;
 
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,12 +47,19 @@ import cn.jiguang.imui.commons.models.IMessage;
 import cn.jiguang.imui.messages.MsgListAdapter;
 import cn.jiguang.imui.messages.ptr.PtrHandler;
 import cn.jiguang.imui.messages.ptr.PullToRefreshLayout;
+import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.event.ContactNotifyEvent;
+import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.event.OfflineMessageEvent;
+import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.android.api.model.UserInfo;
 
 
 public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboardChangedListener,
         ChatView.OnSizeChangedListener, View.OnTouchListener {
 
-    private final static String TAG = "MessageListActivity";
+    private final static String TAG = "ChatActivity";
     private final int RC_RECORD_VOICE = 0x0001;
     private final int RC_CAMERA = 0x0002;
     private final int RC_PHOTO = 0x0003;
@@ -65,6 +74,17 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
     private SensorManager mSensorManager;
     private PowerManager mPowerManager;
     private PowerManager.WakeLock mWakeLock;
+    private DefaultUser user;
+    private DefaultUser otherUser;
+
+    public static void startActivity(Context context, String phone, String username, String url) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra("phone", phone);
+        intent.putExtra("username", username);
+        intent.putExtra("url", url);
+        context.startActivity(intent);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +93,9 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         this.mImm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         mWindow = getWindow();
         registerProximitySensorListener();
+        initUser();
         mChatView = (ChatView) findViewById(R.id.chat_view);
         mChatView.initModule();
-        //mChatView.setTitle("Deadpool");
         mData = getMessages();
         initMsgAdapter();
         mReceiver = new HeadsetDetectReceiver();
@@ -102,9 +122,11 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                     return false;
                 }
                 MyMessage message = new MyMessage(input.toString(), IMessage.MessageType.SEND_TEXT);
-                message.setUserInfo(new DefaultUser("1", "Ironman", "R.drawable.ironman"));
+                message.setUserInfo(user);
                 message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
                 mAdapter.addToStart(message, true);
+                Message sendMessage = JMessageClient.createSingleTextMessage(user.getId() + "", input.toString());
+                JMessageClient.sendMessage(sendMessage);
                 return true;
             }
 
@@ -157,6 +179,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
 //                mAdapter.getLayoutManager().scrollToPosition(0);
             }
         });
+
+
+        JMessageClient.registerEventReceiver(this);
+
     }
 
     private void registerProximitySensorListener() {
@@ -168,7 +194,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
             e.printStackTrace();
         }
     }
-
 
     private void setScreenOn() {
         if (mWakeLock != null) {
@@ -185,7 +210,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         mWakeLock.acquire();
     }
 
-
     private List<MyMessage> getMessages() {
         List<MyMessage> list = new ArrayList<>();
         Resources res = getResources();
@@ -194,10 +218,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
             MyMessage message;
             if (i % 2 == 0) {
                 message = new MyMessage(messages[i], IMessage.MessageType.RECEIVE_TEXT);
-                message.setUserInfo(new DefaultUser("0", "DeadPool", "R.drawable.deadpool"));
+                message.setUserInfo(user);
             } else {
                 message = new MyMessage(messages[i], IMessage.MessageType.SEND_TEXT);
-                message.setUserInfo(new DefaultUser("1", "IronMan", "R.drawable.ironman"));
+                message.setUserInfo(otherUser);
             }
             message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
             list.add(message);
@@ -282,10 +306,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                 // message status view click, resend or download here
             }
         });
-
-        MyMessage message = new MyMessage("Hello World", IMessage.MessageType.RECEIVE_TEXT);
-        message.setUserInfo(new DefaultUser("0", "Deadpool", "R.drawable.deadpool"));
-        mAdapter.addToStart(message, true);
+        //todo 离线消息
+//        MyMessage message = new MyMessage("Hello World", IMessage.MessageType.RECEIVE_TEXT);
+//        message.setUserInfo(new DefaultUser("0", "Deadpool", "R.drawable.deadpool"));
+//        mAdapter.addToStart(message, true);
         MyMessage eventMsg = new MyMessage("haha", IMessage.MessageType.EVENT);
         mAdapter.addToStart(eventMsg, true);
         mAdapter.addToEnd(mData);
@@ -321,10 +345,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                     MyMessage message;
                     if (i % 2 == 0) {
                         message = new MyMessage(messages[i], IMessage.MessageType.RECEIVE_TEXT);
-                        message.setUserInfo(new DefaultUser("0", "DeadPool", "R.drawable.deadpool"));
+                        message.setUserInfo(otherUser);
                     } else {
                         message = new MyMessage(messages[i], IMessage.MessageType.SEND_TEXT);
-                        message.setUserInfo(new DefaultUser("1", "IronMan", "R.drawable.ironman"));
+                        message.setUserInfo(user);
                     }
                     message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
                     list.add(message);
@@ -413,8 +437,41 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
     protected void onDestroy() {
         super.onDestroy();
         unregisterReceiver(mReceiver);
+        JMessageClient.unRegisterEventReceiver(this);
     }
 
+    public void onEventMainThread(MessageEvent event) {
+        String msg = "";
+        try {
+            JSONObject json = new JSONObject(event.getMessage().getContent().toJson());
+            msg = json.getString("text");
+        } catch (Exception e) {
+            LogUtil.e("ChatActivity", e.toString());
+
+        }
+        MyMessage message = new MyMessage(msg, IMessage.MessageType.RECEIVE_TEXT);
+        message.setUserInfo(otherUser);
+        mAdapter.addToStart(message, true);
+
+    }
+
+    public void onEvent(OfflineMessageEvent event) {
+        //获取事件发生的会话对象
+        Conversation conversation = event.getConversation();
+        List<Message> newMessageList = event.getOfflineMessageList();//获取此次离线期间会话收到的新消息列表
+        System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
+    }
+
+
+    private void initUser() {
+        Intent intent = getIntent();
+        UserInfo info = JMessageClient.getMyInfo();
+        String phone = intent.getStringExtra("phone");
+        String username = intent.getStringExtra("username");
+        String url = intent.getStringExtra("url");
+        user = new DefaultUser(phone, username, url);
+        otherUser = new DefaultUser(info.getUserName(), info.getUserName(), info.getExtra("url"));
+    }
 
     private class HeadsetDetectReceiver extends BroadcastReceiver {
 

@@ -76,6 +76,7 @@ import cn.jpush.im.api.BasicCallback;
 //动态地图另外开一个地图显示
 //todo 关闭屏幕时继续定位，不获取其他用户信息
 public class MapActivity extends AppCompatActivity {
+    private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.map)
@@ -145,7 +146,7 @@ public class MapActivity extends AppCompatActivity {
 
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
-        Toast.makeText(MapActivity.this, event.getMessage().toString() + "接收成功", Toast.LENGTH_SHORT).show();
+        LogUtil.d(TAG, event.getMessage().toString());
 
     }
 
@@ -206,11 +207,13 @@ public class MapActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        mLocationClient.stop();
+        //mLocationClient.stop();
     }
 
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
+
+
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
@@ -348,13 +351,15 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
-        SelectPhotoActivity.startActivity(MapActivity.this,
-                chosenUserBean.getUrl(),
-                chosenUserBean.getUsername(),
-                "" + chosenUserBean.getUid(),
-                chosenUserBean.getId(),
-                chosenUserBean.getPhone()
-        );
+//        SelectPhotoActivity.startActivity(MapActivity.this,
+//                chosenUserBean.getUrl(),
+//                chosenUserBean.getUsername(),
+//                "" + chosenUserBean.getUid(),
+//                chosenUserBean.getId(),
+//                chosenUserBean.getPhone()
+//        );
+        ChatActivity.startActivity(this, chosenUserBean.getPhone(), chosenUserBean.getUsername(), chosenUserBean.getUrl());
+
 
     }
 
@@ -480,7 +485,6 @@ public class MapActivity extends AppCompatActivity {
                     LocationBean bean = gson.fromJson(response, LocationBean.class);
                     final BaiduMap baiduMap = mapView.getMap();
                     parameters.clear();
-                    mLocationClient.stop();
                     if (bean.getPois() == null) {
                         return;
                     }
