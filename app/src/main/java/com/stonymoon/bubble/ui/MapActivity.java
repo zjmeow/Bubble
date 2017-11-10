@@ -81,16 +81,12 @@ public class MapActivity extends AppCompatActivity {
     public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.map)
     MapView mapView;
-    @BindView(R.id.et_map_message)
-    EditText messageEditText;
     @BindView(R.id.map_bubble)
     RelativeLayout bubble;
     @BindView(R.id.iv_map_bubble_head)
     QMUIRadiusImageView headImage;
     @BindView(R.id.tv_map_bubble_username)
     TextView usernameText;
-    @BindView(R.id.iv_map_emoji)
-    ImageView emojiImage;
     @BindView(R.id.btn_map_send_message)
     FloatingActionButton button;
 
@@ -100,6 +96,8 @@ public class MapActivity extends AppCompatActivity {
     private List<MyItem> myItems = new ArrayList<>();
     private boolean isFirstLoacted = true;
     private boolean isSelected = false;
+    private boolean isUpdateMap = true;
+
     private String locationId;
     private String token;
     private String id;
@@ -132,10 +130,6 @@ public class MapActivity extends AppCompatActivity {
         }
         button.startAnimation(sendEmojiSet);
 
-
-//        if (messageEditText.getText().equals("")) {
-//            return;
-//        }
 //        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
 //        messageEditText.setText("");
 //        JMessageClient.sendMessage(message);
@@ -194,20 +188,25 @@ public class MapActivity extends AppCompatActivity {
         super.onDestroy();
         JMessageClient.unRegisterEventReceiver(this);
         mapView.onDestroy();
+        mLocationClient.stop();
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mapView.onResume();
+        isUpdateMap = true;
         mLocationClient.start();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        //mLocationClient.stop();
+        isUpdateMap = false;
+        mLocationClient.stop();
     }
 
     private void setMap() {
@@ -452,6 +451,7 @@ public class MapActivity extends AppCompatActivity {
                 zoomIn(mapView.getMap(), new LatLng(location.getLatitude(), location.getLongitude()), 30f);
                 isFirstLoacted = false;
             }
+
             if (locationId == null || locationId.equals("")) {
                 HttpUtil.getUser(MapActivity.this, id, new RxStringCallback() {
                     @Override
@@ -478,6 +478,12 @@ public class MapActivity extends AppCompatActivity {
             } else {
                 HttpUtil.updateLocate(MapActivity.this, locationId, latitude, longitude);
             }
+
+
+            if (!isUpdateMap) {
+                return;
+            }
+
             HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
                 @Override
                 public void onNext(Object tag, String response) {
