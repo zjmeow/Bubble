@@ -38,6 +38,8 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import butterknife.OnClick;
+
 
 /**
  * 此Demo用来说明点聚合功能
@@ -54,8 +56,15 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     private int screenWidth;
     private Point leftTop = new Point(0, 0);
     private Point rightBottom = new Point(0, 0);
-
     private int screenHeight;
+
+    @OnClick(R.id.fab_map_share)
+    void share() {
+        //todo 拿到地址传入
+        ShareActivity.startActivity(this, 0, 0);
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

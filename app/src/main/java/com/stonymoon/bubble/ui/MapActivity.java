@@ -129,7 +129,7 @@ public class MapActivity extends AppCompatActivity {
         //获取事件发生的会话对象
         Conversation conversation = event.getConversation();
         List<Message> newMessageList = event.getOfflineMessageList();//获取此次离线期间会话收到的新消息列表
-        System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
+        //System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
     }
 
     public void onEvent(ContactNotifyEvent event) {
@@ -192,8 +192,6 @@ public class MapActivity extends AppCompatActivity {
 
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
-
-
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
