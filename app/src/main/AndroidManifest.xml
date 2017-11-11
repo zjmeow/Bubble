@@ -168,7 +168,8 @@
 
         <activity android:name=".ui.FriendActivity" />
         <activity android:name=".ui.BubbleDetailActivity" />
-        <activity android:name=".ui.ChatActivity"></activity>
+        <activity android:name=".ui.ChatActivity" />
+        <activity android:name=".ui.MessageListActivity"></activity>
     </application>
 
 </manifest>

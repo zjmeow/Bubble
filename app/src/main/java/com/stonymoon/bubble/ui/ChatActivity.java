@@ -26,6 +26,7 @@ import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.view.ChatView;
 
 import org.json.JSONObject;
@@ -71,7 +72,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
     private InputMethodManager mImm;
     private Window mWindow;
     private HeadsetDetectReceiver mReceiver;
-    private SensorManager mSensorManager;
     private PowerManager mPowerManager;
     private PowerManager.WakeLock mWakeLock;
     private DefaultUser user;
@@ -85,6 +85,14 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         context.startActivity(intent);
 
     }
+
+    public static void startActivity(Context context, String phone) {
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra("phone", phone);
+        context.startActivity(intent);
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -125,7 +133,8 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                 message.setUserInfo(user);
                 message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
                 mAdapter.addToStart(message, true);
-                Message sendMessage = JMessageClient.createSingleTextMessage(user.getId() + "", input.toString());
+
+                Message sendMessage = JMessageClient.createSingleTextMessage(otherUser.getId() + "", input.toString());
                 JMessageClient.sendMessage(sendMessage);
                 return true;
             }
@@ -189,7 +198,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         try {
             mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
             mWakeLock = mPowerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, TAG);
-            mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -211,20 +219,26 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
     }
 
     private List<MyMessage> getMessages() {
+        Intent intent = getIntent();
+        Conversation conversation = JMessageClient.getSingleConversation(intent.getStringExtra("phone"));
         List<MyMessage> list = new ArrayList<>();
-        Resources res = getResources();
-        String[] messages = {"测试"};
-        for (int i = 0; i < messages.length; i++) {
-            MyMessage message;
-            if (i % 2 == 0) {
-                message = new MyMessage(messages[i], IMessage.MessageType.RECEIVE_TEXT);
-                message.setUserInfo(user);
+        if (conversation == null) {
+            return list;
+        }
+        List<Message> messageList = conversation.getAllMessage();
+        for (Message message : messageList) {
+            String phone = message.getFromUser().getUserName();
+            String messageText = MessageUtil.getMessageText(message);
+            if (phone.equals(user.getId())) {
+                MyMessage myMessage = new MyMessage(messageText, IMessage.MessageType.SEND_TEXT);
+                myMessage.setUserInfo(user);
+                list.add(myMessage);
             } else {
-                message = new MyMessage(messages[i], IMessage.MessageType.SEND_TEXT);
-                message.setUserInfo(otherUser);
+                MyMessage myMessage = new MyMessage(messageText, IMessage.MessageType.RECEIVE_TEXT);
+                myMessage.setUserInfo(otherUser);
+                list.add(myMessage);
             }
-            message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
-            list.add(message);
+
         }
         Collections.reverse(list);
         return list;
@@ -441,17 +455,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
     }
 
     public void onEventMainThread(MessageEvent event) {
-        String msg = "";
-        try {
-            JSONObject json = new JSONObject(event.getMessage().getContent().toJson());
-            msg = json.getString("text");
-        } catch (Exception e) {
-            LogUtil.e("ChatActivity", e.toString());
-
-        }
+        String msg = MessageUtil.getMessageText(event.getMessage());
         MyMessage message = new MyMessage(msg, IMessage.MessageType.RECEIVE_TEXT);
         message.setUserInfo(otherUser);
-        mAdapter.addToStart(message, true);
+        if (!event.getMessage().getFromUser().getUserName().equals(user.getId())) {
+            mAdapter.addToStart(message, true);
+        }
+
 
     }
 
@@ -465,12 +475,15 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
 
     private void initUser() {
         Intent intent = getIntent();
-        UserInfo info = JMessageClient.getMyInfo();
-        String phone = intent.getStringExtra("phone");
-        String username = intent.getStringExtra("username");
-        String url = intent.getStringExtra("url");
+        Conversation conversation = JMessageClient.getSingleConversation(intent.getStringExtra("phone"));
+        UserInfo targetInfo = (UserInfo) conversation.getTargetInfo();
+        UserInfo myInfo = JMessageClient.getMyInfo();
+        String phone = myInfo.getUserName();
+        String username = myInfo.getDisplayName();
+        String url = myInfo.getExtra("url");
         user = new DefaultUser(phone, username, url);
-        otherUser = new DefaultUser(info.getUserName(), info.getUserName(), info.getExtra("url"));
+        otherUser = new DefaultUser(targetInfo.getUserName(), targetInfo.getDisplayName(), targetInfo.getExtra("url"));
+
     }
 
     private class HeadsetDetectReceiver extends BroadcastReceiver {

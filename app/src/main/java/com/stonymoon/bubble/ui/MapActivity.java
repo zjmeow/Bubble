@@ -106,7 +106,6 @@ public class MapActivity extends AppCompatActivity {
 
     private Map<String, Object> parameters = new HashMap<>();
     //用marker的id绑定信息，为点击回调提供信息
-    private Map<String, MyMarker> markerMap = new HashMap<>();
 
     private MyCallback callback = new MyCallback(this);
 
@@ -161,6 +160,8 @@ public class MapActivity extends AppCompatActivity {
         initLocate();
         mLocationClient.start();
         initAnimation();
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
+        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
     @Override
@@ -222,7 +223,6 @@ public class MapActivity extends AppCompatActivity {
 
 
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
-            //TODO 点击marker上拉弹窗启动onPause，然后地图停止刷新，关闭弹窗地图继续刷新
             @Override
             public boolean onClusterItemClick(MyItem item) {
 
@@ -234,6 +234,9 @@ public class MapActivity extends AppCompatActivity {
                 baiduMap.clear();
                 mClusterManager.cluster();
                 mLocationClient.stop();
+                //弹出BottomSheet
+                BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
+                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
 
                 //当点击item时删除全部item并且把自定义view引入
                 //此时为选中状态，当用户离开选中状态时，隐藏自定义view
@@ -261,10 +264,6 @@ public class MapActivity extends AppCompatActivity {
                 return false;
             }
 
-//                ProfileActivity.startActivity(MapActivity.this,
-//                        bean.getUrl(),
-//                        bean.getUsername(),
-//                        bean.getId());
 
 
         });
@@ -278,13 +277,7 @@ public class MapActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (isSelected) {
-            mLocationClient.start();
-            bubble.clearAnimation();
-            bubble.setVisibility(View.GONE);
-            isSelected = false;
-            addMarkers(myItems);
-
-
+            closeBubble();
         } else {
             super.onBackPressed();
         }
@@ -405,15 +398,15 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
-//        SelectPhotoActivity.startActivity(MapActivity.this,
-//                chosenUserBean.getUrl(),
-//                chosenUserBean.getUsername(),
-//                "" + chosenUserBean.getUid(),
-//                chosenUserBean.getId(),
-//                chosenUserBean.getPhone()
-//        );
+        SelectPhotoActivity.startActivity(MapActivity.this,
+                chosenUserBean.getUrl(),
+                chosenUserBean.getUsername(),
+                "" + chosenUserBean.getUid(),
+                chosenUserBean.getId(),
+                chosenUserBean.getPhone()
+        );
 
-        ChatActivity.startActivity(this, chosenUserBean.getPhone(), chosenUserBean.getUsername(), chosenUserBean.getUrl());
+        //ChatActivity.startActivity(this, chosenUserBean.getPhone());
 
     }
 
@@ -423,7 +416,7 @@ public class MapActivity extends AppCompatActivity {
             bubble.clearAnimation();
             bubble.setVisibility(View.GONE);
             isSelected = false;
-            //addMarkers(myItems);
+            addMarkers(myItems);
 
             BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
             if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
@@ -432,20 +425,7 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
-    //储存Marker中的信息，用Map把mark的id与它关联起来
-    class MyMarker {
-        private LocationBean.PoisBean poisBean;
 
-        public MyMarker(LocationBean.PoisBean bean) {
-            this.poisBean = bean;
-        }
-
-        public LocationBean.PoisBean getUserBean() {
-            return poisBean;
-        }
-
-
-    }
 
     private class MyItem implements ClusterItem {
         private final LatLng mPosition;
