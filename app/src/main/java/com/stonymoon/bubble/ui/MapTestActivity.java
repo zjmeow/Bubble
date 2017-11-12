@@ -95,7 +95,7 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
             public boolean onClusterItemClick(MyItem item) {
-                BubbleDetailActivity.startActivity(MapTestActivity.this, item.getBean().getId() + "");
+                BubbleDetailActivity.startActivity(MapTestActivity.this, item.getBean());
                 return false;
             }
         });
@@ -160,13 +160,13 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     }
 
     private void initBubble() {
-        String url = "map/bubble";
+        String url = "download";
         HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
-                for (BubbleBean.ResultBean b : bean.getResult()) {
+                for (BubbleBean.ContentBean b : bean.getContent()) {
                     itemList.add(new MyItem(b));
                 }
 
@@ -221,14 +221,14 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
      */
     private class MyItem implements ClusterItem {
         private final LatLng mPosition;
-        private final BubbleBean.ResultBean bean;
+        private final BubbleBean.ContentBean bean;
 
-        public MyItem(BubbleBean.ResultBean bean) {
+        public MyItem(BubbleBean.ContentBean bean) {
             mPosition = new LatLng(bean.getLatitude(), bean.getLongitude());
             this.bean = bean;
         }
 
-        public BubbleBean.ResultBean getBean() {
+        public BubbleBean.ContentBean getBean() {
             return bean;
         }
 

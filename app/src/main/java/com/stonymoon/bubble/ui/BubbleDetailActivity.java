@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleDetailBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
@@ -34,10 +35,11 @@ public class BubbleDetailActivity extends AppCompatActivity {
     TextView tvAuthorName;
     private Context mContext;
     private Map parameters = new HashMap();
+    private BubbleBean.ContentBean bean;
 
-    public static void startActivity(Context context, String id) {
+    public static void startActivity(Context context, BubbleBean.ContentBean bean) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
-        intent.putExtra("id", id);
+        intent.putExtra("bean", bean);
         context.startActivity(intent);
 
 
@@ -50,36 +52,17 @@ public class BubbleDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         mContext = getApplicationContext();
         Intent intent = getIntent();
-        String id = intent.getStringExtra("id");
-        initBubble(id);
-    }
+        bean = (BubbleBean.ContentBean) intent.getSerializableExtra("bean");
+        Glide.with(mContext).load(bean.getImage()).into(ivBubbleDetail);
+        tvTitle.setText(bean.getTitle());
+        tvContent.setText(bean.getContent());
 
-    private void initBubble(String id) {
-        String url = "bubble/" + id;
-        HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                Gson gson = new Gson();
-                BubbleDetailBean bean = gson.fromJson(response, BubbleDetailBean.class);
-                Glide.with(mContext).load(bean.getResource().getImage()).into(ivBubbleDetail);
-                tvTitle.setText(bean.getResource().getTitle());
-                tvContent.setText(bean.getResource().getContent());
 
-            }
 
-            @Override
-            public void onError(Object tag, Throwable e) {
-
-            }
-
-            @Override
-            public void onCancel(Object tag, Throwable e) {
-
-            }
-        });
 
 
     }
+
 
 
 }
