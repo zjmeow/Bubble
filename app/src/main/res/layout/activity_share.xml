@@ -12,7 +12,14 @@
     tools:context="com.stonymoon.bubble.ui.ShareActivity">
 
     <EditText
-        android:id="@+id/et_share"
+        android:id="@+id/et_share_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="有什么想说的吗" />
+
+
+    <EditText
+        android:id="@+id/et_share_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="有什么想说的吗" />
@@ -23,6 +30,16 @@
         android:layout_height="200dp"
         android:gravity="center"
         android:text="发布" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_share_add_picture"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
+    <ImageView
+        android:id="@+id/iv_share_picture"
+        android:layout_width="180dp"
+        android:layout_height="180dp" />
 
 
 </LinearLayout>

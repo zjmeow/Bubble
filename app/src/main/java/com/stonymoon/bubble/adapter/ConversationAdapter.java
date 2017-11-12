@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.ui.ChatActivity;
+import com.stonymoon.bubble.util.MessageUtil;
 
 import java.util.List;
 
@@ -65,9 +66,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
                 .into(holder.imageView);
         //.placeholder(R.drawable.icon_placeholder)
         holder.titleView.setText(userInfo.getDisplayName());
-
-        //todo 第一条消息格式化（封装Message）
-        String latestMessage = bean.getLatestMessage().getContent().toJson();
+        String latestMessage = MessageUtil.getMessageText(bean.getLatestMessage());
         holder.firstText.setText(latestMessage);
     }
 

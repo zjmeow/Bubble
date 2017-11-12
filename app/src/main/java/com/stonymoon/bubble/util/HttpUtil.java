@@ -16,9 +16,6 @@ import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by A on 2017/10/18.
- */
 
 public class HttpUtil {
     private static final String tableId = "1000002164";

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
 
     @OnClick(R.id.fab)
     void submit() {
-        Intent intent = new Intent(MainActivity.this, MessageListActivity.class);
+        Intent intent = new Intent(MainActivity.this, ShareActivity.class);
         startActivity(intent);
     }
 

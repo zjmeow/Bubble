@@ -1,8 +1,14 @@
 package com.stonymoon.bubble.util;
 
-/**
- * Created by Administrator on 2017/10/27.
- */
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
+import com.google.gson.Gson;
+import com.stonymoon.bubble.MyApplication;
+import com.stonymoon.bubble.bean.ContentBean;
+import com.stonymoon.bubble.ui.SelectPhotoActivity;
+import com.tamic.novate.callback.RxStringCallback;
 
 public class AuthUtil {
     private AuthUtil() {
@@ -10,7 +16,9 @@ public class AuthUtil {
     }
 
     public static String getToken() {
-        return "token";
+        SharedPreferences sharedPreferences = MyApplication.getContext().getSharedPreferences("login", Context.MODE_PRIVATE);
+        String token = sharedPreferences.getString("token", "");
+        return token;
     }
 
 

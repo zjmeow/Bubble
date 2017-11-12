@@ -162,6 +162,8 @@ public class MapActivity extends AppCompatActivity {
         initAnimation();
         BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+
+
     }
 
     @Override
@@ -396,7 +398,8 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
-        SelectPhotoActivity.startActivity(MapActivity.this,
+        //todo 用一个方法打开，进入另外的界面编辑资料或者判断权限
+        SelectPhotoActivity.startActivityByUser(MapActivity.this,
                 chosenUserBean.getUrl(),
                 chosenUserBean.getUsername(),
                 "" + chosenUserBean.getUid(),

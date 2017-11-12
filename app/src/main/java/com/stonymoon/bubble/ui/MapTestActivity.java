@@ -41,9 +41,7 @@ import android.widget.Toast;
 import butterknife.OnClick;
 
 
-/**
- * 此Demo用来说明点聚合功能
- */
+//todo 修复缩放移动后不显示点BUG
 public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     private MapView mMapView;
     private BaiduMap mBaiduMap;

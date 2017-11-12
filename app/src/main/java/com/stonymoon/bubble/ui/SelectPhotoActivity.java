@@ -63,6 +63,7 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetGroupIDListCallback;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -70,7 +71,7 @@ import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TIT
 
 public class SelectPhotoActivity extends ActivityBase {
     //此处有bug，拿到token可能能给别人的用户替换头像
-
+    //todo 区分自己打开和别人打开资料
 
     @BindView(R.id.iv_avatar)
     ImageView mIvAvatar;
@@ -83,7 +84,8 @@ public class SelectPhotoActivity extends ActivityBase {
     private String locationId = "926042754864151714";
     private String phone;
     private String url;
-    public static void startActivity(Context context, String url, String username, String userId, String locationId, String phone) {
+
+    public static void startActivityByUser(Context context, String url, String username, String userId, String locationId, String phone) {
         Intent intent = new Intent(context, SelectPhotoActivity.class);
         intent.putExtra("url", url);
         intent.putExtra("username", username);
@@ -92,6 +94,15 @@ public class SelectPhotoActivity extends ActivityBase {
         intent.putExtra("phone", phone);
         context.startActivity(intent);
     }
+
+    public static void startActivityByOthers(Context context, String phone) {
+        Intent intent = new Intent(context, SelectPhotoActivity.class);
+        intent.putExtra("phone", phone);
+        context.startActivity(intent);
+
+    }
+
+
 
     @OnClick(R.id.btn_profile_make_friend)
     void sendMessage() {
@@ -112,12 +123,26 @@ public class SelectPhotoActivity extends ActivityBase {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_select_photo);
         ButterKnife.bind(this);
         initView();
+        Intent intent = getIntent();
+        if (intent.getStringExtra("locationId") == null) {
+
+            setOthersProfile();
+
+        } else {
+            setSelfProfile();
+
+
+        }
+
+
+    }
+
+    private void setSelfProfile() {
         initUpload();
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
@@ -125,18 +150,35 @@ public class SelectPhotoActivity extends ActivityBase {
         url = intent.getStringExtra("url");
         String username = intent.getStringExtra("username");
         phone = intent.getStringExtra("phone");
-        Glide.with(this).load(url).into(mIvAvatar);
         tvUsername.setText(username);
+        Picasso.with(this).load(url).into(mIvAvatar);
+
     }
 
+    private void setOthersProfile() {
+        Intent intent = getIntent();
+        JMessageClient.getUserInfo(intent.getStringExtra("phone"), new GetUserInfoCallback() {
+            @Override
+            public void gotResult(int i, String s, UserInfo userInfo) {
+                tvUsername.setText(userInfo.getDisplayName());
+                Picasso.with(SelectPhotoActivity.this).load(userInfo.getExtra("url")).into(mIvAvatar);
+
+            }
+        });
+
+    }
+
+
     protected void initView() {
-        Picasso.with(SelectPhotoActivity.this).load(url).into(mIvAvatar);
+
         mIvAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 initDialogChooseImage();
             }
         });
+
+
         //todo 查看大图
 //        mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
@@ -174,18 +216,6 @@ public class SelectPhotoActivity extends ActivityBase {
 
                 break;
             case RxPhotoTool.CROP_IMAGE://普通裁剪后的处理
-                Glide.with(mContext).
-                        load(RxPhotoTool.cropImageUri).
-                        diskCacheStrategy(DiskCacheStrategy.RESULT).
-                        bitmapTransform(new CropCircleTransformation(mContext)).
-                        thumbnail(0.5f).
-                        placeholder(R.drawable.circle_elves_ball).
-                        priority(Priority.LOW).
-                        error(R.drawable.circle_elves_ball).
-                        fallback(R.drawable.circle_elves_ball).
-                        into(mIvAvatar);
-//                RequestUpdateAvatar(new File(RxPhotoTool.getRealFilePath(mContext, RxPhotoTool.cropImageUri)));
-                break;
 
             case UCrop.REQUEST_CROP://UCrop裁剪之后的处理
                 if (resultCode == RESULT_OK) {
@@ -193,7 +223,11 @@ public class SelectPhotoActivity extends ActivityBase {
                     resultUri = UCrop.getOutput(data);
                     File image = roadImageView(resultUri, mIvAvatar);
                     uploadHead(image);
-
+                    Glide.with(mContext).
+                            load(resultUri).
+                            diskCacheStrategy(DiskCacheStrategy.RESULT).
+                            thumbnail(0.5f).
+                            into(mIvAvatar);
 
                     RxSPTool.putContent(mContext, "AVATAR", resultUri.toString());
                 } else if (resultCode == UCrop.RESULT_ERROR) {
@@ -255,7 +289,7 @@ public class SelectPhotoActivity extends ActivityBase {
                 .start(this);
     }
 
-    //todo删除多了按钮
+    //todo 删除多了按钮
     //@OnClick(R.id.btn_exit)
     public void onClick() {
         final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(this);

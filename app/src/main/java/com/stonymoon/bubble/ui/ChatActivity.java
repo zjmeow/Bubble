@@ -43,6 +43,7 @@ import cn.jiguang.imui.chatinput.listener.OnClickEditTextListener;
 import cn.jiguang.imui.chatinput.listener.OnMenuClickListener;
 import cn.jiguang.imui.chatinput.model.FileItem;
 import cn.jiguang.imui.chatinput.model.VideoItem;
+import cn.jiguang.imui.chatinput.photo.SelectPhotoView;
 import cn.jiguang.imui.commons.ImageLoader;
 import cn.jiguang.imui.commons.models.IMessage;
 import cn.jiguang.imui.messages.MsgListAdapter;
@@ -310,7 +311,10 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         mAdapter.setOnAvatarClickListener(new MsgListAdapter.OnAvatarClickListener<MyMessage>() {
             @Override
             public void onAvatarClick(MyMessage message) {
-                //todo 弹出用户资料
+
+                //todo 用户资料托管
+                SelectPhotoActivity.startActivityByOthers(ChatActivity.this, otherUser.getId());
+
             }
         });
 
@@ -320,7 +324,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                 // message status view click, resend or download here
             }
         });
-        //todo 离线消息
 //        MyMessage message = new MyMessage("Hello World", IMessage.MessageType.RECEIVE_TEXT);
 //        message.setUserInfo(new DefaultUser("0", "Deadpool", "R.drawable.deadpool"));
 //        mAdapter.addToStart(message, true);
