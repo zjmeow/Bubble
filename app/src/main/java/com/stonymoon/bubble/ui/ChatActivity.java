@@ -287,13 +287,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         mAdapter.setOnMsgClickListener(new MsgListAdapter.OnMsgClickListener<MyMessage>() {
             @Override
             public void onMessageClick(MyMessage message) {
-                // do something
                 if (message.getType() == IMessage.MessageType.RECEIVE_VIDEO
                         || message.getType() == IMessage.MessageType.SEND_VIDEO) {
                     if (!TextUtils.isEmpty(message.getMediaFilePath())) {
                     }
                 } else {
-                    //todo 点击消息的处理,图片弹出。
+                    //todo 图片消息，可能去掉这个功能
+                    PhotoActivity.startActivity(message.getMediaFilePath());
                 }
             }
         });
@@ -304,7 +304,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                 Toast.makeText(getApplicationContext(),
                         "长按消息",
                         Toast.LENGTH_SHORT).show();
-                // todo 长按信息的处理
+
             }
         });
 
@@ -312,7 +312,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
             @Override
             public void onAvatarClick(MyMessage message) {
 
-                //todo 用户资料托管
+
                 SelectPhotoActivity.startActivityByOthers(ChatActivity.this, otherUser.getId());
 
             }
@@ -321,7 +321,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         mAdapter.setMsgStatusViewClickListener(new MsgListAdapter.OnMsgStatusViewClickListener<MyMessage>() {
             @Override
             public void onStatusViewClick(MyMessage message) {
-                // message status view click, resend or download here
+
             }
         });
 //        MyMessage message = new MyMessage("Hello World", IMessage.MessageType.RECEIVE_TEXT);

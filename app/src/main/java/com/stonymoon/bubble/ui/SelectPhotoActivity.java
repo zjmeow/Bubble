@@ -289,24 +289,6 @@ public class SelectPhotoActivity extends ActivityBase {
                 .start(this);
     }
 
-    //todo 删除多了按钮
-    //@OnClick(R.id.btn_exit)
-    public void onClick() {
-        final RxDialogSureCancel rxDialogSureCancel = new RxDialogSureCancel(this);
-        rxDialogSureCancel.getCancelView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rxDialogSureCancel.cancel();
-            }
-        });
-        rxDialogSureCancel.getSureView().setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        rxDialogSureCancel.show();
-    }
 
     private void initUpload() {
 

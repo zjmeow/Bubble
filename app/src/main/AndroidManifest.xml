@@ -172,7 +172,8 @@
         <activity android:name=".ui.BubbleDetailActivity" />
         <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.MessageListActivity" />
-        <activity android:name=".ui.ShareActivity"></activity>
+        <activity android:name=".ui.ShareActivity" />
+        <activity android:name=".ui.PhotoActivity"></activity>
     </application>
 
 </manifest>

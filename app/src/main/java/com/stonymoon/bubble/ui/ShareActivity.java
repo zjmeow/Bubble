@@ -85,6 +85,8 @@ public class ShareActivity extends AppCompatActivity {
     void submit() {
         //todo 输入检测处理，上传图片拿到url
         //1. 限制标题长度 2.内容，是否上传图片
+
+
         parameters.clear();
         String title = titleEt.getText().toString();
         String content = contentEt.getText().toString();
@@ -211,10 +213,8 @@ public class ShareActivity extends AppCompatActivity {
 
             case UCrop.REQUEST_CROP://UCrop裁剪之后的处理
                 if (resultCode == RESULT_OK) {
-
                     resultUri = UCrop.getOutput(data);
                     File image = roadImageView(resultUri);
-                    //todo 可能用不到？
                     uploadPicture(image);
                     Glide.with(ShareActivity.this).
                             load(resultUri).
