@@ -179,17 +179,13 @@ public class SelectPhotoActivity extends ActivityBase {
         });
 
 
-        //todo 查看大图
-//        mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
-//            @Override
-//            public boolean onLongClick(View view) {
-////                RxImageTool.showBigImageView(mContext, resultUri);
-//                RxDialogScaleView rxDialogScaleView = new RxDialogScaleView(mContext);
-//
-//                rxDialogScaleView.show();
-//                return false;
-//            }
-//        });
+        mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                PhotoActivity.startActivity(SelectPhotoActivity.this, url);
+                return true;
+            }
+        });
     }
 
     private void initDialogChooseImage() {

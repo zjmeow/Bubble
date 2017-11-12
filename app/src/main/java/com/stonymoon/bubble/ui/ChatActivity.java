@@ -293,7 +293,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                     }
                 } else {
                     //todo 图片消息，可能去掉这个功能
-                    PhotoActivity.startActivity(message.getMediaFilePath());
+                    PhotoActivity.startActivity(ChatActivity.this, message.getMediaFilePath());
                 }
             }
         });

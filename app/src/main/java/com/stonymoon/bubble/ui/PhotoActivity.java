@@ -17,14 +17,14 @@ import com.stonymoon.bubble.MyApplication;
 import com.stonymoon.bubble.R;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class PhotoActivity extends AppCompatActivity {
     @BindView(R.id.photo_view)
     PhotoView photoView;
     private String url;
 
-    public static void startActivity(String url) {
-        Context context = MyApplication.getContext();
+    public static void startActivity(Context context, String url) {
         Intent intent = new Intent(context, PhotoActivity.class);
         intent.putExtra("url", url);
         context.startActivity(intent);
@@ -34,11 +34,13 @@ public class PhotoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         // 设置全屏
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         // 移除标题栏
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_photo);
+        ButterKnife.bind(this);
         url = getIntent().getStringExtra("url");
 
         Picasso.with(this)
