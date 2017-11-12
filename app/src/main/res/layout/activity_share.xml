@@ -15,7 +15,8 @@
         android:id="@+id/et_share_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="有什么想说的吗" />
+        android:hint="标题"
+        android:maxLength="10" />
 
 
     <EditText

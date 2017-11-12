@@ -24,6 +24,7 @@ import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.AuthUtil;
@@ -83,13 +84,24 @@ public class ShareActivity extends AppCompatActivity {
 
     @OnClick(R.id.et_share_submit)
     void submit() {
-        //todo 输入检测处理，上传图片拿到url
-        //1. 限制标题长度 2.内容，是否上传图片
-
-
         parameters.clear();
         String title = titleEt.getText().toString();
         String content = contentEt.getText().toString();
+        if (title.equals("")) {
+            QMUITipDialog tipDialog = new QMUITipDialog.Builder(ShareActivity.this)
+                    .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
+                    .setTipWord("请输入标题")
+                    .create();
+            return;
+
+        } else if (imageUrl == null) {
+            QMUITipDialog tipDialog = new QMUITipDialog.Builder(ShareActivity.this)
+                    .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
+                    .setTipWord("来，上传一张图片")
+                    .create();
+            return;
+        }
+
         String token = AuthUtil.getToken();
         parameters.put("token", token);
         parameters.put("content", content);
