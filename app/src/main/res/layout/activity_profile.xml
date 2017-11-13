@@ -59,7 +59,6 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="32dp"
                     android:gravity="center"
-                    android:text="用户名"
                     android:textColor="@color/primaryText"
                     android:textSize="24sp" />
 
@@ -69,7 +68,7 @@
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="8dp"
                     android:gravity="center"
-                    android:text="收到了200个emoji"
+                    android:text="一共收到过200个emoji"
                     android:textColor="@color/secondText"
                     android:textSize="16sp" />
 
@@ -148,7 +147,6 @@
             android:layout_gravity="center"
             android:layout_weight="122"
             android:scaleType="centerCrop"
-            android:src="@mipmap/test"
             app:qmui_corner_radius="5dp"
             app:qmui_is_circle="false" />
 

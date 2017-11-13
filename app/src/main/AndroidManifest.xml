@@ -151,6 +151,7 @@
         </activity>
         <activity android:name=".ui.MapActivity" />
         <activity
+
             android:name=".ui.LoginActivity"
             android:label="@string/title_activity_login" />
         <activity android:name=".ui.RegisterActivity" />
@@ -173,7 +174,8 @@
         <activity android:name=".ui.ChatActivity" />
         <activity android:name=".ui.MessageListActivity" />
         <activity android:name=".ui.ShareActivity" />
-        <activity android:name=".ui.PhotoActivity"></activity>
+        <activity android:name=".ui.PhotoActivity" />
+        <activity android:name=".ui.RegisterPhoneActivity"></activity>
     </application>
 
 </manifest>

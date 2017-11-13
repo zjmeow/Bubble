@@ -2,6 +2,7 @@ package com.stonymoon.bubble.ui;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -9,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -25,6 +27,7 @@ import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
+import com.unstoppable.submitbuttonview.SubmitButton;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,13 +42,11 @@ import static android.Manifest.permission.READ_CONTACTS;
 
 
 public class LoginActivity extends Activity {
-
+    private static final String TAG = "LoginActivity";
     private static final int REQUEST_READ_CONTACTS = 0;
 
     private static final String[] DUMMY_CREDENTIALS = new String[]{
     };
-    Map<String, Object> parameters = new HashMap<String, Object>();
-
     @BindView(R.id.et_login_phone_number)
     EditText phoneNumberView;
     @BindView(R.id.et_login_password)
@@ -54,6 +55,10 @@ public class LoginActivity extends Activity {
     TextInputLayout wrapperLoginPhoneNumber;
     @BindView(R.id.wrapper_login_password)
     TextInputLayout wrapperLoginPassword;
+    @BindView(R.id.btn_login_sign_in)
+    SubmitButton submitButton;
+    private Map<String, Object> parameters = new HashMap<String, Object>();
+    private LoginBean bean;
 
     @OnClick(R.id.btn_login_sign_in)
     void login() {
@@ -61,7 +66,11 @@ public class LoginActivity extends Activity {
 
     }
 
-
+    @OnClick(R.id.tv_login_register)
+    void register() {
+        Intent intent = new Intent(this, RegisterPhoneActivity.class);
+        startActivity(intent);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         QMUIStatusBarHelper.translucent(this);
@@ -84,6 +93,16 @@ public class LoginActivity extends Activity {
         //attemptLogin();
         wrapperLoginPhoneNumber.setHint("请输入手机号");
         wrapperLoginPassword.setHint("请输入密码");
+        submitButton.setOnResultEndListener(new SubmitButton.OnResultEndListener() {
+            @Override
+            public void onResultEnd() {
+                if (bean != null) {
+                    MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), bean.getContent().getToken(), "");
+                    finish();
+                }
+            }
+        });
+
 
     }
 
@@ -122,31 +141,37 @@ public class LoginActivity extends Activity {
 
 
     private void login(final String phoneNum, final String password) {
-
+        if (phoneNum.equals("") || password.equals("")) {
+            Toast.makeText(LoginActivity.this, "请输入正确的账户密码", Toast.LENGTH_SHORT).show();
+        }
         String url = "login";
         parameters.put("phone", phoneNum);
         parameters.put("password", password);
+
+
         HttpUtil.sendHttpRequest(this)
                 .rxPost(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
                         Gson gson = new Gson();
-                        LoginBean bean = gson.fromJson(response, LoginBean.class);
+                        bean = gson.fromJson(response, LoginBean.class);
                         AuthUtil.saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
-                        MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), bean.getContent().getToken(), "");
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
                                 Toast.makeText(LoginActivity.this, "登录成功" + s, Toast.LENGTH_SHORT).show();
+                                submitButton.doResult(true);
 
                             }
                         });
-                        finish();
+
                     }
 
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        submitButton.doResult(false);
+                        submitButton.reset();
                         LogUtil.e(TAG, e.getMessage());
                     }
 
@@ -175,10 +200,12 @@ public class LoginActivity extends Activity {
             JMessageClient.login(phone, password, new BasicCallback() {
                 @Override
                 public void gotResult(int i, String s) {
-                    Toast.makeText(LoginActivity.this, "测试极光推送" + s, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(LoginActivity.this, "登录成功" + s, Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             });
-            finish();
+
+
         }
 
 

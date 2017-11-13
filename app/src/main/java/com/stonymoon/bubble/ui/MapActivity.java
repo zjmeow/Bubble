@@ -1,5 +1,6 @@
 package com.stonymoon.bubble.ui;
 
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -13,6 +14,7 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
@@ -41,6 +43,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LocationBean;
+import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MyCallback;
@@ -101,7 +104,7 @@ public class MapActivity extends AppCompatActivity {
     private LocationBean.PoisBean chosenUserBean;
     private AnimatorSet showBubbleSet;
     private AnimatorSet receiveEmojiSet;
-    private AnimationSet sendEmojiSet = new AnimationSet(true);
+
 
 
     private Map<String, Object> parameters = new HashMap<>();
@@ -247,20 +250,11 @@ public class MapActivity extends AppCompatActivity {
                         .into(headImage);
                 //usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
-                isSelected = true;
                 showBubbleSet.start();
 
+                isSelected = true;
                 //todo 设置动画
-                float x = bubble.getX();
-                float y = bubble.getY();
-                sendEmojiSet = null;
-                sendEmojiSet = new AnimationSet(true);
-                TranslateAnimation translateAnimation = new TranslateAnimation(0, -x, 0, -y);
-                ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
-                sendEmojiSet.addAnimation(translateAnimation);
-                sendEmojiSet.addAnimation(scaleAnimation);
-                sendEmojiSet.setDuration(2000);
-                sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
+
                 return false;
             }
 
@@ -340,7 +334,6 @@ public class MapActivity extends AppCompatActivity {
         //set.setRepeatCount(Animation.INFINITE);
         //set.setRepeatMode(Animation.REVERSE);
 
-
     }
 
 
@@ -386,8 +379,7 @@ public class MapActivity extends AppCompatActivity {
         if (chosenUserBean == null) {
             return;
         }
-        button.startAnimation(sendEmojiSet);
-
+        startSendEmoji(button);
 //        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
 //        messageEditText.setText("");
 //        JMessageClient.sendMessage(message);
@@ -421,7 +413,40 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
+    private void startSendEmoji(View view) {
+        float x = bubble.getX();
+        float y = bubble.getY();
+        AnimationSet sendEmojiSet = new AnimationSet(true);
+        float dx = view.getX() - x;
+        float dy = view.getY() - y;
+        TranslateAnimation translateAnimation = new TranslateAnimation(0, dx, 0, dy);
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
+        sendEmojiSet.addAnimation(translateAnimation);
+        sendEmojiSet.addAnimation(scaleAnimation);
+        sendEmojiSet.setDuration(2000);
+        sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
+        sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
 
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                showBubbleSet.start();
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+
+        view.startAnimation(sendEmojiSet);
+
+
+    }
 
     private class MyItem implements ClusterItem {
         private final LatLng mPosition;
@@ -476,10 +501,7 @@ public class MapActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         LocationBean bean = gson.fromJson(response, LocationBean.class);
                         locationId = bean.getPois().get(0).getId();
-                        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putString("locationId", locationId);
-                        editor.apply();
+                        AuthUtil.setLocationId("locationId");
                     }
 
                     @Override

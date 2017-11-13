@@ -7,21 +7,6 @@
     android:background="#f3f3f3"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/title_container"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/colorPrimary"
-        android:gravity="center">
-
-        <TextView
-            android:id="@+id/title_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:textSize="24sp" />
-
-    </LinearLayout>
 
     <cn.jiguang.imui.messages.ptr.PullToRefreshLayout
         android:id="@+id/pull_to_refresh_layout"
