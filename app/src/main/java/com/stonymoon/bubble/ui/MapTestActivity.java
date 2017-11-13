@@ -25,6 +25,7 @@ import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
+import com.stonymoon.bubble.util.clusterutil.projection.Bounds;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -41,7 +42,6 @@ import android.widget.Toast;
 import butterknife.OnClick;
 
 
-//todo 修复缩放移动后不显示点BUG
 public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
@@ -51,10 +51,6 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> itemList = new ArrayList<>();
     private List<MyItem> seenItems = new ArrayList<>();
-    private int screenWidth;
-    private Point leftTop = new Point(0, 0);
-    private Point rightBottom = new Point(0, 0);
-    private int screenHeight;
 
     @OnClick(R.id.fab_map_share)
     void share() {
@@ -99,7 +95,6 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
                 return false;
             }
         });
-        initScreen();
         initBubble();
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
@@ -188,32 +183,14 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
 
     }
 
-    private void initScreen() {
-        WindowManager wm = this.getWindowManager();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(outMetrics);
-        screenWidth = outMetrics.widthPixels;
-        screenHeight = outMetrics.heightPixels;
-        rightBottom.x = screenWidth;
-        rightBottom.y = screenHeight;
-
-    }
-
     private void addSeenItem() {
         seenItems.clear();
-        LatLng ll = mBaiduMap.getProjection().fromScreenLocation(leftTop);
-        LatLng llr = mBaiduMap.getProjection().fromScreenLocation(rightBottom);
         for (MyItem item : itemList) {
-            LatLng latLng = item.getPosition();
-            double lat = latLng.latitude;
-            double lng = latLng.longitude;
-            if (ll.latitude > lat && ll.longitude < lng && llr.latitude < lat && llr.longitude > lng) {
+            if (mBaiduMap.getMapStatusLimit().contains(item.getPosition())) {
                 seenItems.add(item);
             }
-
         }
         addMarkers(seenItems);
-
     }
 
     /**
