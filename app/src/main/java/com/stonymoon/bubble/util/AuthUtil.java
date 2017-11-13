@@ -66,8 +66,12 @@ public class AuthUtil {
 
     public static String getLocationId() {
         return sharedPreferences.getString("locationId", "");
-
-
     }
+
+    public static void setLocationId(String locationId) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("locationId", locationId);
+    }
+
 
 }

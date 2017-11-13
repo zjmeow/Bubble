@@ -398,12 +398,7 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
-        //todo 用一个方法打开，进入另外的界面编辑资料或者判断权限
-        SelectPhotoActivity.startActivityByUser(MapActivity.this,
-                chosenUserBean.getUrl(),
-                chosenUserBean.getUsername(),
-                "" + chosenUserBean.getUid(),
-                chosenUserBean.getId(),
+        ProfileActivity.startActivity(MapActivity.this,
                 chosenUserBean.getPhone()
         );
 
@@ -470,6 +465,7 @@ public class MapActivity extends AppCompatActivity {
             //拿到百度地图上定位的id
             if (isFirstLoacted) {
                 zoomIn(mapView.getMap(), new LatLng(location.getLatitude(), location.getLongitude()), 30f);
+
                 isFirstLoacted = false;
             }
 

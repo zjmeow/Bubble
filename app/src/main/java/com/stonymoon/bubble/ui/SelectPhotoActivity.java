@@ -33,6 +33,7 @@ import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 
 import com.stonymoon.bubble.util.LogUtil;
@@ -70,42 +71,25 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
 public class SelectPhotoActivity extends ActivityBase {
-    //此处有bug，拿到token可能能给别人的用户替换头像
-    //todo 区分自己打开和别人打开资料
 
-    @BindView(R.id.iv_avatar)
+    @BindView(R.id.iv_edit_profile_avatar)
     ImageView mIvAvatar;
-    @BindView(R.id.tv_profile_username)
+    @BindView(R.id.tv_edit_profile_username)
     TextView tvUsername;
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
-    private String userId = "25";
-    private String locationId = "926042754864151714";
-    private String phone;
+
     private String url;
 
-    public static void startActivityByUser(Context context, String url, String username, String userId, String locationId, String phone) {
+    public static void startActivity(Context context) {
         Intent intent = new Intent(context, SelectPhotoActivity.class);
-        intent.putExtra("url", url);
-        intent.putExtra("username", username);
-        intent.putExtra("userId", userId);
-        intent.putExtra("locationId", locationId);
-        intent.putExtra("phone", phone);
         context.startActivity(intent);
     }
 
-    public static void startActivityByOthers(Context context, String phone) {
-        Intent intent = new Intent(context, SelectPhotoActivity.class);
-        intent.putExtra("phone", phone);
-        context.startActivity(intent);
-
-    }
-
-
-
-    @OnClick(R.id.btn_profile_make_friend)
+    @OnClick(R.id.btn_edit_profile_make_friend)
     void sendMessage() {
+        String phone = AuthUtil.getPhone();
         ContactManager.sendInvitationRequest(phone, "", "请求加你为好友", new BasicCallback() {
             @Override
             public void gotResult(int responseCode, String responseMessage) {
@@ -128,36 +112,13 @@ public class SelectPhotoActivity extends ActivityBase {
         setContentView(R.layout.activity_select_photo);
         ButterKnife.bind(this);
         initView();
-        Intent intent = getIntent();
-        if (intent.getStringExtra("locationId") == null) {
-
-            setOthersProfile();
-
-        } else {
-            setSelfProfile();
-
-
-        }
-
-
-    }
-
-    private void setSelfProfile() {
         initUpload();
-        Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
-        locationId = intent.getStringExtra("locationId");
-        url = intent.getStringExtra("url");
-        String username = intent.getStringExtra("username");
-        phone = intent.getStringExtra("phone");
-        tvUsername.setText(username);
-        Picasso.with(this).load(url).into(mIvAvatar);
-
+        setProfile();
     }
 
-    private void setOthersProfile() {
-        Intent intent = getIntent();
-        JMessageClient.getUserInfo(intent.getStringExtra("phone"), new GetUserInfoCallback() {
+    private void setProfile() {
+
+        JMessageClient.getUserInfo(AuthUtil.getPhone(), new GetUserInfoCallback() {
             @Override
             public void gotResult(int i, String s, UserInfo userInfo) {
                 tvUsername.setText(userInfo.getDisplayName());
@@ -167,6 +128,7 @@ public class SelectPhotoActivity extends ActivityBase {
         });
 
     }
+
 
 
     protected void initView() {
@@ -340,12 +302,11 @@ public class SelectPhotoActivity extends ActivityBase {
     }
 
     private void uploadHead(final File file) {
-        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
+        String token = AuthUtil.getToken();
         String url = "imageToken";
         parameters.clear();
         parameters.put("token", token);
-        final String name = generateName(userId);
+        final String name = generateName(AuthUtil.getId());
         parameters.put("name", name);
 
         HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost(url, parameters, new RxStringCallback() {
@@ -405,7 +366,7 @@ public class SelectPhotoActivity extends ActivityBase {
                 Toast.makeText(SelectPhotoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
-        HttpUtil.updateHead(this, locationId, headUrl);
+        HttpUtil.updateHead(this, AuthUtil.getLocationId(), headUrl);
 
     }
 
