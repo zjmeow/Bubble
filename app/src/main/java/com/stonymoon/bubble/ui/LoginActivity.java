@@ -20,7 +20,9 @@ import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LoginBean;
+import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.LogUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -130,13 +132,12 @@ public class LoginActivity extends Activity {
                     public void onNext(Object tag, String response) {
                         Gson gson = new Gson();
                         LoginBean bean = gson.fromJson(response, LoginBean.class);
-                        saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
-                        Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                        AuthUtil.saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
                         MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), bean.getContent().getToken(), "");
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
-                                Toast.makeText(LoginActivity.this, "极光推送:" + s, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(LoginActivity.this, "登录成功" + s, Toast.LENGTH_SHORT).show();
 
                             }
                         });
@@ -146,9 +147,7 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-
-
-                        e.printStackTrace();
+                        LogUtil.e(TAG, e.getMessage());
                     }
 
                     @Override
@@ -165,13 +164,11 @@ public class LoginActivity extends Activity {
     private void attemptLogin() {
         SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         //判断是否已经登录
-        String token = sharedPreferences.getString("token", "");
-        String id = sharedPreferences.getString("id", "");
-        String phone = sharedPreferences.getString("phone", "");
-        String password = sharedPreferences.getString("password", "");
-
-
-        String locationId = sharedPreferences.getString("locationId", "");
+        String token = AuthUtil.getToken();
+        String id = AuthUtil.getId();
+        String phone = AuthUtil.getPhone();
+        String password = AuthUtil.getPassword();
+        String locationId = AuthUtil.getLocationId();
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
             MapActivity.startActivity(this, id, token, locationId);
@@ -187,17 +184,7 @@ public class LoginActivity extends Activity {
 
     }
 
-    //保存用户信息
-    private void saveUser(String phone, String password, String token, String id) {
-        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString("phone", phone);
-        editor.putString("password", password);
-        editor.putString("token", token);
-        editor.putString("id", id);
-        editor.apply();
 
-    }
 
 }
 

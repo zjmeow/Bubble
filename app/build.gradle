@@ -64,4 +64,5 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile 'org.jetbrains:annotations-java5:15.0'
 }
