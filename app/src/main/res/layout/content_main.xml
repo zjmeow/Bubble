@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.stonymoon.bubble.ui.MainActivity"
+    tools:context="com.stonymoon.bubble.ui.common.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
     <TextView

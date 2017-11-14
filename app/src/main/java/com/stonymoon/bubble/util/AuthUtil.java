@@ -4,11 +4,7 @@ package com.stonymoon.bubble.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.stonymoon.bubble.MyApplication;
-import com.stonymoon.bubble.bean.ContentBean;
-import com.stonymoon.bubble.ui.SelectPhotoActivity;
-import com.tamic.novate.callback.RxStringCallback;
+import com.stonymoon.bubble.application.MyApplication;
 
 import static android.content.Context.MODE_PRIVATE;
 

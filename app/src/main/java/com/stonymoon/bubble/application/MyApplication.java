@@ -1,4 +1,4 @@
-package com.stonymoon.bubble;
+package com.stonymoon.bubble.application;
 
 import android.app.Application;
 import android.content.Context;

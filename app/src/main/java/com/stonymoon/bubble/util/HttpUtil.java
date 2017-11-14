@@ -3,13 +3,8 @@ package com.stonymoon.bubble.util;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.stonymoon.bubble.bean.LocationBean;
-import com.stonymoon.bubble.bean.UserBean;
-import com.stonymoon.bubble.ui.RegisterActivity;
 import com.tamic.novate.Novate;
 import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxResultCallback;
 import com.tamic.novate.callback.RxStringCallback;
 
 import java.text.DecimalFormat;

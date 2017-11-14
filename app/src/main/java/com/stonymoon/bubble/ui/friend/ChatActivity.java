@@ -1,12 +1,10 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.friend;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources;
-import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
@@ -25,11 +23,10 @@ import com.bumptech.glide.request.target.Target;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
+import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.view.ChatView;
-
-import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,15 +39,12 @@ import cn.jiguang.imui.chatinput.ChatInputView;
 import cn.jiguang.imui.chatinput.listener.OnClickEditTextListener;
 import cn.jiguang.imui.chatinput.listener.OnMenuClickListener;
 import cn.jiguang.imui.chatinput.model.FileItem;
-import cn.jiguang.imui.chatinput.model.VideoItem;
-import cn.jiguang.imui.chatinput.photo.SelectPhotoView;
 import cn.jiguang.imui.commons.ImageLoader;
 import cn.jiguang.imui.commons.models.IMessage;
 import cn.jiguang.imui.messages.MsgListAdapter;
 import cn.jiguang.imui.messages.ptr.PtrHandler;
 import cn.jiguang.imui.messages.ptr.PullToRefreshLayout;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;

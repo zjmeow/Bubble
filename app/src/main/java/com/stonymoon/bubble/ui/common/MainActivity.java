@@ -1,9 +1,7 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.common;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -19,11 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.ui.auth.LoginActivity;
+import com.stonymoon.bubble.ui.auth.RegisterActivity;
+import com.stonymoon.bubble.ui.friend.MapActivity;
+import com.stonymoon.bubble.ui.friend.ProfileActivity;
+import com.stonymoon.bubble.ui.share.MapTestActivity;
+import com.stonymoon.bubble.ui.share.ShareActivity;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -157,7 +158,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_share) {
-            Intent intent = new Intent(MainActivity.this, SelectPhotoActivity.class);
+            Intent intent = new Intent(MainActivity.this, MyProfileActivity.class);
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {

@@ -3,8 +3,6 @@ package com.stonymoon.bubble.util;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.stonymoon.bubble.ui.MapActivity;
-
 import cn.jpush.im.api.BasicCallback;
 
 /**

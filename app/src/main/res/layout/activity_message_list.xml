@@ -4,7 +4,7 @@
     android:id="@+id/activity_message_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stonymoon.bubble.ui.MessageListActivity">
+    tools:context="com.stonymoon.bubble.ui.friend.MessageListActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_conversation"

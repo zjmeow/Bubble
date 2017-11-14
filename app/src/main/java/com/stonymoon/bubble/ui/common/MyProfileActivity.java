@@ -1,19 +1,13 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.common;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,14 +15,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
-import com.qiniu.android.common.Zone;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
@@ -38,17 +30,13 @@ import com.stonymoon.bubble.util.HttpUtil;
 
 import com.stonymoon.bubble.util.LogUtil;
 import com.tamic.novate.callback.RxStringCallback;
-import com.vondear.rxtools.RxBarTool;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxSPTool;
 import com.vondear.rxtools.activity.ActivityBase;
 import com.vondear.rxtools.view.dialog.RxDialogChooseImage;
-import com.vondear.rxtools.view.dialog.RxDialogScaleView;
-import com.vondear.rxtools.view.dialog.RxDialogSureCancel;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
-import org.apaches.commons.codec.digest.DigestUtils;
 import org.json.JSONObject;
 
 import java.io.File;
@@ -63,14 +51,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetGroupIDListCallback;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
-public class SelectPhotoActivity extends ActivityBase {
+public class MyProfileActivity extends ActivityBase {
 
     @BindView(R.id.iv_edit_profile_avatar)
     ImageView mIvAvatar;
@@ -83,7 +70,7 @@ public class SelectPhotoActivity extends ActivityBase {
     private String url;
 
     public static void startActivity(Context context) {
-        Intent intent = new Intent(context, SelectPhotoActivity.class);
+        Intent intent = new Intent(context, MyProfileActivity.class);
         context.startActivity(intent);
     }
 
@@ -93,12 +80,12 @@ public class SelectPhotoActivity extends ActivityBase {
         ContactManager.sendInvitationRequest(phone, "", "请求加你为好友", new BasicCallback() {
             @Override
             public void gotResult(int responseCode, String responseMessage) {
-                Log.v("SelectPhoto", responseMessage);
-                Toast.makeText(SelectPhotoActivity.this, responseMessage, Toast.LENGTH_SHORT);
+                Log.v("MyProfile", responseMessage);
+                Toast.makeText(MyProfileActivity.this, responseMessage, Toast.LENGTH_SHORT);
                 if (0 == responseCode) {
                     //好友请求请求发送成功
                 } else {
-                    Toast.makeText(SelectPhotoActivity.this, "请求发送失败", Toast.LENGTH_SHORT);
+                    Toast.makeText(MyProfileActivity.this, "请求发送失败", Toast.LENGTH_SHORT);
                 }
             }
         });
@@ -109,7 +96,7 @@ public class SelectPhotoActivity extends ActivityBase {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         QMUIStatusBarHelper.translucent(this);
-        setContentView(R.layout.activity_select_photo);
+        setContentView(R.layout.activity_my_profile);
         ButterKnife.bind(this);
         initView();
         initUpload();
@@ -122,7 +109,7 @@ public class SelectPhotoActivity extends ActivityBase {
             @Override
             public void gotResult(int i, String s, UserInfo userInfo) {
                 tvUsername.setText(userInfo.getDisplayName());
-                Picasso.with(SelectPhotoActivity.this).load(userInfo.getExtra("url")).into(mIvAvatar);
+                Picasso.with(MyProfileActivity.this).load(userInfo.getExtra("url")).into(mIvAvatar);
 
             }
         });
@@ -144,7 +131,7 @@ public class SelectPhotoActivity extends ActivityBase {
         mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                PhotoActivity.startActivity(SelectPhotoActivity.this, url);
+                PhotoActivity.startActivity(MyProfileActivity.this, url);
                 return true;
             }
         });
@@ -293,7 +280,7 @@ public class SelectPhotoActivity extends ActivityBase {
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
-                        Toast.makeText(SelectPhotoActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MyProfileActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 
                         uploadUrl("http://oupl6wdxc.bkt.clouddn.com/" + key, (String) parameters.get("token"));
 
@@ -309,7 +296,7 @@ public class SelectPhotoActivity extends ActivityBase {
         final String name = generateName(AuthUtil.getId());
         parameters.put("name", name);
 
-        HttpUtil.sendHttpRequest(SelectPhotoActivity.this).rxPost(url, parameters, new RxStringCallback() {
+        HttpUtil.sendHttpRequest(MyProfileActivity.this).rxPost(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
                         Gson gson = new Gson();
@@ -345,7 +332,7 @@ public class SelectPhotoActivity extends ActivityBase {
         JMessageClient.updateMyInfo(UserInfo.Field.extras, bean, new BasicCallback() {
             @Override
             public void gotResult(int i, String s) {
-                LogUtil.v("SelectPhoto", s);
+                LogUtil.v("MyProfile", s);
             }
         });
 
@@ -363,7 +350,7 @@ public class SelectPhotoActivity extends ActivityBase {
 
             @Override
             public void onError(Object tag, com.tamic.novate.Throwable e) {
-                Toast.makeText(SelectPhotoActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MyProfileActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
             }
         });
         HttpUtil.updateHead(this, AuthUtil.getLocationId(), headUrl);

@@ -1,11 +1,9 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.friend;
 
-import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
@@ -14,10 +12,12 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,7 +56,6 @@ import com.tamic.novate.callback.RxStringCallback;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -88,15 +87,14 @@ public class MapActivity extends AppCompatActivity {
     FloatingActionButton button;
     @BindView(R.id.nested_scroll_map)
     NestedScrollView nestedScroll;
-
-
+    @BindView(R.id.iv_map_emoji_shit)
+    ImageView emoji;
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
     private boolean isFirstLoacted = true;
     private boolean isSelected = false;
     private boolean isUpdateMap = true;
-
     private String locationId;
     private String token;
     private String id;
@@ -104,13 +102,9 @@ public class MapActivity extends AppCompatActivity {
     private LocationBean.PoisBean chosenUserBean;
     private AnimatorSet showBubbleSet;
     private AnimatorSet receiveEmojiSet;
-
-
-
     private Map<String, Object> parameters = new HashMap<>();
-    //用marker的id绑定信息，为点击回调提供信息
-
     private MyCallback callback = new MyCallback(this);
+    //用marker的id绑定信息，为点击回调提供信息
 
     public static void startActivity(Context context, String id, String token, String locationId) {
         Intent intent = new Intent(context, MapActivity.class);
@@ -121,6 +115,10 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.iv_map_emoji_shit)
+    void sendEmoji() {
+        startSendEmoji(emoji);
+    }
 
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
@@ -224,7 +222,6 @@ public class MapActivity extends AppCompatActivity {
         });
 
 
-
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
             public boolean onClusterItemClick(MyItem item) {
@@ -250,14 +247,14 @@ public class MapActivity extends AppCompatActivity {
                         .into(headImage);
                 //usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
+                isSelected = true;
                 showBubbleSet.start();
 
-                isSelected = true;
+
                 //todo 设置动画
 
                 return false;
             }
-
 
 
         });
@@ -390,9 +387,28 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
-        ProfileActivity.startActivity(MapActivity.this,
-                chosenUserBean.getPhone()
-        );
+        new QMUIDialog.MessageDialogBuilder(MapActivity.this)
+                .setTitle(chosenUserBean.getUsername())
+                .setMessage("15分钟前")
+                .addAction("查看资料", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("聊天", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+
+                    }
+                })
+                .show();
+
+
+//        ProfileActivity.startActivity(MapActivity.this,
+//                chosenUserBean.getPhone()
+//        );
 
         //ChatActivity.startActivity(this, chosenUserBean.getPhone());
 
@@ -414,16 +430,23 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void startSendEmoji(View view) {
-        float x = bubble.getX();
-        float y = bubble.getY();
+        //todo 动画需要奇怪的解决方法
+
+        float x = bubble.getLeft() + bubble.getPivotX();
+        float y = bubble.getTop() + bubble.getTranslationY();
         AnimationSet sendEmojiSet = new AnimationSet(true);
-        float dx = view.getX() - x;
-        float dy = view.getY() - y;
-        TranslateAnimation translateAnimation = new TranslateAnimation(0, dx, 0, dy);
+        float dx = view.getLeft() + view.getTranslationX();
+
+        float dy = view.getTop() + view.getTranslationY();
+        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.ABSOLUTE, 0,
+                Animation.ABSOLUTE, x - dx, Animation.ABSOLUTE, 0, Animation.ABSOLUTE, y - dy);
         ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
+        AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
         sendEmojiSet.addAnimation(translateAnimation);
         sendEmojiSet.addAnimation(scaleAnimation);
-        sendEmojiSet.setDuration(2000);
+        sendEmojiSet.addAnimation(alphaAnimation);
+
+        sendEmojiSet.setDuration(400);
         sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
         sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
             @Override

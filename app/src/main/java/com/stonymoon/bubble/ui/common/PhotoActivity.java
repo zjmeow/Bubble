@@ -1,19 +1,14 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.common;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
-import android.provider.ContactsContract;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
-import com.stonymoon.bubble.MyApplication;
 import com.stonymoon.bubble.R;
 
 import butterknife.BindView;

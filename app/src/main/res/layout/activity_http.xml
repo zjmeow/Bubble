@@ -11,7 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
 
 
-    tools:context="com.stonymoon.bubble.ui.HttpActivity">
+    tools:context="com.stonymoon.bubble.ui.common.HttpActivity">
 
     <EditText
         android:id="@+id/et1"

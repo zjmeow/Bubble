@@ -1,4 +1,4 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.share;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,13 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
-import com.stonymoon.bubble.bean.BubbleDetailBean;
-import com.stonymoon.bubble.util.HttpUtil;
-import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxStringCallback;
 
 import java.util.HashMap;
 import java.util.Map;

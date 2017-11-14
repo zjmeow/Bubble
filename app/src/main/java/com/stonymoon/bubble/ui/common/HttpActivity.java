@@ -1,4 +1,4 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.common;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

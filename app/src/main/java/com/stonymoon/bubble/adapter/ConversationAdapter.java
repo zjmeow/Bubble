@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
-import com.stonymoon.bubble.ui.ChatActivity;
+import com.stonymoon.bubble.ui.friend.ChatActivity;
 import com.stonymoon.bubble.util.MessageUtil;
 
 import java.util.List;

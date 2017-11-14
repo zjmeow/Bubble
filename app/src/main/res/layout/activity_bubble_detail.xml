@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.stonymoon.bubble.ui.BubbleDetailActivity"
+    tools:context="com.stonymoon.bubble.ui.share.BubbleDetailActivity"
 
     >
 

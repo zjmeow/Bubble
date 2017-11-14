@@ -1,9 +1,6 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.share;
 
 import android.app.Activity;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Point;
 import android.os.Bundle;
 
 import com.baidu.mapapi.SDKInitializer;
@@ -14,18 +11,14 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
-import com.stonymoon.bubble.bean.BubbleDetailBean;
 import com.stonymoon.bubble.util.HttpUtil;
-import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
-import com.stonymoon.bubble.util.clusterutil.projection.Bounds;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -35,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import android.util.DisplayMetrics;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import butterknife.OnClick;

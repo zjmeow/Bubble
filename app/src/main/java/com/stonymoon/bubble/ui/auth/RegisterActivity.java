@@ -1,4 +1,4 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.auth;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -23,7 +23,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.android.api.options.RegisterOptionalUserInfo;
 import cn.jpush.im.api.BasicCallback;
 

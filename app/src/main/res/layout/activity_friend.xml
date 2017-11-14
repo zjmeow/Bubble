@@ -4,7 +4,7 @@
     android:id="@+id/activity_friend"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stonymoon.bubble.ui.FriendActivity">
+    tools:context="com.stonymoon.bubble.ui.friend.FriendActivity">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_friend"

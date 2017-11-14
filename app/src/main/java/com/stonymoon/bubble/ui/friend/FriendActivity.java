@@ -1,4 +1,4 @@
-package com.stonymoon.bubble.ui;
+package com.stonymoon.bubble.ui.friend;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
