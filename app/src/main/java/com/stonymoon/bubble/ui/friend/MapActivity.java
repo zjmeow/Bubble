@@ -412,22 +412,22 @@ public class MapActivity extends AppCompatActivity {
                 .addAction("查看资料", new QMUIDialogAction.ActionListener() {
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
+                        ProfileActivity.startActivity(MapActivity.this,
+                                chosenUserBean.getPhone()
+                        );
                         dialog.dismiss();
                     }
                 })
                 .addAction("聊天", new QMUIDialogAction.ActionListener() {
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
+                        ChatActivity.startActivity(MapActivity.this, chosenUserBean.getPhone());
                         dialog.dismiss();
 
                     }
                 })
                 .show();
 
-
-//        ProfileActivity.startActivity(MapActivity.this,
-//                chosenUserBean.getPhone()
-//        );
 
         //ChatActivity.startActivity(this, chosenUserBean.getPhone());
 

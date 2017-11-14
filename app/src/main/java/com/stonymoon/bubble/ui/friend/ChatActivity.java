@@ -306,8 +306,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
             @Override
             public void onAvatarClick(MyMessage message) {
 
-
-                ProfileActivity.startActivity(ChatActivity.this, otherUser.getId());
+                ProfileActivity.startActivity(ChatActivity.this, message.getFromUser().getId());
 
             }
         });

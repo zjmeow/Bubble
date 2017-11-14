@@ -330,7 +330,7 @@ public class ChatFragment extends Fragment implements ChatView.OnKeyboardChanged
             public void onAvatarClick(MyMessage message) {
 
 
-                ProfileActivity.startActivity(mContext, otherUser.getId());
+                ProfileActivity.startActivity(mContext, message.getFromUser().getId());
 
             }
         });
