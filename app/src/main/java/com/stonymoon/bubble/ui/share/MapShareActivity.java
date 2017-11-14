@@ -33,7 +33,7 @@ import android.widget.Toast;
 import butterknife.OnClick;
 
 
-public class MapTestActivity extends Activity implements OnMapLoadedCallback {
+public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     private MapView mMapView;
     private BaiduMap mBaiduMap;
     private Map parameters = new HashMap();
@@ -55,7 +55,7 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SDKInitializer.initialize(getApplicationContext());
-        setContentView(R.layout.activity_map_test);
+        setContentView(R.layout.activity_share_map);
 
         mMapView = (MapView) findViewById(R.id.bmapView);
         ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(8).build();
@@ -72,7 +72,7 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
         mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
             @Override
             public boolean onClusterClick(Cluster cluster) {
-                Toast.makeText(MapTestActivity.this,
+                Toast.makeText(MapShareActivity.this,
                         "有" + cluster.getSize() + "个点", Toast.LENGTH_SHORT).show();
 
                 return false;
@@ -82,7 +82,7 @@ public class MapTestActivity extends Activity implements OnMapLoadedCallback {
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
             public boolean onClusterItemClick(MyItem item) {
-                BubbleDetailActivity.startActivity(MapTestActivity.this, item.getBean());
+                BubbleDetailActivity.startActivity(MapShareActivity.this, item.getBean());
                 return false;
             }
         });

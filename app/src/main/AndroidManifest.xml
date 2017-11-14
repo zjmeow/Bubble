@@ -161,7 +161,7 @@
         <activity
             android:name=".ui.common.MyProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".ui.share.MapTestActivity" />
+        <activity android:name=".ui.share.MapShareActivity" />
         <activity android:name=".ui.common.HttpActivity" />
 
         <receiver

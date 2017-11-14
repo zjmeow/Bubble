@@ -23,7 +23,7 @@ import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.ui.auth.RegisterActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
-import com.stonymoon.bubble.ui.share.MapTestActivity;
+import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.ui.share.ShareActivity;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.nav_send) {
-            Intent intent = new Intent(MainActivity.this, MapTestActivity.class);
+            Intent intent = new Intent(MainActivity.this, MapShareActivity.class);
             startActivity(intent);
         }
 

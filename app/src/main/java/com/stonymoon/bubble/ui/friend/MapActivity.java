@@ -8,6 +8,8 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -42,6 +44,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.adapter.MyFragmentPagerAdapter;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -87,8 +90,11 @@ public class MapActivity extends AppCompatActivity {
     FloatingActionButton button;
     @BindView(R.id.nested_scroll_map)
     NestedScrollView nestedScroll;
-    @BindView(R.id.iv_map_emoji_shit)
-    ImageView emoji;
+    @BindView(R.id.pager_map_chat)
+    ViewPager viewPager;
+
+
+
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
@@ -103,7 +109,11 @@ public class MapActivity extends AppCompatActivity {
     private AnimatorSet showBubbleSet;
     private AnimatorSet receiveEmojiSet;
     private Map<String, Object> parameters = new HashMap<>();
+    private List<Fragment> fragmentList = new ArrayList<>();
+
+
     private MyCallback callback = new MyCallback(this);
+
     //用marker的id绑定信息，为点击回调提供信息
 
     public static void startActivity(Context context, String id, String token, String locationId) {
@@ -113,11 +123,6 @@ public class MapActivity extends AppCompatActivity {
         intent.putExtra("locationId", locationId);
         context.startActivity(intent);
 
-    }
-
-    @OnClick(R.id.iv_map_emoji_shit)
-    void sendEmoji() {
-        startSendEmoji(emoji);
     }
 
     //接收到事件的处理
@@ -163,7 +168,8 @@ public class MapActivity extends AppCompatActivity {
         initAnimation();
         BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-
+        nestedScroll.setFillViewport(true);
+        initPager();
 
     }
 
@@ -237,7 +243,8 @@ public class MapActivity extends AppCompatActivity {
                 //弹出BottomSheet
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
+                //设置聊天
+                ((ChatFragment) fragmentList.get(0)).initUser(item.getPoisBean().getPhone());
                 //当点击item时删除全部item并且把自定义view引入
                 //此时为选中状态，当用户离开选中状态时，隐藏自定义view
                 //加载小图
@@ -471,6 +478,23 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    private void initPager() {
+
+        fragmentList.add(new ChatFragment());
+        fragmentList.add(new ChatFragment());
+        fragmentList.add(new ChatFragment());
+
+        MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setOffscreenPageLimit(2);
+        viewPager.setCurrentItem(0);
+
+    }
+
+    public LocationBean.PoisBean getChosenUserBean() {
+        return chosenUserBean;
+    }
+
     private class MyItem implements ClusterItem {
         private final LatLng mPosition;
         private final LocationBean.PoisBean poisBean;
@@ -498,7 +522,6 @@ public class MapActivity extends AppCompatActivity {
                     load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
-
 
     }
 
@@ -582,6 +605,4 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
-
-
 }
