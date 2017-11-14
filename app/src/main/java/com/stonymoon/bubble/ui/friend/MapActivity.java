@@ -19,7 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -92,7 +92,12 @@ public class MapActivity extends AppCompatActivity {
     NestedScrollView nestedScroll;
     @BindView(R.id.pager_map_chat)
     ViewPager viewPager;
-
+    @BindView(R.id.btn_map_friend)
+    Button btnMapFriend;
+    @BindView(R.id.btn_map_location)
+    Button btnMapLocation;
+    @BindView(R.id.btn_map_message)
+    Button btnMapMessage;
 
 
     //管理聚合地图
@@ -110,6 +115,7 @@ public class MapActivity extends AppCompatActivity {
     private AnimatorSet receiveEmojiSet;
     private Map<String, Object> parameters = new HashMap<>();
     private List<Fragment> fragmentList = new ArrayList<>();
+    private LatLng myLatLng = new LatLng(0, 0);
 
 
     private MyCallback callback = new MyCallback(this);
@@ -201,6 +207,12 @@ public class MapActivity extends AppCompatActivity {
 
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
+        mapView.showZoomControls(false);
+        mapView.showScaleControl(false);
+        baiduMap.setCompassEnable(false);
+        // 删除百度地图logo
+        mapView.removeViewAt(1);
+
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
@@ -244,7 +256,7 @@ public class MapActivity extends AppCompatActivity {
                 BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
                 behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                 //设置聊天
-                ((ChatFragment) fragmentList.get(0)).initUser(item.getPoisBean().getPhone());
+                //((ChatFragment) fragmentList.get(0)).initUser(item.getPoisBean().getPhone());
                 //当点击item时删除全部item并且把自定义view引入
                 //此时为选中状态，当用户离开选中状态时，隐藏自定义view
                 //加载小图
@@ -479,20 +491,33 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void initPager() {
+        // todo fix bug
 
-        fragmentList.add(new ChatFragment());
-        fragmentList.add(new ChatFragment());
-        fragmentList.add(new ChatFragment());
+        //fragmentList.add(new ChatFragment());
 
         MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
         viewPager.setCurrentItem(0);
 
     }
 
     public LocationBean.PoisBean getChosenUserBean() {
         return chosenUserBean;
+    }
+
+    @OnClick({R.id.btn_map_friend, R.id.btn_map_location, R.id.btn_map_message})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.btn_map_friend:
+                FriendActivity.startActivity(this);
+                break;
+            case R.id.btn_map_location:
+                zoomIn(mapView.getMap(), myLatLng, 30);
+                break;
+            case R.id.btn_map_message:
+                MessageListActivity.startActivity(this);
+                break;
+        }
     }
 
     private class MyItem implements ClusterItem {
@@ -533,9 +558,10 @@ public class MapActivity extends AppCompatActivity {
 
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
+            myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             //拿到百度地图上定位的id
             if (isFirstLoacted) {
-                zoomIn(mapView.getMap(), new LatLng(location.getLatitude(), location.getLongitude()), 30f);
+                zoomIn(mapView.getMap(), myLatLng, 30f);
 
                 isFirstLoacted = false;
             }

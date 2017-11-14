@@ -1,5 +1,7 @@
 package com.stonymoon.bubble.ui.friend;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,11 @@ public class FriendActivity extends AppCompatActivity {
     private List<UserInfo> mList = new ArrayList<>();
     FriendAdapter adapter = new FriendAdapter(mList);
 
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, FriendActivity.class);
+        context.startActivity(intent);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

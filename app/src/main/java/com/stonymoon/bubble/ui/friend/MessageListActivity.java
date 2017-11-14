@@ -1,5 +1,7 @@
 package com.stonymoon.bubble.ui.friend;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,6 +26,11 @@ public class MessageListActivity extends AppCompatActivity {
     @BindView(R.id.recycler_conversation)
     RecyclerView conversationRecycler;
 
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, MessageListActivity.class);
+        context.startActivity(intent);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

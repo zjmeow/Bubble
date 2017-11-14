@@ -90,7 +90,7 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
-        //attemptLogin();
+        attemptLogin();
         wrapperLoginPhoneNumber.setHint("请输入手机号");
         wrapperLoginPassword.setHint("请输入密码");
         submitButton.setOnResultEndListener(new SubmitButton.OnResultEndListener() {
