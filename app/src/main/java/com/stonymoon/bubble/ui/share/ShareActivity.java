@@ -107,7 +107,8 @@ public class ShareActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
-                Toast.makeText(ShareActivity.this, response, Toast.LENGTH_SHORT);
+                Toast.makeText(ShareActivity.this, response, Toast.LENGTH_SHORT).show();
+                finish();
 
             }
 

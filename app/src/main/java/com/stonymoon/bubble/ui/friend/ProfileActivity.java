@@ -101,6 +101,16 @@ public class ProfileActivity extends ActivityBase {
         finish();
     }
 
+    @OnClick(R.id.iv_profile_location)
+    void locate() {
+        Intent intent = new Intent();
+        intent.putExtra("phone", phone);//创一个intent用于传值
+        setResult(RESULT_OK, intent);//此处为把intent传给FirstActivity
+        finish();
+    }
+
+
+
 
 
 }

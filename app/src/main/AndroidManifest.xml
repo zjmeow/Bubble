@@ -175,7 +175,10 @@
         <activity android:name=".ui.share.ShareActivity" />
         <activity android:name=".ui.common.PhotoActivity" />
         <activity android:name=".ui.auth.RegisterPhoneActivity" />
-        <activity android:name=".ui.common.EditActivity"></activity>
+        <activity android:name=".ui.common.EditActivity" />
+        <activity
+            android:name=".base.BaseActivity"
+            android:label="@string/title_activity_base"></activity>
     </application>
 
 </manifest>

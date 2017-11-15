@@ -103,11 +103,6 @@
                         android:layout_marginLeft="16dp"
                         android:src="@drawable/love" />
 
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="8dp"
-                        android:src="@drawable/love" />
 
                     <View
                         android:layout_width="0dp"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.JUserBean;
@@ -43,8 +44,11 @@ public class EditActivity extends AppCompatActivity {
             @Override
             public void gotResult(int i, String s) {
                 LogUtil.v("MyProfile", s);
+                Toast.makeText(EditActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
+
 
     }
 

@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -28,7 +29,7 @@ import cn.jpush.im.api.BasicCallback;
 
 import static com.vondear.rxtools.RxConstTool.REGEX_MOBILE_SIMPLE;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.et_register_username)
     EditText usernameText;
@@ -51,8 +52,10 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        //setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
+        setToolbarTitle("注册");
+        setToolbarTextColor(Color.WHITE);
 
     }
 
@@ -131,4 +134,8 @@ public class RegisterActivity extends AppCompatActivity {
         return DigestUtils.md5Hex(key);
     }
 
+    @Override
+    protected int getLayoutId() {
+        return R.layout.activity_register;
+    }
 }
