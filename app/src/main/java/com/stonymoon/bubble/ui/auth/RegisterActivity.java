@@ -91,6 +91,7 @@ public class RegisterActivity extends BaseActivity {
     @OnClick(R.id.btn_register_next)
     void register() {
 
+
         SMSSDK.getInstance().checkSmsCodeAsyn(phone, identificationText.getText().toString(), new SmscheckListener() {
             @Override
             public void checkCodeSuccess(final String code) {
