@@ -54,3 +54,6 @@ freeline.py
 freeline/
 freeline_project_description.json
 app/libs/
+
+-keep class cn.jpush.sms.SMSSDK {*;}
+-keep class cn.jpush.sms.listener.** {*;}

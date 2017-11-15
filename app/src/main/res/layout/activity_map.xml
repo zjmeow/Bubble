@@ -87,60 +87,58 @@
                 android:id="@+id/btn_map_send_message"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:layout_gravity="bottom|right"
-                android:layout_marginBottom="50dp"
-                android:layout_marginRight="16dp" />
+                android:layout_gravity="bottom|right" />
 
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll_map"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="120dp"
         android:clipChildren="false"
         android:clipToPadding="false"
         app:behavior_hideable="true"
         app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager_map_chat"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#FFF"
-
-            ></android.support.v4.view.ViewPager>
-
-        <!---->
-        <!--<LinearLayout-->
+        <!--<android.support.v4.view.ViewPager-->
+        <!--android:id="@+id/pager_map_chat"-->
         <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="16dp"-->
-        <!--android:layout_marginLeft="24dp"-->
-        <!--android:layout_marginRight="24dp"-->
-        <!--android:layout_marginTop="16dp"-->
-        <!--android:clipChildren="false"-->
-        <!--android:clipToPadding="false">-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:background="#FFF"-->
 
-        <!--<ImageView-->
-        <!--android:id="@+id/iv_map_emoji_shit"-->
-        <!--android:layout_width="56dp"-->
-        <!--android:layout_height="56dp"-->
-        <!--android:src="@drawable/shit" />-->
+        <!--&gt;</android.support.v4.view.ViewPager>-->
 
-        <!--<ImageView-->
-        <!--android:layout_width="56dp"-->
-        <!--android:layout_height="56dp"-->
-        <!--android:src="@drawable/shit" />-->
 
-        <!--<ImageView-->
-        <!--android:layout_width="56dp"-->
-        <!--android:layout_height="56dp"-->
-        <!--android:src="@drawable/shit" />-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="16dp"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
-        <!--<ImageView-->
-        <!--android:layout_width="56dp"-->
-        <!--android:layout_height="56dp"-->
-        <!--android:src="@drawable/shit" />-->
-        <!--</LinearLayout>-->
+            <ImageView
+                android:id="@+id/iv_map_emoji_shit"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/shit" />
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/shit" />
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/shit" />
+
+            <ImageView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:src="@drawable/shit" />
+        </LinearLayout>
 
 
     </android.support.v4.widget.NestedScrollView>

@@ -69,12 +69,12 @@
             android:maxLines="1" />
 
         <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-            android:id="@+id/btn_register_register"
+            android:id="@+id/btn_register_next"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginTop="16dp"
-            android:text="注册"
+            android:text="下一步"
             android:textStyle="bold" />
 
     </LinearLayout>

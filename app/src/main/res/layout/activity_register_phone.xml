@@ -77,21 +77,21 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_login_phone_number"
+                    android:id="@+id/wrapper_register_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     android:layout_marginTop="4dp">
 
                     <EditText
-                        android:id="@+id/et_login_phone_number"
+                        android:id="@+id/et_register_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="46dp"
                         android:background="@null"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:hint="请输入手机号"
+                        android:hint="用户名"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="#2C2C2C"
@@ -105,7 +105,7 @@
                     android:id="@+id/user_line"
                     android:layout_width="match_parent"
                     android:layout_height="0.67dp"
-                    android:layout_below="@id/wrapper_login_phone_number"
+                    android:layout_below="@id/wrapper_register_username"
                     android:layout_marginTop="10dp"
                     android:background="@color/colorPrimary" />
 
@@ -123,21 +123,21 @@
 
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/wrapper_login_password"
+                    android:id="@+id/wrapper_register_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
                     android:layout_marginTop="4dp">
 
                     <EditText
-                        android:id="@+id/et_login_password"
+                        android:id="@+id/et_register_password"
                         android:layout_width="fill_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="46dp"
                         android:background="@null"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:hint="请输入密码"
+                        android:hint="密码"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColor="#2C2C2C"
@@ -149,20 +149,22 @@
                     android:id="@+id/psw_line"
                     android:layout_width="match_parent"
                     android:layout_height="0.67dp"
-                    android:layout_below="@id/wrapper_login_password"
+                    android:layout_below="@id/wrapper_register_password"
                     android:layout_marginTop="10dp"
                     android:background="@color/colorPrimary" />
 
             </RelativeLayout>
 
             <Button
-                android:id="@+id/btn_login_sign_in"
+                android:id="@+id/btn_register_register"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="36dp"
                 android:background="@drawable/shape"
+                android:text="注册"
+                android:textColor="#fff"
                 android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
@@ -175,23 +177,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="38dp">
 
-        <TextView
-            android:id="@+id/login_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="还没有账号?"
-            android:textColor="@color/secondText"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_login_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="立即注册"
-            android:textColor="@color/colorPrimary"
-            android:textSize="12sp" />
 
     </LinearLayout>
 

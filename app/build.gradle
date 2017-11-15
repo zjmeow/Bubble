@@ -37,6 +37,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     // 此处以JMessage 2.3.0 版本为例。
+
     // 此处以JCore 1.1.7 版本为例。
     compile files('src/main/libs/codec.jar')
     compile files('src/main/libs/BaiduLBS_Android.jar')
@@ -65,4 +66,5 @@ dependencies {
     compile 'org.jetbrains:annotations-java5:15.0'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    compile files('src/main/libs/jsms_android-1.2.0.jar')
 }

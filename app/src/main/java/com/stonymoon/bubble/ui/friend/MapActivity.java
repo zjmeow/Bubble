@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
@@ -24,6 +23,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -94,15 +94,14 @@ public class MapActivity extends AppCompatActivity {
     FloatingActionButton button;
     @BindView(R.id.nested_scroll_map)
     NestedScrollView nestedScroll;
-    @BindView(R.id.pager_map_chat)
-    ViewPager viewPager;
     @BindView(R.id.btn_map_friend)
     Button btnMapFriend;
     @BindView(R.id.btn_map_location)
     Button btnMapLocation;
     @BindView(R.id.btn_map_message)
     Button btnMapMessage;
-
+    @BindView(R.id.iv_map_emoji_shit)
+    ImageView ivEmoji;
 
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
@@ -133,6 +132,11 @@ public class MapActivity extends AppCompatActivity {
         intent.putExtra("locationId", locationId);
         context.startActivity(intent);
 
+    }
+
+    @OnClick(R.id.iv_map_emoji_shit)
+    void startEmoji() {
+        startSendEmoji(ivEmoji);
     }
 
     //接收到事件的处理
@@ -187,7 +191,6 @@ public class MapActivity extends AppCompatActivity {
         BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
         behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         nestedScroll.setFillViewport(true);
-        initPager();
 
     }
 
@@ -395,13 +398,13 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_map_send_message)
     void sendMessage() {
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
-        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-
-        } else {
-            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-        }
+//        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
+//        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+//            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+//
+//        } else {
+//            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//        }
 
 
         if (chosenUserBean == null) {
@@ -460,58 +463,65 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
-    private void startSendEmoji(View view) {
-        //todo 动画需要奇怪的解决方法
+    private void startSendEmoji(final View view) {
+//        ObjectAnimator animator1 = ObjectAnimator.ofFloat(
+//                view,
+//                "translationX",
+//                bubble.getX() - view.getX());
+//        ObjectAnimator animator2 = ObjectAnimator.ofFloat(
+//                view,
+//                "translationY",
+//                bubble.getY() - view.getY() );
+//        AnimatorSet set = new AnimatorSet();
+//        set.setDuration(1000);
+//        set.play(animator1).with(animator2);
+//        set.start();
+        float x = view.getX();
 
-        float x = bubble.getLeft() + bubble.getPivotX();
-        float y = bubble.getTop() + bubble.getTranslationY();
-        AnimationSet sendEmojiSet = new AnimationSet(true);
-        float dx = view.getLeft() + view.getTranslationX();
 
-        float dy = view.getTop() + view.getTranslationY();
-        TranslateAnimation translateAnimation = new TranslateAnimation(Animation.ABSOLUTE, 0,
-                Animation.ABSOLUTE, x - dx, Animation.ABSOLUTE, 0, Animation.ABSOLUTE, y - dy);
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
-        AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
-        sendEmojiSet.addAnimation(translateAnimation);
-        sendEmojiSet.addAnimation(scaleAnimation);
-        sendEmojiSet.addAnimation(alphaAnimation);
-
-        sendEmojiSet.setDuration(400);
-        sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
-        sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
+        view.post(new Runnable() {
             @Override
-            public void onAnimationStart(Animation animation) {
+            public void run() {
+                AnimationSet sendEmojiSet = new AnimationSet(true);
+                float k = view.getX();
 
-            }
+                TranslateAnimation translateAnimation = new TranslateAnimation(0,
+                        bubble.getX() - view.getX(), 0, bubble.getY() - view.getY());
+                //ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
+                AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
+                sendEmojiSet.addAnimation(translateAnimation);
+                //sendEmojiSet.addAnimation(scaleAnimation);
+                sendEmojiSet.addAnimation(alphaAnimation);
+                sendEmojiSet.setDuration(400);
+                sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
+                sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
+                    @Override
+                    public void onAnimationStart(Animation animation) {
 
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                showBubbleSet.start();
-            }
+                    }
 
-            @Override
-            public void onAnimationRepeat(Animation animation) {
+                    @Override
+                    public void onAnimationEnd(Animation animation) {
+                        showBubbleSet.start();
+
+
+                    }
+
+                    @Override
+                    public void onAnimationRepeat(Animation animation) {
+
+                    }
+                });
+
+                view.startAnimation(sendEmojiSet);
+
 
             }
         });
 
 
-        view.startAnimation(sendEmojiSet);
-
-
     }
 
-    private void initPager() {
-        // todo fix bug
-
-        //fragmentList.add(new ChatFragment());
-
-        MyFragmentPagerAdapter pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList);
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(0);
-
-    }
 
     public LocationBean.PoisBean getChosenUserBean() {
         return chosenUserBean;
