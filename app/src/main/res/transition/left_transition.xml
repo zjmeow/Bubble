@@ -1,0 +1,3 @@
+<slide xmlns:android="http://schemas.android.com/apk/res/android"
+    android:interpolator="@android:interpolator/decelerate_cubic"
+    android:slideEdge="start" />

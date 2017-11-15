@@ -5,6 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.FloatingActionButton;
@@ -12,7 +13,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -155,6 +159,14 @@ public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (Build.VERSION.SDK_INT >= 21) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            Transition leftExplode = TransitionInflater.from(this).inflateTransition(R.transition.left_transition);
+            Transition rightExplode = TransitionInflater.from(this).inflateTransition(R.transition.right_transition);
+            getWindow().setExitTransition(rightExplode);
+            getWindow().setEnterTransition(leftExplode);
+
+        }
         //设置沉浸式状态栏
         QMUIStatusBarHelper.translucent(this);
         super.onCreate(savedInstanceState);
@@ -509,13 +521,19 @@ public class MapActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_map_friend:
+
                 FriendActivity.startActivity(this);
+
                 break;
             case R.id.btn_map_location:
                 zoomIn(mapView.getMap(), myLatLng, 30);
+
+
                 break;
             case R.id.btn_map_message:
                 MessageListActivity.startActivity(this);
+
+
                 break;
         }
     }

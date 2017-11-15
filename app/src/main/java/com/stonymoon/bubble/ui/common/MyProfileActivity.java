@@ -38,6 +38,7 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -63,6 +64,11 @@ public class MyProfileActivity extends ActivityBase {
     ImageView mIvAvatar;
     @BindView(R.id.tv_edit_profile_username)
     TextView tvUsername;
+    @BindView(R.id.tv_edit_profile_signature)
+    TextView tvSignature;
+
+
+
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
@@ -109,6 +115,7 @@ public class MyProfileActivity extends ActivityBase {
             @Override
             public void gotResult(int i, String s, UserInfo userInfo) {
                 tvUsername.setText(userInfo.getDisplayName());
+                tvSignature.setText(userInfo.getSignature());
                 Picasso.with(MyProfileActivity.this).load(userInfo.getExtra("url")).into(mIvAvatar);
 
             }
@@ -366,6 +373,17 @@ public class MyProfileActivity extends ActivityBase {
             builder.append((char) (b + 20));
         }
         return builder.toString() + System.currentTimeMillis();
+    }
+
+    @OnClick(R.id.iv_my_profile_back)
+    void back() {
+        finish();
+    }
+
+    @OnClick(R.id.iv_my_profile_edit)
+    void edit() {
+        EditActivity.startActivity(this);
+
     }
 
 

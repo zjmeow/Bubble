@@ -8,10 +8,11 @@
     >
 
     <ImageView
+        android:id="@+id/iv_my_profile_back"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="36dp"
         android:src="@drawable/arrow" />
 
     <FrameLayout
@@ -22,12 +23,10 @@
         android:layout_margin="16dp">
 
         <android.support.v7.widget.CardView
-
             android:id="@+id/card_edit_profile_detail"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="16dp"
-
 
             >
 
@@ -47,9 +46,10 @@
                     android:orientation="horizontal">
 
                     <ImageView
+                        android:id="@+id/iv_my_profile_edit"
                         android:layout_width="32dp"
                         android:layout_height="32dp"
-                        android:src="@drawable/love" />
+                        android:src="@drawable/edit" />
 
                 </LinearLayout>
 
@@ -74,19 +74,20 @@
                     android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/tv_edit_profile_signature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
                     android:layout_marginTop="24dp"
                     android:gravity="center"
-                    android:text="这个用户很懒，他什么都没有留下"
+
                     android:textColor="@color/secondText"
                     android:textSize="16sp" />
 
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="5dp"
+                    android:layout_height="3dp"
                     android:layout_gravity="bottom"
                     android:layout_marginTop="140dp"
                     android:background="#EAEAEA" />
@@ -118,9 +119,11 @@
                         android:layout_width="110dp"
                         android:layout_height="match_parent"
                         android:layout_marginRight="16dp"
-                        android:background="@color/colorPrimary"
                         android:text="加好友"
-                        android:textColor="#FFFFFF" />
+                        android:textColor="#FFFFFF"
+                        app:qmui_backgroundColor="@color/colorPrimary"
+
+                        />
                 </LinearLayout>
 
 

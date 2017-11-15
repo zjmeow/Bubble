@@ -27,12 +27,14 @@ import cn.jpush.im.api.BasicCallback;
 
 public class ProfileActivity extends ActivityBase {
 
-    //todo 这个是打开别人的资料，只需要展示出资料即可
 
     @BindView(R.id.iv_profile_avatar)
     ImageView mIvAvatar;
     @BindView(R.id.tv_profile_username)
     TextView tvUsername;
+    @BindView(R.id.tv_profile_signature)
+    TextView tvSignature;
+
     private String phone;
     private String url;
 
@@ -79,6 +81,7 @@ public class ProfileActivity extends ActivityBase {
             @Override
             public void gotResult(int i, String s, UserInfo userInfo) {
                 tvUsername.setText(userInfo.getDisplayName());
+                tvSignature.setText(userInfo.getSignature());
                 Picasso.with(ProfileActivity.this).load(userInfo.getExtra("url")).into(mIvAvatar);
 
             }
@@ -92,6 +95,12 @@ public class ProfileActivity extends ActivityBase {
             }
         });
     }
+
+    @OnClick(R.id.iv_profile_back)
+    void back() {
+        finish();
+    }
+
 
 
 }

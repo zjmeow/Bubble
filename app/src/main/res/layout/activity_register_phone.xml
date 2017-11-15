@@ -163,10 +163,7 @@
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="36dp"
                 android:background="@drawable/shape"
-                android:textSize="16sp"
-                app:buttonColor="@color/colorPrimary"
-                app:buttonText="登录"
-                app:succeedColor="@color/colorPrimary" />
+                android:textSize="16sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -184,7 +181,7 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:text="还没有账号?"
-            android:textColor="#999999"
+            android:textColor="@color/secondText"
             android:textSize="12sp" />
 
         <TextView
