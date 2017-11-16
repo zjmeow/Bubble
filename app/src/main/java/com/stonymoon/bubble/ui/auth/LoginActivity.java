@@ -83,7 +83,7 @@ public class LoginActivity extends Activity {
         passwordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                if (id == EditorInfo.IME_NULL) {
                     login(phoneNumberView.getText().toString(), passwordView.getText().toString());
                     return true;
                 }
