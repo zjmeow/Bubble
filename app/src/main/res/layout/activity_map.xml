@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_map"
@@ -14,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -58,72 +60,80 @@
 
     <RelativeLayout
 
-                android:id="@+id/map_bubble"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:visibility="gone">
+        android:id="@+id/map_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone">
 
-                <com.qmuiteam.qmui.widget.QMUIRadiusImageView
-                    android:id="@+id/iv_map_bubble_head"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:gravity="center"
-                    android:src="@mipmap/bubble"
-                    />
+        <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+            android:id="@+id/iv_map_bubble_head"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:src="@mipmap/bubble" />
 
-                <TextView
-                    android:id="@+id/tv_map_bubble_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
+        <TextView
+            android:id="@+id/tv_map_bubble_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
 
-                    />
+            />
 
-            </RelativeLayout>
 
-            <android.support.design.widget.FloatingActionButton
+    </RelativeLayout>
 
-                android:id="@+id/btn_map_send_message"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="bottom|right" />
+    <android.support.design.widget.FloatingActionButton
+
+        android:id="@+id/btn_map_send_message"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|right" />
 
 
     <com.stonymoon.bubble.view.MyLinearLayout
         android:id="@+id/ll_map_emoji"
-            android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="120dp"
         android:layout_gravity="bottom"
         android:layout_marginBottom="-120dp"
         android:background="#FFF"
-            android:clipChildren="false"
-            android:clipToPadding="false">
-            <ImageView
-                android:id="@+id/iv_map_emoji_shit1"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/shit" />
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
-            <ImageView
-                android:id="@+id/iv_map_emoji_shit2"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/shit" />
+        <ImageView
+            android:id="@+id/iv_map_emoji_shit1"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/shit" />
 
-            <ImageView
-                android:id="@+id/iv_map_emoji_shit3"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/shit" />
+        <ImageView
+            android:id="@+id/iv_map_emoji_shit2"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/shit" />
 
-            <ImageView
-                android:id="@+id/iv_map_emoji_shit4"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:src="@drawable/shit" />
+        <ImageView
+            android:id="@+id/iv_map_emoji_shit3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/shit" />
+
+        <ImageView
+            android:id="@+id/iv_map_emoji_shit4"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/shit" />
 
     </com.stonymoon.bubble.view.MyLinearLayout>
 
+    <ImageView
+        android:id="@+id/iv_map_receive_emoji"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:src="@drawable/shit"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

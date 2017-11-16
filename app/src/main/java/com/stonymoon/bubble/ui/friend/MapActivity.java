@@ -8,6 +8,7 @@ import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
@@ -43,6 +44,7 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -86,6 +88,10 @@ public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
+    @BindView(R.id.activity_map)
+    CoordinatorLayout mainLayout;
+
+
     @BindView(R.id.map)
     MapView mapView;
     @BindView(R.id.map_bubble)
@@ -102,6 +108,11 @@ public class MapActivity extends AppCompatActivity {
     Button btnMapLocation;
     @BindView(R.id.btn_map_message)
     Button btnMapMessage;
+    @BindView(R.id.iv_map_receive_emoji)
+    ImageView ivReceiveEmoji;
+
+
+
     @BindView(R.id.iv_map_emoji_shit1)
     ImageView ivEmoji1;
     @BindView(R.id.iv_map_emoji_shit2)
@@ -427,7 +438,8 @@ public class MapActivity extends AppCompatActivity {
         if (chosenUserBean == null) {
             return;
         }
-        startSendEmoji(button);
+        //startSendEmoji(button);
+        receiveEmoji();
 //        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
 //        messageEditText.setText("");
 //        JMessageClient.sendMessage(message);
@@ -576,6 +588,21 @@ public class MapActivity extends AppCompatActivity {
                 -RxImageTool.dp2px(120));
         animator.setDuration(500);
         animator.start();
+
+    }
+
+    private void receiveEmoji() {
+
+        ivReceiveEmoji.setVisibility(View.VISIBLE);
+        mainLayout.bringChildToFront(ivReceiveEmoji);
+        AnimationSet sendEmojiSet = new AnimationSet(true);
+
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
+        );
+        sendEmojiSet.addAnimation(scaleAnimation);
+        sendEmojiSet.setDuration(300);
+        ivReceiveEmoji.startAnimation(sendEmojiSet);
 
     }
 
