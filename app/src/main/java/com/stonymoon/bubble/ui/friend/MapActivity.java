@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AlphaAnimation;
@@ -24,6 +25,7 @@ import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +61,8 @@ import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
+import com.vondear.rxtools.RxImageTool;
+import com.vondear.rxtools.RxTool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -92,16 +96,22 @@ public class MapActivity extends AppCompatActivity {
     TextView usernameText;
     @BindView(R.id.btn_map_send_message)
     FloatingActionButton button;
-    @BindView(R.id.nested_scroll_map)
-    NestedScrollView nestedScroll;
     @BindView(R.id.btn_map_friend)
     Button btnMapFriend;
     @BindView(R.id.btn_map_location)
     Button btnMapLocation;
     @BindView(R.id.btn_map_message)
     Button btnMapMessage;
-    @BindView(R.id.iv_map_emoji_shit)
-    ImageView ivEmoji;
+    @BindView(R.id.iv_map_emoji_shit1)
+    ImageView ivEmoji1;
+    @BindView(R.id.iv_map_emoji_shit2)
+    ImageView ivEmoji2;
+    @BindView(R.id.iv_map_emoji_shit3)
+    ImageView ivEmoji3;
+
+
+    @BindView(R.id.ll_map_emoji)
+    LinearLayout llEmoji;
 
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
@@ -132,12 +142,33 @@ public class MapActivity extends AppCompatActivity {
         intent.putExtra("locationId", locationId);
         context.startActivity(intent);
 
+
     }
 
-    @OnClick(R.id.iv_map_emoji_shit)
-    void startEmoji() {
-        startSendEmoji(ivEmoji);
+
+    @OnClick(R.id.iv_map_emoji_shit1)
+    void sendEmoji1() {
+        startSendEmoji(ivEmoji1);
     }
+
+    @OnClick(R.id.iv_map_emoji_shit2)
+    void sendEmoji22() {
+        startSendEmoji(ivEmoji2);
+    }
+
+    @OnClick(R.id.iv_map_emoji_shit3)
+    void sendEmoji3() {
+        startSendEmoji(ivEmoji3);
+    }
+
+
+
+
+
+
+
+
+
 
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
@@ -188,9 +219,8 @@ public class MapActivity extends AppCompatActivity {
         initLocate();
         mLocationClient.start();
         initAnimation();
-        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
-        behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        nestedScroll.setFillViewport(true);
+        //初始化像素工具
+        RxTool.init(this);
 
     }
 
@@ -267,9 +297,7 @@ public class MapActivity extends AppCompatActivity {
                 baiduMap.clear();
                 mClusterManager.cluster();
                 mLocationClient.stop();
-                //弹出BottomSheet
-                BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
-                behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                openBottomSheet();
                 //设置聊天
                 //((ChatFragment) fragmentList.get(0)).initUser(item.getPoisBean().getPhone());
                 //当点击item时删除全部item并且把自定义view引入
@@ -398,13 +426,6 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_map_send_message)
     void sendMessage() {
-//        BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
-//        if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-//            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-//
-//        } else {
-//            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//        }
 
 
         if (chosenUserBean == null) {
@@ -455,11 +476,7 @@ public class MapActivity extends AppCompatActivity {
             bubble.setVisibility(View.GONE);
             isSelected = false;
             addMarkers(myItems);
-
-            BottomSheetBehavior behavior = BottomSheetBehavior.from(findViewById(R.id.nested_scroll_map));
-            if (behavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-                behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-            }
+            closeBottomSheet();
         }
     }
 
@@ -483,10 +500,10 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void run() {
                 AnimationSet sendEmojiSet = new AnimationSet(true);
-                float k = view.getX();
-
+                float dy = ((ViewGroup) view.getParent()).getY() + view.getY();
+                float dx = ((ViewGroup) view.getParent()).getX() + view.getX();
                 TranslateAnimation translateAnimation = new TranslateAnimation(0,
-                        bubble.getX() - view.getX(), 0, bubble.getY() - view.getY());
+                        bubble.getX() - dx, 0, bubble.getY() - dy);
                 //ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
                 AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
                 sendEmojiSet.addAnimation(translateAnimation);
@@ -503,7 +520,6 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public void onAnimationEnd(Animation animation) {
                         showBubbleSet.start();
-
 
                     }
 
@@ -531,9 +547,7 @@ public class MapActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.btn_map_friend:
-
                 FriendActivity.startActivity(this);
-
                 break;
             case R.id.btn_map_location:
                 zoomIn(mapView.getMap(), myLatLng, 30);
@@ -546,6 +560,27 @@ public class MapActivity extends AppCompatActivity {
 
                 break;
         }
+    }
+
+    private void closeBottomSheet() {
+
+        ObjectAnimator animator = ObjectAnimator.ofFloat(
+                llEmoji,
+                "translationY",
+                RxImageTool.dp2px(120));
+        animator.setDuration(500);
+        animator.start();
+
+    }
+
+    private void openBottomSheet() {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(
+                llEmoji,
+                "translationY",
+                -RxImageTool.dp2px(120));
+        animator.setDuration(500);
+        animator.start();
+
     }
 
     private class MyItem implements ClusterItem {
