@@ -403,7 +403,7 @@ public class MapActivity extends AppCompatActivity {
 //            behavior.setState(BottomSheetBehavior.STATE_HIDDEN);
 //
 //        } else {
-//            behavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            behavior.setState(BottomSheetBehavior.STAsTE_EXPANDED);
 //        }
 
 

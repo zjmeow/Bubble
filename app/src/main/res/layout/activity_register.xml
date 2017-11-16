@@ -4,7 +4,6 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
     tools:context="com.stonymoon.bubble.ui.auth.RegisterActivity">
 
 
@@ -15,15 +14,7 @@
         android:orientation="vertical">
 
         <include layout="@layout/activity_base"
-
-
             />
-        <EditText
-            android:id="@+id/et_register_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="名称"
-            android:maxLines="1" />
 
         <EditText
             android:id="@+id/et_register_phone_number"
@@ -32,21 +23,7 @@
             android:hint="@string/prompt_email"
             android:maxLines="1" />
 
-        <EditText
-            android:id="@+id/et_register_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="密码"
-            android:inputType="textPassword"
-            android:maxLines="1" />
 
-        <EditText
-            android:id="@+id/et_register_confirm_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="确认密码"
-            android:inputType="textPassword"
-            android:maxLines="1" />
 
         <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
             android:id="@+id/btn_register_send_identification_code"
@@ -62,7 +39,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="验证码"
-            android:imeActionId="@+id/login"
             android:imeActionLabel="@string/action_sign_in_short"
             android:imeOptions="actionUnspecified"
             android:inputType="textPassword"

@@ -278,6 +278,7 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         // CustomViewHolder must extends ViewHolders defined in MsgListAdapter.
         // Current ViewHolders are TxtViewHolder, VoiceViewHolder.
 
+
         mAdapter.setOnMsgClickListener(new MsgListAdapter.OnMsgClickListener<MyMessage>() {
             @Override
             public void onMessageClick(MyMessage message) {
