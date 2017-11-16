@@ -22,6 +22,7 @@ import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleHolder;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
@@ -84,9 +85,8 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         mClusterManager.setOnClusterClickListener(new ClusterManager.OnClusterClickListener<MyItem>() {
             @Override
             public boolean onClusterClick(Cluster cluster) {
-                Toast.makeText(MapShareActivity.this,
-                        "有" + cluster.getSize() + "个点", Toast.LENGTH_SHORT).show();
-
+                BubbleHolder.getInstance().setData(cluster);
+                ShareListActivity.startActivity(MapShareActivity.this);
                 return false;
             }
         });
@@ -248,7 +248,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     /**
      * 每个Marker点，包含Marker点坐标以及图标
      */
-    private class MyItem implements ClusterItem {
+    public class MyItem implements ClusterItem {
         private final LatLng mPosition;
         private final BubbleBean.ContentBean bean;
 

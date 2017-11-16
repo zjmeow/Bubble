@@ -178,7 +178,8 @@
         <activity android:name=".ui.common.EditActivity" />
         <activity
             android:name=".base.BaseActivity"
-            android:label="@string/title_activity_base"></activity>
+            android:label="@string/title_activity_base" />
+        <activity android:name=".ui.share.ShareListActivity"></activity>
     </application>
 
 </manifest>
