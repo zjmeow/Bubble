@@ -267,17 +267,21 @@ public class MapActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         mapView.onResume();
-        isUpdateMap = true;
-        mLocationClient.start();
 
+        if (!isSelected) {
+            isUpdateMap = true;
+            mLocationClient.start();
+        }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         mapView.onPause();
-        isUpdateMap = false;
-        mLocationClient.stop();
+        if (!isSelected) {
+            isUpdateMap = false;
+            //mLocationClient.stop();
+        }
     }
 
     private void setMap() {
@@ -661,7 +665,6 @@ public class MapActivity extends AppCompatActivity {
             //拿到百度地图上定位的id
             if (isFirstLoacted) {
                 zoomIn(mapView.getMap(), myLatLng, 30f);
-
                 isFirstLoacted = false;
             }
 
