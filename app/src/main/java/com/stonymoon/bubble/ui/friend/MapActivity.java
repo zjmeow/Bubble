@@ -14,9 +14,11 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -441,13 +443,13 @@ public class MapActivity extends AppCompatActivity {
                         switch (index) {
                             case 0:
                                 ContactManager.declineInvitation(username, "", targetUsername + "拒绝了你的请求", callback);
+                                dialog.dismiss();
                                 break;
                             case 1:
                                 ContactManager.acceptInvitation(targetUsername, "", callback);
+                                dialog.dismiss();
                                 break;
                         }
-                        dialog.dismiss();
-
                     }
                 })
                 .show();
@@ -512,10 +514,23 @@ public class MapActivity extends AppCompatActivity {
 
     private void startSendEmoji(final View view) {
         MessageUtil.sendEmoji(chosenUserBean.getPhone());
+        ViewGroup parent = (ViewGroup) view.getParent();
+
+
+        view.setClickable(false);
+        //todo 设置自定义view，new view
+        //final ImageView imageView = new ImageView(view.getContext());
+        //imageView.setMaxHeight(48);
+        //imageView.setMaxWidth(48);
+        //Picasso.with(this).load(R.drawable.shit).into(imageView);
+        //((ViewGroup)view.getParent()).addView(imageView);
+        //imageView.setX(x);
+        //imageView.setY(y);
         final float x = view.getX();
         final float y = view.getY();
-        float dy = ((ViewGroup) view.getParent()).getY() + y;
-        float dx = ((ViewGroup) view.getParent()).getX() + x;
+        float dy = parent.getY() + y;
+        float dx = parent.getX() + x;
+
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(
                 view,
                 "translationX",
@@ -526,15 +541,16 @@ public class MapActivity extends AppCompatActivity {
                 bubble.getY() - dy);
 
         AnimatorSet set = new AnimatorSet();
-        set.setDuration(400);
+        set.setDuration(200);
         set.play(animator1).with(animator2);
         set.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
                 showBubbleSet.start();
+                //((ViewGroup)view.getParent()).removeView(imageView);
                 view.setX(x);
                 view.setY(y);
-
+                view.setClickable(true);
             }
         });
         set.start();
