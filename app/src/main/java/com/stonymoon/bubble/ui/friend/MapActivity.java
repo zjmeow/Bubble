@@ -1,5 +1,7 @@
 package com.stonymoon.bubble.ui.friend;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -57,6 +59,7 @@ import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.util.MyCallback;
 import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
@@ -76,6 +79,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.content.CustomContent;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
@@ -173,24 +177,42 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
+        Message message = event.getMessage();
+        switch (message.getContentType()) {
+            case custom:
+                CustomContent customContent = (CustomContent) message.getContent();
+                customContent.getStringExtra("emoji");
+                receiveEmoji();
+                //todo 判断并且添加多种表情
+                break;
+
+        }
+
+
         LogUtil.d(TAG, event.getMessage().toString());
 
     }
 
-    public void onEvent(OfflineMessageEvent event) {
+    public void onEventMainThread(OfflineMessageEvent event) {
         //获取事件发生的会话对象
         Conversation conversation = event.getConversation();
         List<Message> newMessageList = event.getOfflineMessageList();//获取此次离线期间会话收到的新消息列表
+        for (Message message : newMessageList) {
+            switch (message.getContentType()) {
+                case custom:
+                    CustomContent customContent = (CustomContent) message.getContent();
+                    customContent.getStringExtra("emoji");
+                    receiveEmoji();
+                    //todo 判断并且添加多种表情
+                    break;
+
+
+            }
+
+        }
+
         //System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
     }
 
@@ -489,60 +511,33 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void startSendEmoji(final View view) {
-//        ObjectAnimator animator1 = ObjectAnimator.ofFloat(
-//                view,
-//                "translationX",
-//                bubble.getX() - view.getX());
-//        ObjectAnimator animator2 = ObjectAnimator.ofFloat(
-//                view,
-//                "translationY",
-//                bubble.getY() - view.getY() );
-//        AnimatorSet set = new AnimatorSet();
-//        set.setDuration(1000);
-//        set.play(animator1).with(animator2);
-//        set.start();
-        float x = view.getX();
+        MessageUtil.sendEmoji(chosenUserBean.getPhone());
+        final float x = view.getX();
+        final float y = view.getY();
+        float dy = ((ViewGroup) view.getParent()).getY() + y;
+        float dx = ((ViewGroup) view.getParent()).getX() + x;
+        ObjectAnimator animator1 = ObjectAnimator.ofFloat(
+                view,
+                "translationX",
+                bubble.getX() - dx);
+        ObjectAnimator animator2 = ObjectAnimator.ofFloat(
+                view,
+                "translationY",
+                bubble.getY() - dy);
 
-
-        view.post(new Runnable() {
+        AnimatorSet set = new AnimatorSet();
+        set.setDuration(400);
+        set.play(animator1).with(animator2);
+        set.addListener(new AnimatorListenerAdapter() {
             @Override
-            public void run() {
-                AnimationSet sendEmojiSet = new AnimationSet(true);
-                float dy = ((ViewGroup) view.getParent()).getY() + view.getY();
-                float dx = ((ViewGroup) view.getParent()).getX() + view.getX();
-                TranslateAnimation translateAnimation = new TranslateAnimation(0,
-                        bubble.getX() - dx, 0, bubble.getY() - dy);
-                //ScaleAnimation scaleAnimation = new ScaleAnimation(1, 1.8f, 1, 1.8f);
-                AlphaAnimation alphaAnimation = new AlphaAnimation(1, 0);
-                sendEmojiSet.addAnimation(translateAnimation);
-                //sendEmojiSet.addAnimation(scaleAnimation);
-                sendEmojiSet.addAnimation(alphaAnimation);
-                sendEmojiSet.setDuration(400);
-                sendEmojiSet.setInterpolator(new AccelerateDecelerateInterpolator());
-                sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        showBubbleSet.start();
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-
-                    }
-                });
-
-                view.startAnimation(sendEmojiSet);
-
+            public void onAnimationEnd(Animator animation) {
+                showBubbleSet.start();
+                view.setX(x);
+                view.setY(y);
 
             }
         });
-
+        set.start();
 
     }
 
@@ -559,13 +554,9 @@ public class MapActivity extends AppCompatActivity {
                 break;
             case R.id.btn_map_location:
                 zoomIn(mapView.getMap(), myLatLng, 30);
-
-
                 break;
             case R.id.btn_map_message:
                 MessageListActivity.startActivity(this);
-
-
                 break;
         }
     }
@@ -576,7 +567,7 @@ public class MapActivity extends AppCompatActivity {
                 llEmoji,
                 "translationY",
                 RxImageTool.dp2px(120));
-        animator.setDuration(500);
+        animator.setDuration(400);
         animator.start();
 
     }
@@ -586,7 +577,7 @@ public class MapActivity extends AppCompatActivity {
                 llEmoji,
                 "translationY",
                 -RxImageTool.dp2px(120));
-        animator.setDuration(500);
+        animator.setDuration(400);
         animator.start();
 
     }
@@ -602,6 +593,24 @@ public class MapActivity extends AppCompatActivity {
         );
         sendEmojiSet.addAnimation(scaleAnimation);
         sendEmojiSet.setDuration(300);
+        sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                ivReceiveEmoji.clearAnimation();
+                ivReceiveEmoji.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
         ivReceiveEmoji.startAnimation(sendEmojiSet);
 
     }

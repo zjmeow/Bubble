@@ -2,6 +2,10 @@ package com.stonymoon.bubble.util;
 
 import org.json.JSONObject;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.Message;
 
 
@@ -21,6 +25,20 @@ public class MessageUtil {
         return msg;
 
     }
+
+    public static void sendEmoji(String phone) {
+        Map<String, String> map = new HashMap<>();
+        map.put("emoji", "shit");
+        Message message = JMessageClient.createSingleCustomMessage(phone, map);
+        JMessageClient.sendMessage(message);
+    }
+
+
+
+
+
+
+
 
 
 }
