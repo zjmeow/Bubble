@@ -1,5 +1,7 @@
 package com.stonymoon.bubble.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -50,6 +52,7 @@ public class LocationBean {
         private int uid;
         private String username;
         private String url;
+        @SerializedName("modify_time")
         private String modifyTime;
         private String phone;
         private List<Double> location;

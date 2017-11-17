@@ -91,14 +91,13 @@ import cn.jpush.im.android.api.model.Message;
 //本地图显示附近的人
 //动态地图另外开一个地图显示
 //todo 优化地图页面构造
+//todo 离线表情一次性发完
 public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
     @BindView(R.id.activity_map)
     CoordinatorLayout mainLayout;
-
-
     @BindView(R.id.map)
     MapView mapView;
     @BindView(R.id.map_bubble)
@@ -118,14 +117,8 @@ public class MapActivity extends AppCompatActivity {
     @BindView(R.id.iv_map_receive_emoji)
     ImageView ivReceiveEmoji;
 
-
-
     @BindView(R.id.iv_map_emoji_shit1)
     ImageView ivEmoji1;
-    @BindView(R.id.iv_map_emoji_shit2)
-    ImageView ivEmoji2;
-    @BindView(R.id.iv_map_emoji_shit3)
-    ImageView ivEmoji3;
 
 
     @BindView(R.id.ll_map_emoji)
@@ -143,7 +136,6 @@ public class MapActivity extends AppCompatActivity {
     private AnimatorSet showBubbleSet;
     private AnimatorSet receiveEmojiSet;
     private Map<String, Object> parameters = new HashMap<>();
-    private List<Fragment> fragmentList = new ArrayList<>();
     private LatLng myLatLng = new LatLng(0, 0);
 
 
@@ -163,16 +155,6 @@ public class MapActivity extends AppCompatActivity {
     @OnClick(R.id.iv_map_emoji_shit1)
     void sendEmoji1() {
         startSendEmoji(ivEmoji1);
-    }
-
-    @OnClick(R.id.iv_map_emoji_shit2)
-    void sendEmoji22() {
-        startSendEmoji(ivEmoji2);
-    }
-
-    @OnClick(R.id.iv_map_emoji_shit3)
-    void sendEmoji3() {
-        startSendEmoji(ivEmoji3);
     }
 
 
@@ -322,9 +304,7 @@ public class MapActivity extends AppCompatActivity {
         mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<MyItem>() {
             @Override
             public boolean onClusterItemClick(MyItem item) {
-
                 zoomIn(baiduMap, item.getPosition(), 30f);
-                Point p = baiduMap.getProjection().toScreenLocation(item.getPosition());
                 LocationBean.PoisBean bean = item.getPoisBean();
                 chosenUserBean = bean;
                 mClusterManager.clearItems();
@@ -332,7 +312,6 @@ public class MapActivity extends AppCompatActivity {
                 mClusterManager.cluster();
                 mLocationClient.stop();
                 openBottomSheet();
-                //((ChatFragment) fragmentList.get(0)).initUser(item.getPoisBean().getPhone());
                 //当点击item时删除全部item并且把自定义view引入
                 //此时为选中状态，当用户离开选中状态时，隐藏自定义view
                 //加载小图
@@ -418,8 +397,6 @@ public class MapActivity extends AppCompatActivity {
         showBubbleSet.setDuration(1000);
         showBubbleSet.setInterpolator(new SpringScaleInterpolator(0.4f));
         showBubbleSet.playTogether(animatorX, animatorY);
-        //set.setRepeatCount(Animation.INFINITE);
-        //set.setRepeatMode(Animation.REVERSE);
 
     }
 
@@ -454,26 +431,18 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.btn_map_send_message)
     void sendMessage() {
-
-
         if (chosenUserBean == null) {
             return;
         }
         //startSendEmoji(button);
         receiveEmoji();
-//        Message message = JMessageClient.createSingleTextMessage(chosenUserBean.getPhone(), messageEditText.getText().toString());
-//        messageEditText.setText("");
-//        JMessageClient.sendMessage(message);
-//        Intent intent = new Intent(MapActivity.this, FriendActivity.class);
-//        startActivity(intent);
-
     }
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
         new QMUIDialog.MessageDialogBuilder(MapActivity.this)
                 .setTitle(chosenUserBean.getUsername())
-                .setMessage("15分钟前")
+                .setMessage(chosenUserBean.getModifTime())
                 .addAction("查看资料", new QMUIDialogAction.ActionListener() {
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
@@ -494,8 +463,6 @@ public class MapActivity extends AppCompatActivity {
                 .show();
 
 
-        //ChatActivity.startActivity(this, chosenUserBean.getPhone());
-
     }
 
     void closeBubble() {
@@ -512,17 +479,7 @@ public class MapActivity extends AppCompatActivity {
     private void startSendEmoji(final View view) {
         MessageUtil.sendEmoji(chosenUserBean.getPhone());
         ViewGroup parent = (ViewGroup) view.getParent();
-
-
         view.setClickable(false);
-        //todo 设置自定义view，new view
-        //final ImageView imageView = new ImageView(view.getContext());
-        //imageView.setMaxHeight(48);
-        //imageView.setMaxWidth(48);
-        //Picasso.with(this).load(R.drawable.shit).into(imageView);
-        //((ViewGroup)view.getParent()).addView(imageView);
-        //imageView.setX(x);
-        //imageView.setY(y);
         final float x = view.getX();
         final float y = view.getY();
         float dy = parent.getY() + y;
@@ -623,6 +580,41 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    private void locateUserByPhone(String phone) {
+
+        for (MyItem item : myItems) {
+            String p = item.getPoisBean().getPhone();
+            if (p == null) {
+                continue;
+            } else if (p.equals(phone)) {
+                zoomIn(mapView.getMap(), item.getPosition(), 30f);
+                LocationBean.PoisBean bean = item.getPoisBean();
+                chosenUserBean = bean;
+                mClusterManager.clearItems();
+                mapView.getMap().clear();
+                mClusterManager.cluster();
+                mLocationClient.stop();
+                openBottomSheet();
+                Picasso.with(MapActivity.this).
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        .into(headImage);
+                bubble.setVisibility(View.VISIBLE);
+                isSelected = true;
+                showBubbleSet.start();
+                return;
+            }
+
+        }
+
+        Toast.makeText(this, "用户距离太远", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        locateUserByPhone(intent.getStringExtra("phone"));
+    }
+
     private class MyItem implements ClusterItem {
         private final LatLng mPosition;
         private final LocationBean.PoisBean poisBean;
@@ -653,7 +645,7 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    class MyLocationListener extends BDAbstractLocationListener {
+    private class MyLocationListener extends BDAbstractLocationListener {
 
         @Override
         public void onReceiveLocation(final BDLocation location) {
@@ -733,6 +725,4 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
-
-
 }

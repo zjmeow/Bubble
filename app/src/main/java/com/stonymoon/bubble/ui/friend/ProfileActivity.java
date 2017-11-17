@@ -16,6 +16,8 @@ import com.stonymoon.bubble.ui.common.PhotoActivity;
 
 import com.vondear.rxtools.activity.ActivityBase;
 
+import java.util.Map;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,9 +56,9 @@ public class ProfileActivity extends ActivityBase {
                 Log.v("SelectPhoto", responseMessage);
                 Toast.makeText(ProfileActivity.this, responseMessage, Toast.LENGTH_SHORT);
                 if (0 == responseCode) {
-                    Toast.makeText(ProfileActivity.this, "发送请求成功", Toast.LENGTH_SHORT);
+                    Toast.makeText(ProfileActivity.this, "发送请求成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ProfileActivity.this, "请求发送失败", Toast.LENGTH_SHORT);
+                    Toast.makeText(ProfileActivity.this, "请求发送失败", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -103,10 +105,9 @@ public class ProfileActivity extends ActivityBase {
 
     @OnClick(R.id.iv_profile_location)
     void locate() {
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("phone", phone);//创一个intent用于传值
-        setResult(RESULT_OK, intent);//此处为把intent传给FirstActivity
-        finish();
+        startActivity(intent);
     }
 
 

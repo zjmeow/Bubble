@@ -149,7 +149,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.friend.MapActivity" />
+        <activity
+            android:name=".ui.friend.MapActivity"
+            android:launchMode="singleTask" />
         <activity
             android:name=".ui.auth.LoginActivity"
             android:label="@string/title_activity_login"
