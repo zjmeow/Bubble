@@ -152,8 +152,14 @@
         <activity android:name=".ui.friend.MapActivity" />
         <activity
             android:name=".ui.auth.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity android:name=".ui.auth.RegisterActivity" />
+            android:label="@string/title_activity_login"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".ui.auth.RegisterActivity"
+            android:windowSoftInputMode="adjustPan"
+
+
+            />
         <activity
             android:name=".ui.friend.ProfileActivity"
             android:label="@string/title_activity_profile" />
@@ -170,15 +176,18 @@
 
         <activity android:name=".ui.friend.FriendActivity" />
         <activity android:name=".ui.share.BubbleDetailActivity" />
-        <activity android:name=".ui.friend.ChatActivity" />
+        <activity
+            android:name=".ui.friend.ChatActivity"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".ui.friend.MessageListActivity" />
         <activity android:name=".ui.share.ShareActivity" />
         <activity android:name=".ui.common.PhotoActivity" />
-        <activity android:name=".ui.auth.RegisterPhoneActivity" />
-        <activity android:name=".ui.common.EditActivity" />
         <activity
-            android:name=".base.BaseActivity"
-            android:label="@string/title_activity_base" />
+            android:name=".ui.auth.RegisterPhoneActivity"
+            android:windowSoftInputMode="adjustPan"
+
+            />
+        <activity android:name=".ui.common.EditActivity" />
         <activity android:name=".ui.share.ShareListActivity"></activity>
     </application>
 

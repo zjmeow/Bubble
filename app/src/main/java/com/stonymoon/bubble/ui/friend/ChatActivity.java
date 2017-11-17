@@ -1,76 +1,55 @@
 package com.stonymoon.bubble.ui.friend;
 
-import android.content.BroadcastReceiver;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources;
+
 import android.os.Handler;
-import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
-import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.view.ChatView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
-import cn.jiguang.imui.chatinput.ChatInputView;
-import cn.jiguang.imui.chatinput.listener.OnClickEditTextListener;
-import cn.jiguang.imui.chatinput.listener.OnMenuClickListener;
-import cn.jiguang.imui.chatinput.model.FileItem;
 import cn.jiguang.imui.commons.ImageLoader;
 import cn.jiguang.imui.commons.models.IMessage;
 import cn.jiguang.imui.messages.MsgListAdapter;
 import cn.jiguang.imui.messages.ptr.PtrHandler;
 import cn.jiguang.imui.messages.ptr.PullToRefreshLayout;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.enums.ContentType;
 import cn.jpush.im.android.api.event.MessageEvent;
-import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 
-// todo 消息聊天框自定义
-public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboardChangedListener,
-        ChatView.OnSizeChangedListener, View.OnTouchListener {
+public class ChatActivity extends AppCompatActivity {
 
     private final static String TAG = "ChatActivity";
-    private final int RC_RECORD_VOICE = 0x0001;
-    private final int RC_CAMERA = 0x0002;
-    private final int RC_PHOTO = 0x0003;
 
     private ChatView mChatView;
+    private EditText editText;
     private MsgListAdapter<MyMessage> mAdapter;
-    private List<MyMessage> mData;
-
-    private InputMethodManager mImm;
-    private Window mWindow;
-    private HeadsetDetectReceiver mReceiver;
-    private PowerManager mPowerManager;
-    private PowerManager.WakeLock mWakeLock;
+    private List<MyMessage> historyMessage;
     private DefaultUser user;
     private DefaultUser otherUser;
+    //读取页面条数
+    private int page = 1;
+
 
     public static void startActivity(Context context, String phone, String username, String url) {
         Intent intent = new Intent(context, ChatActivity.class);
@@ -93,135 +72,53 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
-        this.mImm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        mWindow = getWindow();
-        registerProximitySensorListener();
         initUser();
         mChatView = (ChatView) findViewById(R.id.chat_view);
+        editText = (EditText) findViewById(R.id.et_chat_input);
         mChatView.initModule();
-        mData = getMessages();
+
+
         initMsgAdapter();
-        mReceiver = new HeadsetDetectReceiver();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
-        registerReceiver(mReceiver, intentFilter);
-        mChatView.setKeyboardChangedListener(this);
-        mChatView.setOnSizeChangedListener(this);
-        mChatView.setOnTouchListener(this);
-        mChatView.setMenuClickListener(new OnMenuClickListener() {
+        mChatView.setOnSendClickListener(new View.OnClickListener() {
             @Override
-            public boolean switchToMicrophoneMode() {
-                return false;
-            }
-
-            @Override
-            public boolean switchToCameraMode() {
-                return false;
-            }
-
-            @Override
-            public boolean onSendTextMessage(CharSequence input) {
-                if (input.length() == 0) {
-                    return false;
-                }
-                MyMessage message = new MyMessage(input.toString(), IMessage.MessageType.SEND_TEXT);
+            public void onClick(View v) {
+                MyMessage message = new MyMessage(editText.getText().toString(), IMessage.MessageType.SEND_TEXT);
                 message.setUserInfo(user);
-                message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+                //message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
                 mAdapter.addToStart(message, true);
-
-                Message sendMessage = JMessageClient.createSingleTextMessage(otherUser.getId() + "", input.toString());
+                Message sendMessage = JMessageClient.createSingleTextMessage(otherUser.getId() + "", editText.getText().toString());
                 JMessageClient.sendMessage(sendMessage);
-                return true;
-            }
+                mChatView.clearText();
 
-            @Override
-            public void onSendFiles(List<FileItem> list) {
-                if (list == null || list.isEmpty()) {
-                    return;
-                }
-
-                MyMessage message;
-                for (FileItem item : list) {
-                    if (item.getType() == FileItem.Type.Image) {
-                        message = new MyMessage(null, IMessage.MessageType.SEND_IMAGE);
-
-                    } else {
-                        throw new RuntimeException("Invalid FileItem type. Must be Type.Image or Type.Video");
-                    }
-
-                    message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
-                    message.setMediaFilePath(item.getFilePath());
-                    message.setUserInfo(new DefaultUser("1", "Ironman", "R.drawable.ironman"));
-
-                    final MyMessage fMsg = message;
-                    ChatActivity.this.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mAdapter.addToStart(fMsg, true);
-                        }
-                    });
-                }
             }
 
 
-            @Override
-            public boolean switchToGalleryMode() {
-                scrollToBottom();
-                return true;
-            }
-
-            public boolean switchToEmojiMode() {
-                scrollToBottom();
-                return true;
-            }
-        });
+                                         }
 
 
-        mChatView.setOnTouchEditTextListener(new OnClickEditTextListener() {
-            @Override
-            public void onTouchEditText() {
-//                mAdapter.getLayoutManager().scrollToPosition(0);
-            }
-        });
-
+        );
 
         JMessageClient.registerEventReceiver(this);
+        historyMessage = getHistoryMessages();
 
     }
 
-    private void registerProximitySensorListener() {
-        try {
-            mPowerManager = (PowerManager) getSystemService(POWER_SERVICE);
-            mWakeLock = mPowerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, TAG);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
-    private void setScreenOn() {
-        if (mWakeLock != null) {
-            mWakeLock.setReferenceCounted(false);
-            mWakeLock.release();
-            mWakeLock = null;
-        }
-    }
-
-    private void setScreenOff() {
-        if (mWakeLock == null) {
-            mWakeLock = mPowerManager.newWakeLock(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, TAG);
-        }
-        mWakeLock.acquire();
-    }
-
-    private List<MyMessage> getMessages() {
+    private List<MyMessage> getHistoryMessages() {
         Intent intent = getIntent();
         Conversation conversation = JMessageClient.getSingleConversation(intent.getStringExtra("phone"));
         List<MyMessage> list = new ArrayList<>();
+
         if (conversation == null) {
             return list;
         }
         List<Message> messageList = conversation.getAllMessage();
         for (Message message : messageList) {
+            if (message.getContentType() == ContentType.custom) {
+                continue;
+            }
             String phone = message.getFromUser().getUserName();
             String messageText = MessageUtil.getMessageText(message);
             if (phone.equals(user.getId())) {
@@ -243,18 +140,11 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         ImageLoader imageLoader = new ImageLoader() {
             @Override
             public void loadAvatarImage(ImageView avatarImageView, String string) {
-                // You can use other image load libraries.
-                if (string.contains("R.drawable")) {
-                    Integer resId = getResources().getIdentifier(string.replace("R.drawable.", ""),
-                            "drawable", getPackageName());
-
-                    avatarImageView.setImageResource(resId);
-                } else {
                     Glide.with(getApplicationContext())
                             .load(string)
                             .placeholder(R.drawable.aurora_headicon_default)
                             .into(avatarImageView);
-                }
+
             }
 
             @Override
@@ -268,37 +158,13 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
                         .into(imageView);
             }
         };
-
-        // Use default layout
         MsgListAdapter.HoldersConfig holdersConfig = new MsgListAdapter.HoldersConfig();
         mAdapter = new MsgListAdapter<>("0", holdersConfig, imageLoader);
-        // If you want to customise your layout, try to create custom ViewHolder:
-        // holdersConfig.setSenderTxtMsg(CustomViewHolder.class, layoutRes);
-        // holdersConfig.setReceiverTxtMsg(CustomViewHolder.class, layoutRes);
-        // CustomViewHolder must extends ViewHolders defined in MsgListAdapter.
-        // Current ViewHolders are TxtViewHolder, VoiceViewHolder.
 
-
-        mAdapter.setOnMsgClickListener(new MsgListAdapter.OnMsgClickListener<MyMessage>() {
-            @Override
-            public void onMessageClick(MyMessage message) {
-                if (message.getType() == IMessage.MessageType.RECEIVE_VIDEO
-                        || message.getType() == IMessage.MessageType.SEND_VIDEO) {
-                    if (!TextUtils.isEmpty(message.getMediaFilePath())) {
-                    }
-                } else {
-                    //todo 图片消息，可能去掉这个功能
-                    PhotoActivity.startActivity(ChatActivity.this, message.getMediaFilePath());
-                }
-            }
-        });
-
+//TODO 可以添加删除消息
         mAdapter.setMsgLongClickListener(new MsgListAdapter.OnMsgLongClickListener<MyMessage>() {
             @Override
             public void onMessageLongClick(MyMessage message) {
-                Toast.makeText(getApplicationContext(),
-                        "长按消息",
-                        Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -318,26 +184,15 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
 
             }
         });
-//        MyMessage message = new MyMessage("Hello World", IMessage.MessageType.RECEIVE_TEXT);
-//        message.setUserInfo(new DefaultUser("0", "Deadpool", "R.drawable.deadpool"));
-//        mAdapter.addToStart(message, true);
-        MyMessage eventMsg = new MyMessage("haha", IMessage.MessageType.EVENT);
-        mAdapter.addToStart(eventMsg, true);
-        mAdapter.addToEnd(mData);
+
         PullToRefreshLayout layout = mChatView.getPtrLayout();
         layout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PullToRefreshLayout layout) {
                 LogUtil.i("MessageListActivity", "Loading next page");
-                loadNextPage();
-            }
-        });
-        // Deprecated, should use onRefreshBegin to load next page
-        mAdapter.setOnLoadMoreListener(new MsgListAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(int page, int totalCount) {
-//                Log.i("MessageListActivity", "Loading next page");
-//                loadNextPage();
+                loadNextPage(page);
+                page += 20;
+
             }
         });
 
@@ -345,113 +200,42 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
         mAdapter.getLayoutManager().scrollToPosition(0);
     }
 
-    private void loadNextPage() {
+    private void loadNextPage(int page) {
+        final int end = page + 20;
+        final int start = page;
+        final int length = historyMessage.size();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 List<MyMessage> list = new ArrayList<>();
-                Resources res = getResources();
-                String[] messages = {"测试"};
-                for (int i = 0; i < messages.length; i++) {
-                    MyMessage message;
-                    if (i % 2 == 0) {
-                        message = new MyMessage(messages[i], IMessage.MessageType.RECEIVE_TEXT);
-                        message.setUserInfo(otherUser);
-                    } else {
-                        message = new MyMessage(messages[i], IMessage.MessageType.SEND_TEXT);
-                        message.setUserInfo(user);
-                    }
-                    message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
-                    list.add(message);
+                for (int i = start; i < end && i < length; i++) {
+                    list.add(historyMessage.get(i));
                 }
-                Collections.reverse(list);
                 mAdapter.addToEnd(list);
+
                 mChatView.getPtrLayout().refreshComplete();
             }
         }, 1500);
     }
 
-    @Override
-    public void onKeyBoardStateChanged(int state) {
-        switch (state) {
-            case ChatInputView.KEYBOARD_STATE_INIT:
-                ChatInputView chatInputView = mChatView.getChatInputView();
-                if (mImm != null) {
-                    mImm.isActive();
-                }
-                if (chatInputView.getMenuState() == View.INVISIBLE
-                        || (!chatInputView.getSoftInputState()
-                        && chatInputView.getMenuState() == View.GONE)) {
 
-                    mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-                            | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    chatInputView.dismissMenuLayout();
-                }
-                break;
-        }
-    }
 
     private void scrollToBottom() {
         mAdapter.getLayoutManager().scrollToPosition(0);
     }
 
-    @Override
-    public void onSizeChanged(int w, int h, int oldw, int oldh) {
-        if (oldh - h > 300) {
-            mChatView.setMenuHeight(oldh - h);
-        }
-        scrollToBottom();
-    }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (motionEvent.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                ChatInputView chatInputView = mChatView.getChatInputView();
-
-                if (view.getId() == chatInputView.getInputView().getId()) {
-
-                    if (chatInputView.getMenuState() == View.VISIBLE
-                            && !chatInputView.getSoftInputState()) {
-                        chatInputView.dismissMenuAndResetSoftMode();
-                        return false;
-                    } else {
-                        return false;
-                    }
-                }
-                if (chatInputView.getMenuState() == View.VISIBLE) {
-                    chatInputView.dismissMenuLayout();
-                }
-                try {
-                    View v = getCurrentFocus();
-                    if (mImm != null && v != null) {
-                        mImm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                        mWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
-                                | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-                        view.clearFocus();
-                        chatInputView.setSoftInputState(false);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                break;
-        }
-        return false;
-    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(mReceiver);
         JMessageClient.unRegisterEventReceiver(this);
     }
 
     public void onEventMainThread(MessageEvent event) {
+        if (event.getMessage().getContentType() == ContentType.custom) {
+            return;
+        }
         String msg = MessageUtil.getMessageText(event.getMessage());
         MyMessage message = new MyMessage(msg, IMessage.MessageType.RECEIVE_TEXT);
         message.setUserInfo(otherUser);
@@ -462,12 +246,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
 
     }
 
-    public void onEvent(OfflineMessageEvent event) {
-        //获取事件发生的会话对象
-        Conversation conversation = event.getConversation();
-        List<Message> newMessageList = event.getOfflineMessageList();//获取此次离线期间会话收到的新消息列表
-        System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
-    }
 
 
     private void initUser() {
@@ -483,18 +261,6 @@ public class ChatActivity extends AppCompatActivity implements ChatView.OnKeyboa
 
     }
 
-    private class HeadsetDetectReceiver extends BroadcastReceiver {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(Intent.ACTION_HEADSET_PLUG)) {
-                if (intent.hasExtra("state")) {
-                    int state = intent.getIntExtra("state", 0);
-                    mAdapter.setAudioPlayByEarPhone(state);
-                }
-            }
-        }
-    }
 
 
 }

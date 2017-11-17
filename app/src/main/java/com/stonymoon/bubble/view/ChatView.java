@@ -3,6 +3,9 @@ package com.stonymoon.bubble.view;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,14 +33,15 @@ public class ChatView extends RelativeLayout {
 
     private TextView mTitle;
     private MessageList mMsgList;
-    private ChatInputView mChatInput;
     private LinearLayout mMenuLl;
-    private RecordVoiceButton mRecordVoiceBtn;
     private PullToRefreshLayout mPtrLayout;
+    private Button button;
 
+    private EditText editText;
     private boolean mHasInit;
     private boolean mHasKeyboard;
     private int mHeight;
+
 
     private OnKeyboardChangedListener mKeyboardListener;
     private OnSizeChangedListener mSizeChangedListener;
@@ -55,12 +59,12 @@ public class ChatView extends RelativeLayout {
     }
 
     public void initModule() {
+        button = (Button) findViewById(R.id.btn_chat_send);
+        editText = (EditText) findViewById(R.id.et_chat_input);
         mMsgList = (MessageList) findViewById(R.id.msg_list);
         mMenuLl = (LinearLayout) findViewById(R.id.aurora_ll_menuitem_container);
-        mChatInput = (ChatInputView) findViewById(R.id.chat_input);
         mPtrLayout = (PullToRefreshLayout) findViewById(R.id.pull_to_refresh_layout);
 
-        mRecordVoiceBtn = mChatInput.getRecordVoiceButton();
         PtrDefaultHeader header = new PtrDefaultHeader(getContext());
         int[] colors = getResources().getIntArray(R.array.waveSideBarLetters);
         header.setColorSchemeColors(colors);
@@ -88,48 +92,15 @@ public class ChatView extends RelativeLayout {
         mTitle.setText(title);
     }
 
-    public void setMenuClickListener(OnMenuClickListener listener) {
-        mChatInput.setMenuClickListener(listener);
-    }
 
     public void setAdapter(MsgListAdapter adapter) {
         mMsgList.setAdapter(adapter);
     }
 
-    public void setLayoutManager(RecyclerView.LayoutManager layoutManager) {
-        mMsgList.setLayoutManager(layoutManager);
-    }
 
-    public void setRecordVoiceFile(String path, String fileName) {
-        mRecordVoiceBtn.setVoiceFilePath(path, fileName);
-    }
-
-    public void setCameraCaptureFile(String path, String fileName) {
-        mChatInput.setCameraCaptureFile(path, fileName);
-    }
-
-    public void setRecordVoiceListener(RecordVoiceListener listener) {
-        mRecordVoiceBtn.setRecordVoiceListener(listener);
-    }
-
-    public void setOnCameraCallbackListener(OnCameraCallbackListener listener) {
-        mChatInput.setOnCameraCallbackListener(listener);
-    }
-
-    public void setKeyboardChangedListener(OnKeyboardChangedListener listener) {
-        mKeyboardListener = listener;
-    }
-
-    public void setOnSizeChangedListener(OnSizeChangedListener listener) {
-        mSizeChangedListener = listener;
-    }
 
     public void setOnTouchListener(OnTouchListener listener) {
         mMsgList.setOnTouchListener(listener);
-    }
-
-    public void setOnTouchEditTextListener(OnClickEditTextListener listener) {
-        mChatInput.setOnClickEditTextListener(listener);
     }
 
     @Override
@@ -175,21 +146,22 @@ public class ChatView extends RelativeLayout {
         }
     }
 
-    public ChatInputView getChatInputView() {
-        return mChatInput;
-    }
 
     public MessageList getMessageListView() {
         return mMsgList;
     }
 
-    public void setMenuHeight(int height) {
-        mChatInput.setMenuContainerHeight(height);
+    public void setOnSendClickListener(View.OnClickListener listener) {
+        button.setOnClickListener(listener);
+
     }
 
-    /**
-     * Keyboard status changed will invoke onKeyBoardStateChanged
-     */
+    public void clearText() {
+        editText.setText("");
+
+
+    }
+
     public interface OnKeyboardChangedListener {
 
         /**
@@ -203,4 +175,6 @@ public class ChatView extends RelativeLayout {
     public interface OnSizeChangedListener {
         void onSizeChanged(int w, int h, int oldw, int oldh);
     }
+
+
 }

@@ -90,6 +90,7 @@ import cn.jpush.im.android.api.model.Message;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
+//todo 优化地图页面构造
 public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
@@ -137,9 +138,7 @@ public class MapActivity extends AppCompatActivity {
     private boolean isSelected = false;
     private boolean isUpdateMap = true;
     private String locationId;
-    private String token;
     private String id;
-    private String phone;
     private LocationBean.PoisBean chosenUserBean;
     private AnimatorSet showBubbleSet;
     private AnimatorSet receiveEmojiSet;
@@ -152,13 +151,11 @@ public class MapActivity extends AppCompatActivity {
 
     //用marker的id绑定信息，为点击回调提供信息
 
-    public static void startActivity(Context context, String id, String token, String locationId) {
+    public static void startActivity(Context context, String id, String locationId) {
         Intent intent = new Intent(context, MapActivity.class);
         intent.putExtra("id", id);
-        intent.putExtra("token", token);
         intent.putExtra("locationId", locationId);
         context.startActivity(intent);
-
 
     }
 
@@ -215,7 +212,6 @@ public class MapActivity extends AppCompatActivity {
 
         }
 
-        //System.out.println(String.format(Locale.SIMPLIFIED_CHINESE, "收到%d条来自%s的离线消息。\n", newMessageList.size(), conversation.getTargetId()));
     }
 
     public void onEvent(ContactNotifyEvent event) {
@@ -247,7 +243,6 @@ public class MapActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         JMessageClient.registerEventReceiver(this);
         Intent intent = getIntent();
-        token = intent.getStringExtra("token");
         id = intent.getStringExtra("id");
         locationId = intent.getStringExtra("locationId");
         setMap();
@@ -333,7 +328,6 @@ public class MapActivity extends AppCompatActivity {
                 mClusterManager.cluster();
                 mLocationClient.stop();
                 openBottomSheet();
-                //设置聊天
                 //((ChatFragment) fragmentList.get(0)).initUser(item.getPoisBean().getPhone());
                 //当点击item时删除全部item并且把自定义view引入
                 //此时为选中状态，当用户离开选中状态时，隐藏自定义view
@@ -409,7 +403,6 @@ public class MapActivity extends AppCompatActivity {
 //可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
         mLocationClient.setLocOption(option);
 //mLocationClient为第二步初始化过的LocationClient对象
-
 
     }
 
@@ -555,11 +548,6 @@ public class MapActivity extends AppCompatActivity {
         });
         set.start();
 
-    }
-
-
-    public LocationBean.PoisBean getChosenUserBean() {
-        return chosenUserBean;
     }
 
     @OnClick({R.id.btn_map_friend, R.id.btn_map_location, R.id.btn_map_message})

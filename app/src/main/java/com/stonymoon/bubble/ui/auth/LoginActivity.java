@@ -97,7 +97,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onResultEnd() {
                 if (bean != null) {
-                    MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), bean.getContent().getToken(), "");
+                    MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), "");
                     finish();
                 }
             }
@@ -187,7 +187,6 @@ public class LoginActivity extends Activity {
 
     //如果登录过则直接进入主页面
     private void attemptLogin() {
-        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         //判断是否已经登录
         String token = AuthUtil.getToken();
         String id = AuthUtil.getId();
@@ -196,7 +195,7 @@ public class LoginActivity extends Activity {
         String locationId = AuthUtil.getLocationId();
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
-            MapActivity.startActivity(this, id, token, locationId);
+            MapActivity.startActivity(this, id, locationId);
             JMessageClient.login(phone, password, new BasicCallback() {
                 @Override
                 public void gotResult(int i, String s) {
