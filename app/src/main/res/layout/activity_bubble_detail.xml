@@ -1,46 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_billboard"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.stonymoon.bubble.ui.share.BubbleDetailActivity"
+    android:layout_height="match_parent">
 
-    >
-
-    <ImageView
-        android:id="@+id/iv_bubble_detail"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="180dp" />
+        android:layout_height="250dp">
 
-    <TextView
-        android:id="@+id/tv_bubble_detail_title"
-        android:layout_width="wrap_content"
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:contentScrim="?attr/colorPrimary"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_collapseMode="parallax">
+
+                <ImageView
+                    android:id="@+id/iv_bubble_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop" />
+
+            </RelativeLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/billboard_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AlertDialog.AppCompat.Light">
+                <!--app:layout_scrollFlags="scroll|enterAlways|snap"影响宣传所以不加进去-->
+            </android.support.v7.widget.Toolbar>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/primaryText"
-        android:textSize="24sp" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="250dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_bubble_detail_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:textColor="@color/primaryText"
-        android:textSize="18sp" />
+        <TextView
+            android:id="@+id/tv_bubble_detail_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryText"
+            android:textSize="24sp" />
 
-    <ImageView
-        android:id="@+id/iv_bubble_detail_head"
-        android:layout_width="56dp"
-        android:layout_height="56dp" />
-
-    <TextView
-        android:id="@+id/tv_bubble_detail_author_name"
-        android:layout_width="18sp"
-        android:layout_height="18sp" />
+        <TextView
+            android:id="@+id/tv_bubble_detail_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryText"
+            android:textSize="18sp" />
 
 
-</LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+                android:id="@+id/iv_bubble_detail_head"
+                android:layout_width="56dp"
+                android:layout_height="56dp" />
+
+            <TextView
+                android:id="@+id/tv_bubble_detail_author_name"
+                android:layout_width="18sp"
+                android:layout_height="18sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!--<android.support.v7.widget.RecyclerView-->
+    <!--app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
+    <!--android:id="@+id/recycler_bubble_detail_comment"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"/>-->
+
+
+</android.support.design.widget.CoordinatorLayout>
+
+
+
+

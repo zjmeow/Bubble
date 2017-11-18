@@ -8,14 +8,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.AUserBean;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.UserBean;
+import com.stonymoon.bubble.util.HttpUtil;
+import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxStringCallback;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+import retrofit2.http.HTTP;
 
 public class BubbleDetailActivity extends AppCompatActivity {
     @BindView(R.id.iv_bubble_detail)
@@ -40,9 +49,15 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.iv_bubble_detail_head)
+    void openProfile() {
+        //todo 用户资料全部要放在java服务器上托管
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_bubble_detail);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
@@ -51,13 +66,35 @@ public class BubbleDetailActivity extends AppCompatActivity {
         Glide.with(mContext).load(bean.getImage()).into(ivBubbleDetail);
         tvTitle.setText(bean.getTitle());
         tvContent.setText(bean.getContent());
-
-
-
-
+        loadUser();
 
     }
 
+    private void loadUser() {
+        String url = "user/" + bean.getUid();
+        HttpUtil.sendHttpRequest(this).rxGet(url, parameters
+                , new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+                        Gson gson = new Gson();
+                        AUserBean userBean = gson.fromJson(response, AUserBean.class);
+                        Glide.with(mContext).load(userBean.getContent().getImage()).into(ivHead);
+                        tvAuthorName.setText(userBean.getContent().getUsername());
+                    }
+
+                    @Override
+                    public void onError(Object tag, Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, Throwable e) {
+
+                    }
+                });
+
+
+    }
 
 
 }

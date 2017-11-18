@@ -53,7 +53,7 @@ import butterknife.OnClick;
 
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
-
+//todo 关闭剪裁
 public class ShareActivity extends AppCompatActivity {
 
     private static final String TAG = "ShareActivity";
