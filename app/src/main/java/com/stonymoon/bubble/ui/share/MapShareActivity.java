@@ -20,6 +20,7 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleHolder;
@@ -27,6 +28,7 @@ import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
@@ -67,12 +69,23 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QMUIStatusBarHelper.translucent(this);
         SDKInitializer.initialize(getApplicationContext());
         setContentView(R.layout.activity_share_map);
         ButterKnife.bind(this);
+        setMap();
+
+
+    }
+
+    private void setMap() {
         mMapView = (MapView) findViewById(R.id.bmapView);
-        ms = new MapStatus.Builder().target(new LatLng(39.914935, 116.403119)).zoom(8).build();
         mBaiduMap = mMapView.getMap();
+        mMapView.showZoomControls(false);
+        mMapView.showScaleControl(false);
+        mBaiduMap.setCompassEnable(false);
+        // 删除百度地图logo
+        mMapView.removeViewAt(1);
         mBaiduMap.setOnMapLoadedCallback(this);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
         // 定义点聚合管理类ClusterManager
@@ -124,16 +137,6 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         initLocate();
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
-
-// 设置定位图层的配置（定位模式，是否允许方向信息，用户自定义定位图标）
-//        CurrentMarker mCurrentMarker = BitmapDescriptorFactory
-//                .fromResource(R.drawable.icon_geo);
-//        MyLocationConfiguration config = new MyLocationConfiguration(mCurrentMode, true, mCurrentMarker);
-//        mBaiduMap.setMyLocationConfiguration(config);
-
-
-
-
     }
 
     @Override
@@ -186,7 +189,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
 
             @Override
             public void onError(Object tag, Throwable e) {
-
+                LogUtil.e(TAG, e.getMessage());
             }
 
             @Override

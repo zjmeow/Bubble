@@ -3,11 +3,14 @@ package com.stonymoon.bubble.ui.share;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -20,8 +23,10 @@ import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -50,6 +55,7 @@ import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TIT
 
 
 public class ShareActivity extends AppCompatActivity {
+
     private static final String TAG = "ShareActivity";
     private static Map<String, Object> parameters = new HashMap<>();
     @BindView(R.id.et_share_title)
@@ -64,6 +70,7 @@ public class ShareActivity extends AppCompatActivity {
     private UploadManager mUploadManager;
     private String imageUrl;
 
+
     public static void startActivity(Context context, double latitude, double longitude) {
         Intent intent = new Intent(context, ShareActivity.class);
         intent.putExtra("latitude", latitude);
@@ -71,12 +78,17 @@ public class ShareActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
-    @OnClick(R.id.fab_share_add_picture)
+    @OnClick(R.id.iv_share_picture)
     void selectPicture() {
         initDialogChooseImage();
     }
 
-    @OnClick(R.id.et_share_submit)
+    @OnClick(R.id.iv_share_back)
+    void back() {
+        finish();
+    }
+
+    @OnClick(R.id.tv_share_submit)
     void submit() {
         parameters.clear();
         String title = titleEt.getText().toString();
@@ -103,6 +115,7 @@ public class ShareActivity extends AppCompatActivity {
         parameters.put("image", imageUrl);
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
+        parameters.put("anonymous", 0);
         String url = "upload";
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
@@ -115,6 +128,7 @@ public class ShareActivity extends AppCompatActivity {
             @Override
             public void onError(Object tag, Throwable e) {
                 LogUtil.e(TAG, e.toString());
+                Toast.makeText(ShareActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -129,6 +143,7 @@ public class ShareActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
         getLocation();
@@ -257,11 +272,6 @@ public class ShareActivity extends AppCompatActivity {
         options.setAllowedGestures(UCropActivity.SCALE, UCropActivity.ROTATE, UCropActivity.ALL);
         //设置隐藏底部容器，默认显示
         //options.setHideBottomControls(true);
-        //设置toolbar颜色
-        options.setToolbarColor(ActivityCompat.getColor(this, R.color.colorPrimary));
-        //设置状态栏颜色
-        options.setStatusBarColor(ActivityCompat.getColor(this, R.color.colorPrimaryDark));
-
         //开始设置
         //设置最大缩放比例
         options.setMaxScaleMultiplier(5);
@@ -316,5 +326,6 @@ public class ShareActivity extends AppCompatActivity {
         }
         return builder.toString();
     }
+
 
 }

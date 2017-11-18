@@ -91,42 +91,7 @@
         android:layout_height="56dp"
         android:layout_gravity="bottom|right" />
 
-
-    <com.stonymoon.bubble.view.MyLinearLayout
-        android:id="@+id/ll_map_emoji"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="-120dp"
-        android:background="#FFF"
-        android:clipChildren="false"
-        android:clipToPadding="false">
-
-        <ImageView
-            android:id="@+id/iv_map_emoji_shit1"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/shit" />
-
-        <ImageView
-            android:id="@+id/iv_map_emoji_shit2"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/shit" />
-
-        <ImageView
-            android:id="@+id/iv_map_emoji_shit3"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/shit" />
-
-        <ImageView
-            android:id="@+id/iv_map_emoji_shit4"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/shit" />
-
-    </com.stonymoon.bubble.view.MyLinearLayout>
+    <include layout="@layout/bottom_sheet" />
 
     <ImageView
         android:id="@+id/iv_map_receive_emoji"

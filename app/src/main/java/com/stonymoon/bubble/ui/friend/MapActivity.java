@@ -29,6 +29,7 @@ import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -121,8 +122,12 @@ public class MapActivity extends AppCompatActivity {
     ImageView ivEmoji1;
 
 
-    @BindView(R.id.ll_map_emoji)
-    LinearLayout llEmoji;
+    @BindView(R.id.fl_map_emoji)
+    FrameLayout llEmoji;
+    @BindView(R.id.iv_bottom_sheet_big_emoji)
+    ImageView ivBigEmoji;
+
+
 
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
@@ -231,6 +236,7 @@ public class MapActivity extends AppCompatActivity {
         initAnimation();
         //初始化像素工具
         RxTool.init(this);
+        ivBigEmoji.bringToFront();
 
     }
 
@@ -481,8 +487,8 @@ public class MapActivity extends AppCompatActivity {
         view.setClickable(false);
         final float x = view.getX();
         final float y = view.getY();
-        float dy = parent.getY() + y;
-        float dx = parent.getX() + x;
+        float dy = parent.getY() + y + ((ViewGroup) (parent.getParent())).getY();
+        float dx = parent.getX() + x + ((ViewGroup) (parent.getParent())).getX();
 
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(
                 view,
@@ -535,7 +541,6 @@ public class MapActivity extends AppCompatActivity {
         animator.start();
 
     }
-
     private void openBottomSheet() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 llEmoji,
@@ -546,10 +551,10 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+
     private void receiveEmoji() {
 
         ivReceiveEmoji.setVisibility(View.VISIBLE);
-        mainLayout.bringChildToFront(ivReceiveEmoji);
         AnimationSet sendEmojiSet = new AnimationSet(true);
 
         ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,

@@ -2,30 +2,18 @@ package com.stonymoon.bubble.ui.auth;
 
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
-import com.stonymoon.bubble.util.HttpUtil;
-import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxStringCallback;
 
-
-import org.apaches.commons.codec.digest.DigestUtils;
-
-import java.util.HashMap;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.options.RegisterOptionalUserInfo;
-import cn.jpush.im.api.BasicCallback;
 import cn.jpush.sms.SMSSDK;
 import cn.jpush.sms.listener.SmscheckListener;
 import cn.jpush.sms.listener.SmscodeListener;

@@ -7,12 +7,14 @@ import android.support.v4.app.SupportActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 
 import com.stonymoon.bubble.R;
 
 public abstract class BaseActivity extends AppCompatActivity {
     Toolbar toolbar;
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
