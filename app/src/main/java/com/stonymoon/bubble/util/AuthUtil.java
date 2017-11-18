@@ -41,6 +41,8 @@ public class AuthUtil {
         editor.putString("password", password);
         editor.putString("token", token);
         editor.putString("id", id);
+        //重新拿到locationId
+        editor.putString("locationId", "");
         editor.apply();
 
     }
@@ -67,6 +69,7 @@ public class AuthUtil {
     public static void setLocationId(String locationId) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("locationId", locationId);
+        editor.apply();
     }
 
 

@@ -91,11 +91,11 @@ public class RegisterActivity extends BaseActivity {
     @OnClick(R.id.btn_register_next)
     void register() {
 
-
+        RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
         SMSSDK.getInstance().checkSmsCodeAsyn(phone, identificationText.getText().toString(), new SmscheckListener() {
             @Override
             public void checkCodeSuccess(final String code) {
-                RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
+                //RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
 
             }
 

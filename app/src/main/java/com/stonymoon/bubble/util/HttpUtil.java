@@ -110,7 +110,7 @@ public class HttpUtil {
         userParameters.clear();
         userParameters.put("geotable_id", tableId);
         userParameters.put("ak", ak);
-        userParameters.put("uid", userId + ",-");
+        userParameters.put("uid", userId + "," + userId);
         Novate novate = new Novate.Builder(context).baseUrl("http://api.map.baidu.com/").build();
         novate.rxPost("geodata/v4/poi/list", userParameters, rxStringCallback);
 

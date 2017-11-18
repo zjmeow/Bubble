@@ -80,24 +80,6 @@ public class MyProfileActivity extends ActivityBase {
         context.startActivity(intent);
     }
 
-    @OnClick(R.id.btn_edit_profile_make_friend)
-    void sendMessage() {
-        String phone = AuthUtil.getPhone();
-        ContactManager.sendInvitationRequest(phone, "", "请求加你为好友", new BasicCallback() {
-            @Override
-            public void gotResult(int responseCode, String responseMessage) {
-                Log.v("MyProfile", responseMessage);
-                Toast.makeText(MyProfileActivity.this, responseMessage, Toast.LENGTH_SHORT);
-                if (0 == responseCode) {
-                    //好友请求请求发送成功
-                } else {
-                    Toast.makeText(MyProfileActivity.this, "请求发送失败", Toast.LENGTH_SHORT);
-                }
-            }
-        });
-
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

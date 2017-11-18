@@ -90,8 +90,8 @@ import cn.jpush.im.android.api.model.Message;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
-//todo 优化地图页面构造
 //todo 离线表情一次性发完
+//todo 定位完成才能进入主页面
 public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
@@ -143,10 +143,9 @@ public class MapActivity extends AppCompatActivity {
 
     //用marker的id绑定信息，为点击回调提供信息
 
-    public static void startActivity(Context context, String id, String locationId) {
+    public static void startActivity(Context context, String id) {
         Intent intent = new Intent(context, MapActivity.class);
         intent.putExtra("id", id);
-        intent.putExtra("locationId", locationId);
         context.startActivity(intent);
 
     }
@@ -226,7 +225,6 @@ public class MapActivity extends AppCompatActivity {
         JMessageClient.registerEventReceiver(this);
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
-        locationId = intent.getStringExtra("locationId");
         setMap();
         initLocate();
         mLocationClient.start();
@@ -242,6 +240,7 @@ public class MapActivity extends AppCompatActivity {
         JMessageClient.unRegisterEventReceiver(this);
         mapView.onDestroy();
         mLocationClient.stop();
+        //JMessageClient.logout();
 
     }
 
@@ -667,11 +666,12 @@ public class MapActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         LocationBean bean = gson.fromJson(response, LocationBean.class);
                         locationId = bean.getPois().get(0).getId();
-                        AuthUtil.setLocationId("locationId");
+                        AuthUtil.setLocationId(locationId);
                     }
 
                     @Override
                     public void onError(Object tag, Throwable e) {
+                        LogUtil.e(TAG, e.toString());
 
                     }
 
@@ -711,8 +711,8 @@ public class MapActivity extends AppCompatActivity {
 
                 @Override
                 public void onError(Object tag, Throwable e) {
-                    Toast.makeText(MapActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
+                    //todo 判断是否联网
+                    LogUtil.e(TAG, e.toString());
                 }
 
                 @Override

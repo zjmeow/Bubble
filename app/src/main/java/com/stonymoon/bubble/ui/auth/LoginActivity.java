@@ -97,7 +97,7 @@ public class LoginActivity extends Activity {
             @Override
             public void onResultEnd() {
                 if (bean != null) {
-                    MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId(), "");
+                    MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
                     finish();
                 }
             }
@@ -192,10 +192,9 @@ public class LoginActivity extends Activity {
         String id = AuthUtil.getId();
         String phone = AuthUtil.getPhone();
         String password = AuthUtil.getPassword();
-        String locationId = AuthUtil.getLocationId();
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
-            MapActivity.startActivity(this, id, locationId);
+            MapActivity.startActivity(this, id);
             JMessageClient.login(phone, password, new BasicCallback() {
                 @Override
                 public void gotResult(int i, String s) {
