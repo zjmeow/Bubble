@@ -29,6 +29,7 @@ import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.MapUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
@@ -45,6 +46,9 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.stonymoon.bubble.util.MapUtil.clearMap;
+import static com.stonymoon.bubble.util.MapUtil.zoomIn;
 
 
 public class MapShareActivity extends Activity implements OnMapLoadedCallback {
@@ -75,17 +79,12 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         ButterKnife.bind(this);
         setMap();
 
-
     }
 
     private void setMap() {
         mMapView = (MapView) findViewById(R.id.bmapView);
         mBaiduMap = mMapView.getMap();
-        mMapView.showZoomControls(false);
-        mMapView.showScaleControl(false);
-        mBaiduMap.setCompassEnable(false);
-        // 删除百度地图logo
-        mMapView.removeViewAt(1);
+        clearMap(mMapView);
         mBaiduMap.setOnMapLoadedCallback(this);
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
         // 定义点聚合管理类ClusterManager
@@ -134,7 +133,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
                 addSeenItem();
             }
         });
-        initLocate();
+        mLocationClient = MapUtil.getDefaultLocationClient(new MyLocationListener());
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
     }
@@ -211,42 +210,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         addMarkers(seenItems);
     }
 
-    private void initLocate() {
-        mLocationClient = new LocationClient(getApplicationContext());
-        //声明LocationClient类
-        mLocationClient.registerLocationListener(new MyLocationListener());
-        //注册监听函数
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-        //bd09：百度墨卡托坐标；
-        option.setScanSpan(5000);
-        //设置发起定位请求的间隔，int类型，单位ms
-        option.setOpenGps(true);
-        option.setLocationNotify(false);
-        //可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
 
-        option.setIgnoreKillProcess(true);
-        //可选，定位SDK内部是一个service，并放到了独立进程。
-        //设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
-
-        option.setEnableSimulateGps(false);
-//可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
-        mLocationClient.setLocOption(option);
-//mLocationClient为第二步初始化过的LocationClient对象
-        mLocationClient.start();
-
-    }
-
-    //根据marker来设置地图镜头移动
-    private void zoomIn(BaiduMap baiduMap, LatLng latLng, float v) {
-        MapStatus mMapStatus = new MapStatus.Builder()
-                .target(latLng)
-                .zoom(v)
-                .build();
-        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        baiduMap.animateMapStatus(mMapStatusUpdate);
-    }
 
     /**
      * 每个Marker点，包含Marker点坐标以及图标

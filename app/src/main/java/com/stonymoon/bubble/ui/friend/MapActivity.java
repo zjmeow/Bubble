@@ -6,32 +6,21 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.ScaleAnimation;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,7 +38,7 @@ import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
-import com.bumptech.glide.Glide;
+
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -57,14 +46,13 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
-import com.stonymoon.bubble.adapter.MyFragmentPagerAdapter;
 import com.stonymoon.bubble.bean.LocationBean;
-import com.stonymoon.bubble.ui.common.MainActivity;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.MapUtil;
 import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.util.MyCallback;
 import com.stonymoon.bubble.util.SpringScaleInterpolator;
@@ -92,6 +80,9 @@ import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
+
+import static com.stonymoon.bubble.util.MapUtil.clearMap;
+import static com.stonymoon.bubble.util.MapUtil.zoomIn;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
@@ -133,6 +124,7 @@ public class MapActivity extends AppCompatActivity {
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
+    private List<MyItem> seenItems = new ArrayList<>();
     private boolean isFirstLoacted = true;
     private boolean isSelected = false;
     private boolean isUpdateMap = true;
@@ -232,7 +224,7 @@ public class MapActivity extends AppCompatActivity {
         Intent intent = getIntent();
         id = intent.getStringExtra("id");
         setMap();
-        initLocate();
+        mLocationClient = MapUtil.getDefaultLocationClient(myListener);
         mLocationClient.start();
         initAnimation();
         //初始化像素工具
@@ -297,11 +289,7 @@ public class MapActivity extends AppCompatActivity {
 
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
-        mapView.showZoomControls(false);
-        mapView.showScaleControl(false);
-        baiduMap.setCompassEnable(false);
-        // 删除百度地图logo
-        mapView.removeViewAt(1);
+        clearMap(mapView);
 
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
@@ -373,16 +361,6 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
-    //根据marker来设置地图镜头移动
-    private void zoomIn(BaiduMap baiduMap, LatLng latLng, float v) {
-        MapStatus mMapStatus = new MapStatus.Builder()
-                .target(latLng)
-                .zoom(v)
-                .build();
-        MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
-        baiduMap.animateMapStatus(mMapStatusUpdate);
-    }
-
     public void addMarkers(List<MyItem> items) {
         // 添加Marker点
         //addItems添加一组
@@ -390,34 +368,6 @@ public class MapActivity extends AppCompatActivity {
         mClusterManager.cluster();
 
     }
-
-
-    private void initLocate() {
-        mLocationClient = new LocationClient(getApplicationContext());
-        //声明LocationClient类
-        mLocationClient.registerLocationListener(myListener);
-        //注册监听函数
-        LocationClientOption option = new LocationClientOption();
-        option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);
-        option.setCoorType("bd09ll");
-        //bd09：百度墨卡托坐标；
-        option.setScanSpan(5000);
-        //设置发起定位请求的间隔，int类型，单位ms
-        option.setOpenGps(true);
-        option.setLocationNotify(false);
-        //可选，设置是否当GPS有效时按照1S/1次频率输出GPS结果，默认false
-
-        option.setIgnoreKillProcess(true);
-        //可选，定位SDK内部是一个service，并放到了独立进程。
-        //设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
-
-        option.setEnableSimulateGps(false);
-//可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
-        mLocationClient.setLocOption(option);
-//mLocationClient为第二步初始化过的LocationClient对象
-
-    }
-
 
     private void initAnimation() {
         ObjectAnimator animatorX = ObjectAnimator.ofFloat(bubble, "scaleX", 1.0f, 1.8f);

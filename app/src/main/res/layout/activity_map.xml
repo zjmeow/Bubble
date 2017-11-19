@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_map"
     android:layout_width="match_parent"
@@ -28,6 +27,7 @@
             android:id="@+id/btn_map_switch"
             android:layout_width="88dp"
             android:layout_height="36dp"
+            android:layout_gravity="bottom"
             android:layout_margin="8dp"
             android:background="@color/colorPrimary"
             android:text="切换"
@@ -40,22 +40,21 @@
             android:id="@+id/btn_map_location"
             android:layout_width="88dp"
             android:layout_height="36dp"
+            android:layout_gravity="bottom"
             android:layout_margin="8dp"
             android:background="@color/colorPrimary"
             android:text="我的位置"
             android:textColor="#fff"
-
             />
+
+        <com.stonymoon.bubble.view.FloatingMenu
+            android:id="@+id/floating_menu_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom" />
 
 
     </LinearLayout>
-
-
-    <com.stonymoon.bubble.view.FloatingMenu
-        android:id="@+id/floating_menu_map"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom" />
 
 
     <RelativeLayout
