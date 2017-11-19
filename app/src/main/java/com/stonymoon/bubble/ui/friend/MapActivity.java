@@ -59,6 +59,9 @@ import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.MyFragmentPagerAdapter;
 import com.stonymoon.bubble.bean.LocationBean;
+import com.stonymoon.bubble.ui.common.MainActivity;
+import com.stonymoon.bubble.ui.common.MyProfileActivity;
+import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
@@ -67,6 +70,7 @@ import com.stonymoon.bubble.util.MyCallback;
 import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
+import com.stonymoon.bubble.view.FloatingMenu;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxImageTool;
@@ -108,14 +112,9 @@ public class MapActivity extends AppCompatActivity {
     QMUIRadiusImageView headImage;
     @BindView(R.id.tv_map_bubble_username)
     TextView usernameText;
-    @BindView(R.id.btn_map_send_message)
-    FloatingActionButton button;
-    @BindView(R.id.btn_map_friend)
-    Button btnMapFriend;
     @BindView(R.id.btn_map_location)
     Button btnMapLocation;
-    @BindView(R.id.btn_map_message)
-    Button btnMapMessage;
+
     @BindView(R.id.iv_map_receive_emoji)
     ImageView ivReceiveEmoji;
 
@@ -127,7 +126,8 @@ public class MapActivity extends AppCompatActivity {
     FrameLayout llEmoji;
     @BindView(R.id.iv_bottom_sheet_big_emoji)
     ImageView ivBigEmoji;
-
+    @BindView(R.id.floating_menu_map)
+    FloatingMenu mFloatingMenu;
 
 
     //管理聚合地图
@@ -238,7 +238,30 @@ public class MapActivity extends AppCompatActivity {
         //初始化像素工具
         RxTool.init(this);
         ivBigEmoji.bringToFront();
+        setFloatingMenu();
 
+    }
+
+    private void setFloatingMenu() {
+        mFloatingMenu.setMoveDistance(RxImageTool.dp2px(60));
+        mFloatingMenu.setOnclickListener(new FloatingMenu.OnPictureClickListener() {
+            @Override
+            public void onFirstClick() {
+                FriendActivity.startActivity(MapActivity.this);
+            }
+
+            @Override
+            public void onSecondClick() {
+                MessageListActivity.startActivity(MapActivity.this);
+            }
+
+            @Override
+            public void onThirdClick() {
+                Intent intent = new Intent(MapActivity.this, MyProfileActivity.class);
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -435,14 +458,6 @@ public class MapActivity extends AppCompatActivity {
                 .show();
     }
 
-    @OnClick(R.id.btn_map_send_message)
-    void sendMessage() {
-        if (chosenUserBean == null) {
-            return;
-        }
-        //startSendEmoji(button);
-        receiveEmoji();
-    }
 
     @OnClick(R.id.map_bubble)
     void startProfile() {
@@ -470,6 +485,14 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
+
+    @OnClick(R.id.btn_map_switch)
+    void changeMap() {
+        Intent intent = new Intent(MapActivity.this, MapShareActivity.class);
+        startActivity(intent);
+
+    }
+
 
     void closeBubble() {
         if (isSelected) {
@@ -517,20 +540,14 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.btn_map_friend, R.id.btn_map_location, R.id.btn_map_message})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_map_friend:
-                FriendActivity.startActivity(this);
-                break;
-            case R.id.btn_map_location:
-                zoomIn(mapView.getMap(), myLatLng, 30);
-                break;
-            case R.id.btn_map_message:
-                MessageListActivity.startActivity(this);
-                break;
-        }
+    @OnClick(R.id.btn_map_location)
+    void locate() {
+        zoomIn(mapView.getMap(), myLatLng, 30);
+
     }
+
+
+
 
     private void closeBottomSheet() {
 
@@ -542,6 +559,7 @@ public class MapActivity extends AppCompatActivity {
         animator.start();
 
     }
+
     private void openBottomSheet() {
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 llEmoji,
@@ -731,4 +749,6 @@ public class MapActivity extends AppCompatActivity {
 
 
     }
+
+
 }

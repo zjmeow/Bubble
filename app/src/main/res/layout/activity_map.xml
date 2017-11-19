@@ -24,17 +24,17 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">
-
         <Button
-            android:id="@+id/btn_map_friend"
+            android:id="@+id/btn_map_switch"
             android:layout_width="88dp"
             android:layout_height="36dp"
             android:layout_margin="8dp"
             android:background="@color/colorPrimary"
-            android:text="我的好友"
+            android:text="切换"
             android:textColor="#fff"
 
             />
+
 
         <Button
             android:id="@+id/btn_map_location"
@@ -47,15 +47,15 @@
 
             />
 
-        <Button
-            android:id="@+id/btn_map_message"
-            android:layout_width="88dp"
-            android:layout_height="36dp"
-            android:layout_margin="8dp"
-            android:background="@color/colorPrimary"
-            android:text="消息列表"
-            android:textColor="#fff" />
+
     </LinearLayout>
+
+
+    <com.stonymoon.bubble.view.FloatingMenu
+        android:id="@+id/floating_menu_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom" />
 
 
     <RelativeLayout
@@ -83,13 +83,6 @@
 
 
     </RelativeLayout>
-
-    <android.support.design.widget.FloatingActionButton
-
-        android:id="@+id/btn_map_send_message"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="bottom|right" />
 
     <include layout="@layout/bottom_sheet" />
 

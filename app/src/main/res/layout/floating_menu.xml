@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="260dp"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+
+    >
+
+    <ImageView
+        android:id="@+id/iv_floating_menu_3"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center|bottom"
+        android:src="@drawable/shit" />
+
+    <ImageView
+        android:id="@+id/iv_floating_menu_2"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center|bottom"
+        android:src="@drawable/shit" />
+
+    <ImageView
+        android:id="@+id/iv_floating_menu_1"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center|bottom"
+        android:src="@drawable/shit" />
+
+    <ImageView
+        android:id="@+id/iv_floating_menu_menu"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center|bottom"
+        android:src="@drawable/shit" />
+
+
+</FrameLayout>
