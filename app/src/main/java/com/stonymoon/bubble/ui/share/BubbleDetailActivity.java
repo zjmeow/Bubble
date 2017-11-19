@@ -51,7 +51,7 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.iv_bubble_detail_head)
     void openProfile() {
-        //todo 用户资料全部要放在java服务器上托管
+        //todo 用户资料全部要放在java服务器上托管或者JAVA服务端要提供手机号
     }
 
     @Override

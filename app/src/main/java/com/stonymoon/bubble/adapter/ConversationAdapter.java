@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.ui.friend.ChatActivity;
@@ -16,7 +17,10 @@ import com.stonymoon.bubble.util.MessageUtil;
 import java.util.List;
 
 import cn.jpush.im.android.api.model.Conversation;
+import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
+
+import static com.stonymoon.bubble.util.DateUtil.CalculateTime;
 
 
 public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapter.ViewHolder> {
@@ -34,7 +38,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.ivAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
@@ -63,23 +67,42 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         userInfo.getExtra("url");
         Picasso.with(mContext)
                 .load(userInfo.getExtra("url"))
-                .into(holder.imageView);
+                .into(holder.ivAvatar);
         //.placeholder(R.drawable.icon_placeholder)
-        holder.titleView.setText(userInfo.getDisplayName());
+        holder.tvTitle.setText(userInfo.getDisplayName());
         String latestMessage = MessageUtil.getMessageText(bean.getLatestMessage());
-        holder.firstText.setText(latestMessage);
+        holder.tvFirst.setText(latestMessage);
+        holder.tvTime.setText(String.valueOf(CalculateTime(bean.getLatestMessage().getCreateTime())));
+//极光推送在未读消息处理上有bug
+//        if(bean.getUnReadMsgCnt() != 0) {
+//            holder.tvNewMessage.setText(String.valueOf(bean.getUnReadMsgCnt()));
+//            holder.tvNewMessage.setVisibility(View.VISIBLE);
+//
+//        } else {
+//            holder.tvNewMessage.setText("");
+//            holder.tvNewMessage.setVisibility(View.GONE);
+//        }
+
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView titleView;
-        TextView firstText;
 
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        QMUIRadiusImageView ivAvatar;
+        TextView tvTitle;
+        TextView tvFirst;
+        TextView tvTime;
+        TextView tvNewMessage;
         public ViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view.findViewById(R.id.msg_item_head_icon);
-            titleView = (TextView) view.findViewById(R.id.conv_item_name);
-            firstText = (TextView) view.findViewById(R.id.msg_item_content);
+            ivAvatar = (QMUIRadiusImageView) view.findViewById(R.id.msg_item_head_icon);
+            tvTitle = (TextView) view.findViewById(R.id.conv_item_name);
+            tvFirst = (TextView) view.findViewById(R.id.msg_item_content);
+            tvTime = (TextView) view.findViewById(R.id.msg_item_date);
+
+            tvNewMessage = (TextView) view.findViewById(R.id.new_msg_number);
+
+
+
 
         }
 

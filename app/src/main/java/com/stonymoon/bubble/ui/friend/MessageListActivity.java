@@ -54,16 +54,23 @@ public class MessageListActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         conversationRecycler.setLayoutManager(linearLayoutManager);
-        initMessage();
+
     }
 
     private void initMessage() {
         if (list == null) {
             return;
         }
+        list.clear();
         list.addAll(JMessageClient.getConversationList());
         adapter.notifyDataSetChanged();
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initMessage();
+
+    }
 }

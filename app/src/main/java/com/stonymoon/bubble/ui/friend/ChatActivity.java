@@ -48,7 +48,7 @@ public class ChatActivity extends AppCompatActivity {
     private DefaultUser user;
     private DefaultUser otherUser;
     //读取页面条数
-    private int page = 1;
+    private int page = 0;
 
 
     public static void startActivity(Context context, String phone, String username, String url) {
@@ -81,27 +81,29 @@ public class ChatActivity extends AppCompatActivity {
         initMsgAdapter();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
-        mChatView.setOnSendClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MyMessage message = new MyMessage(editText.getText().toString(), IMessage.MessageType.SEND_TEXT);
-                message.setUserInfo(user);
-                //message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
-                mAdapter.addToStart(message, true);
-                Message sendMessage = JMessageClient.createSingleTextMessage(otherUser.getId() + "", editText.getText().toString());
-                JMessageClient.sendMessage(sendMessage);
-                mChatView.clearText();
+        mChatView.setOnSendClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MyMessage message = new MyMessage(editText.getText().toString(), IMessage.MessageType.SEND_TEXT);
+                        message.setUserInfo(user);
+                        //message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
+                        mAdapter.addToStart(message, true);
+                        Message sendMessage = JMessageClient.createSingleTextMessage(otherUser.getId() + "", editText.getText().toString());
+                        JMessageClient.sendMessage(sendMessage);
+                        mChatView.clearText();
 
-            }
+                    }
 
 
-                                         }
+                }
 
 
         );
 
         JMessageClient.registerEventReceiver(this);
         historyMessage = getHistoryMessages();
+
 
     }
 
@@ -133,6 +135,9 @@ public class ChatActivity extends AppCompatActivity {
 
         }
         Collections.reverse(list);
+        historyMessage = list;
+        loadNextPage(page);
+        page += 20;
         return list;
     }
 
@@ -140,21 +145,18 @@ public class ChatActivity extends AppCompatActivity {
         ImageLoader imageLoader = new ImageLoader() {
             @Override
             public void loadAvatarImage(ImageView avatarImageView, String string) {
-                    Glide.with(getApplicationContext())
-                            .load(string)
-                            .placeholder(R.drawable.aurora_headicon_default)
-                            .into(avatarImageView);
+                Glide.with(ChatActivity.this)
+                        .load(string)
+                        .into(avatarImageView);
 
             }
 
             @Override
             public void loadImage(ImageView imageView, String string) {
-                // You can use other image load libraries.
                 Glide.with(getApplicationContext())
                         .load(string)
                         .fitCenter()
                         .placeholder(R.drawable.aurora_picture_not_found)
-                        .override(400, Target.SIZE_ORIGINAL)
                         .into(imageView);
             }
         };
@@ -212,18 +214,17 @@ public class ChatActivity extends AppCompatActivity {
                     list.add(historyMessage.get(i));
                 }
                 mAdapter.addToEnd(list);
+                mAdapter.notifyDataSetChanged();
 
                 mChatView.getPtrLayout().refreshComplete();
             }
-        }, 1500);
+        }, 500);
     }
-
 
 
     private void scrollToBottom() {
         mAdapter.getLayoutManager().scrollToPosition(0);
     }
-
 
 
     @Override
@@ -247,7 +248,6 @@ public class ChatActivity extends AppCompatActivity {
     }
 
 
-
     private void initUser() {
         Intent intent = getIntent();
         Conversation conversation = JMessageClient.getSingleConversation(intent.getStringExtra("phone"));
@@ -260,7 +260,6 @@ public class ChatActivity extends AppCompatActivity {
         otherUser = new DefaultUser(targetInfo.getUserName(), targetInfo.getDisplayName(), targetInfo.getExtra("url"));
 
     }
-
 
 
 }

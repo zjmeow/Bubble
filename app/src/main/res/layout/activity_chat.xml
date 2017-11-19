@@ -4,13 +4,33 @@
     android:id="@+id/chat_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f3f3f3"
+    android:background="@color/textBackground"
     android:orientation="vertical">
 
-    <LinearLayout
+    <FrameLayout
+        android:id="@+id/title_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="?attr/actionBarSize"
+        android:background="#FFF">
+
+        <ImageView
+            android:id="@+id/iv_share_back"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="left|center"
+            android:layout_marginLeft="16dp"
+            android:src="@drawable/arrow" />
+
+        <TextView
+            android:id="@+id/tv_share_submit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="bubble"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp" />
+
+    </FrameLayout>
 
 
     <cn.jiguang.imui.messages.ptr.PullToRefreshLayout
@@ -31,7 +51,6 @@
             android:id="@+id/msg_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
             app:avatarHeight="48dp"
             app:avatarRadius="5dp"
             app:avatarWidth="48dp"
@@ -50,26 +69,33 @@
 
     </cn.jiguang.imui.messages.ptr.PullToRefreshLayout>
 
-        <LinearLayout
+    <LinearLayout
+        android:id="@+id/chat_input"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+        android:background="#FFF"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp">
 
-            <EditText
-                android:id="@+id/et_chat_input"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-        />
+        <EditText
+            android:id="@+id/et_chat_input"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="8dp"
+            android:layout_weight="1"
+            android:background="@color/textBackground" />
 
-            <Button
-                android:id="@+id/btn_chat_send"
-                android:layout_width="80dp"
-                android:layout_height="40dp"
-                android:text="发送"
+        <Button
+            android:id="@+id/btn_chat_send"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:text="发送"
 
-                />
-        </LinearLayout>
+            />
     </LinearLayout>
+
 </com.stonymoon.bubble.view.ChatView>

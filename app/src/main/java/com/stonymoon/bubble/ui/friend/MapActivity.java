@@ -93,6 +93,7 @@ import cn.jpush.im.android.api.model.Message;
 //动态地图另外开一个地图显示
 //todo 离线表情一次性发完
 //todo 定位完成才能进入主页面
+//todo 维护可见列表
 public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;

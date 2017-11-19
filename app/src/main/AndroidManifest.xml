@@ -180,7 +180,9 @@
         <activity android:name=".ui.share.BubbleDetailActivity" />
         <activity
             android:name=".ui.friend.ChatActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+
+            />
         <activity android:name=".ui.friend.MessageListActivity" />
         <activity android:name=".ui.share.ShareActivity" />
         <activity android:name=".ui.common.PhotoActivity" />
