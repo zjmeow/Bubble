@@ -66,8 +66,11 @@ import com.vondear.rxtools.RxTool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,11 +123,15 @@ public class MapActivity extends AppCompatActivity {
     @BindView(R.id.floating_menu_map)
     FloatingMenu mFloatingMenu;
 
+    @BindView(R.id.iv_map_receive_message)
+    ImageView ivMessage;
+
 
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
     private List<MyItem> seenItems = new ArrayList<>();
+    private HashMap<String, Queue<String>> receivedEmojiMap = new HashMap<>();
     private boolean isFirstLoacted = true;
     private boolean isSelected = false;
     private boolean isUpdateMap = true;
@@ -155,14 +162,44 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.iv_map_receive_message)
+    void getMessage() {
+        for (String key : receivedEmojiMap.keySet()) {
+            locateUserByPhone(key);
+            receiveOfflineEmoji(receivedEmojiMap.get(key));
+            receivedEmojiMap.remove(key);
+            break;
+        }
+
+        if (receivedEmojiMap.isEmpty()) {
+            ivMessage.setVisibility(View.GONE);
+
+        }
+
+    }
+
+
     //接收到事件的处理
     public void onEventMainThread(MessageEvent event) {
         Message message = event.getMessage();
         switch (message.getContentType()) {
             case custom:
+                String phone = message.getFromUser().getUserName();
                 CustomContent customContent = (CustomContent) message.getContent();
-                customContent.getStringExtra("emoji");
-                receiveEmoji();
+
+                if (chosenUserBean != null && chosenUserBean.getPhone().equals(phone)) {
+                    receiveEmoji();
+
+                } else if (receivedEmojiMap.get(phone) == null) {
+                    receivedEmojiMap.put(phone, new LinkedList());
+                    receivedEmojiMap.get(phone)
+                            .add(customContent.getStringExtra("emoji"));
+
+                } else {
+                    receivedEmojiMap.get(phone)
+                            .add(customContent.getStringExtra("emoji"));
+                }
+
                 //todo 判断并且添加多种表情
                 break;
 
@@ -180,14 +217,26 @@ public class MapActivity extends AppCompatActivity {
         for (Message message : newMessageList) {
             switch (message.getContentType()) {
                 case custom:
+                    String phone = message.getFromUser().getUserName();
                     CustomContent customContent = (CustomContent) message.getContent();
-                    customContent.getStringExtra("emoji");
-                    receiveEmoji();
+                    if (receivedEmojiMap.get(phone) == null) {
+                        receivedEmojiMap.put(phone, new LinkedList());
+                        receivedEmojiMap.get(phone)
+                                .add(customContent.getStringExtra("emoji"));
+
+                    } else {
+                        receivedEmojiMap.get(phone)
+                                .add(customContent.getStringExtra("emoji"));
+                    }
+
                     //todo 判断并且添加多种表情
                     break;
 
-
             }
+
+        }
+        if (!receivedEmojiMap.isEmpty()) {
+            ivMessage.setVisibility(View.VISIBLE);
 
         }
 
@@ -496,9 +545,6 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-
-
-
     private void closeBottomSheet() {
 
         ObjectAnimator animator = ObjectAnimator.ofFloat(
@@ -520,38 +566,6 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-
-    private void receiveEmoji() {
-
-        ivReceiveEmoji.setVisibility(View.VISIBLE);
-        AnimationSet sendEmojiSet = new AnimationSet(true);
-
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,
-                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
-        );
-        sendEmojiSet.addAnimation(scaleAnimation);
-        sendEmojiSet.setDuration(300);
-        sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
-            @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-                ivReceiveEmoji.clearAnimation();
-                ivReceiveEmoji.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
-        });
-
-        ivReceiveEmoji.startAnimation(sendEmojiSet);
-
-    }
 
     private void locateUserByPhone(String phone) {
 
@@ -586,6 +600,79 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         locateUserByPhone(intent.getStringExtra("phone"));
+    }
+
+    private void receiveEmoji() {
+
+        ivReceiveEmoji.setVisibility(View.VISIBLE);
+        final AnimationSet sendEmojiSet = new AnimationSet(true);
+
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
+        );
+        sendEmojiSet.addAnimation(scaleAnimation);
+        sendEmojiSet.setDuration(300);
+        sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+                ivReceiveEmoji.clearAnimation();
+                ivReceiveEmoji.setVisibility(View.GONE);
+
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        ivReceiveEmoji.startAnimation(sendEmojiSet);
+
+
+    }
+
+    private void receiveOfflineEmoji(final Queue<String> queue) {
+        queue.remove();
+        ivReceiveEmoji.setVisibility(View.VISIBLE);
+        final AnimationSet sendEmojiSet = new AnimationSet(true);
+
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,
+                Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
+        );
+        sendEmojiSet.addAnimation(scaleAnimation);
+        sendEmojiSet.setDuration(300);
+        sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                if (!queue.isEmpty()) {
+                    receiveOfflineEmoji(queue);
+                } else {
+                    ivReceiveEmoji.clearAnimation();
+                    ivReceiveEmoji.setVisibility(View.GONE);
+                }
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        ivReceiveEmoji.startAnimation(sendEmojiSet);
+
     }
 
     private class MyItem implements ClusterItem {

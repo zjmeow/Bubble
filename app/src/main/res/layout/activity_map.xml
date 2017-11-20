@@ -93,4 +93,12 @@
         android:src="@drawable/shit"
         android:visibility="gone" />
 
+    <ImageView
+        android:id="@+id/iv_map_receive_message"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="bottom|right"
+        android:src="@drawable/shit" />
+
+
 </android.support.design.widget.CoordinatorLayout>

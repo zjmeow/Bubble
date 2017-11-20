@@ -28,6 +28,7 @@
         android:layout_gravity="center|bottom"
         android:src="@drawable/shit" />
 
+
     <ImageView
         android:id="@+id/iv_floating_menu_menu"
         android:layout_width="70dp"
