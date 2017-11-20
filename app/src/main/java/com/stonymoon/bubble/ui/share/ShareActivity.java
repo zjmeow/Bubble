@@ -219,8 +219,14 @@ public class ShareActivity extends AppCompatActivity {
         switch (requestCode) {
             case RxPhotoTool.GET_IMAGE_FROM_PHONE://选择相册之后的处理
                 if (resultCode == RESULT_OK) {
-//
-                    initUCrop(data.getData());
+                    File image = roadImageView(data.getData());
+                    uploadPicture(image);
+                    Glide.with(ShareActivity.this).
+                            load(data.getData()).
+                            diskCacheStrategy(DiskCacheStrategy.RESULT).
+                            thumbnail(0.5f).
+                            into(shareImage);
+
                 }
 
                 break;
@@ -231,22 +237,6 @@ public class ShareActivity extends AppCompatActivity {
                     initUCrop(RxPhotoTool.imageUriFromCamera);
                 }
 
-                break;
-
-            case UCrop.REQUEST_CROP://UCrop裁剪之后的处理
-                if (resultCode == RESULT_OK) {
-                    resultUri = UCrop.getOutput(data);
-                    File image = roadImageView(resultUri);
-                    uploadPicture(image);
-                    Glide.with(ShareActivity.this).
-                            load(resultUri).
-                            diskCacheStrategy(DiskCacheStrategy.RESULT).
-                            thumbnail(0.5f).
-                            into(shareImage);
-
-                } else if (resultCode == UCrop.RESULT_ERROR) {
-                    final java.lang.Throwable cropError = UCrop.getError(data);
-                }
                 break;
             case UCrop.RESULT_ERROR: //UCrop裁剪错误之后的处理
                 final java.lang.Throwable cropError = UCrop.getError(data);

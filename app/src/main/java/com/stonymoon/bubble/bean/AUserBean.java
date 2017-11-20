@@ -50,6 +50,7 @@ public class AUserBean {
         private double latitude;
         private int emojicount;
         private long logintime;
+        private String phone;
 
         public int getId() {
             return id;
@@ -105,6 +106,14 @@ public class AUserBean {
 
         public void setLogintime(long logintime) {
             this.logintime = logintime;
+        }
+
+        public String getPhone() {
+            return phone;
+        }
+
+        public void setPhone(String phone) {
+            this.phone = phone;
         }
     }
 }

@@ -6,11 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.ui.friend.ChatActivity;
 
 import java.util.List;
 
@@ -32,11 +34,12 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.imageView.setOnClickListener(new View.OnClickListener() {
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 UserInfo bean = userList.get(position);
+                ChatActivity.startActivity(mContext, bean.getUserName());
 
             }
 
@@ -64,11 +67,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView titleView;
+        LinearLayout linearLayout;
 
         public ViewHolder(View view) {
             super(view);
             imageView = (ImageView) view.findViewById(R.id.iv_friend_head);
             titleView = (TextView) view.findViewById(R.id.tv_friend_text);
+            linearLayout = (LinearLayout) view.findViewById(R.id.ll_share_item);
 
         }
 

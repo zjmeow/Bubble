@@ -85,7 +85,12 @@ public class ChatActivity extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MyMessage message = new MyMessage(editText.getText().toString(), IMessage.MessageType.SEND_TEXT);
+                        String text = editText.getText().toString();
+                        if (text.equals("")) {
+                            return;
+                        }
+
+                        MyMessage message = new MyMessage(text, IMessage.MessageType.SEND_TEXT);
                         message.setUserInfo(user);
                         //message.setTimeString(new SimpleDateFormat("HH:mm", Locale.getDefault()).format(new Date()));
                         mAdapter.addToStart(message, true);

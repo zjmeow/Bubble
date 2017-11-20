@@ -108,14 +108,10 @@ public class MapActivity extends AppCompatActivity {
     TextView usernameText;
     @BindView(R.id.btn_map_location)
     Button btnMapLocation;
-
     @BindView(R.id.iv_map_receive_emoji)
     ImageView ivReceiveEmoji;
-
     @BindView(R.id.iv_map_emoji_shit1)
     ImageView ivEmoji1;
-
-
     @BindView(R.id.fl_map_emoji)
     FrameLayout llEmoji;
     @BindView(R.id.iv_bottom_sheet_big_emoji)

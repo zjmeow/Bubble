@@ -84,7 +84,8 @@ public class ProfileActivity extends ActivityBase {
             public void gotResult(int i, String s, UserInfo userInfo) {
                 tvUsername.setText(userInfo.getDisplayName());
                 tvSignature.setText(userInfo.getSignature());
-                Picasso.with(ProfileActivity.this).load(userInfo.getExtra("url")).into(mIvAvatar);
+                url = userInfo.getExtra("url");
+                Picasso.with(ProfileActivity.this).load(url).into(mIvAvatar);
 
             }
         });

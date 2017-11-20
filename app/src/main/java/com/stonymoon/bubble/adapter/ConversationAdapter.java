@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -38,7 +39,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         }
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_message, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.ivAvatar.setOnClickListener(new View.OnClickListener() {
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
@@ -92,6 +93,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         TextView tvFirst;
         TextView tvTime;
         TextView tvNewMessage;
+        RelativeLayout relativeLayout;
         public ViewHolder(View view) {
             super(view);
             ivAvatar = (QMUIRadiusImageView) view.findViewById(R.id.msg_item_head_icon);
@@ -100,7 +102,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             tvTime = (TextView) view.findViewById(R.id.msg_item_date);
 
             tvNewMessage = (TextView) view.findViewById(R.id.new_msg_number);
-
+            relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_msg_item);
 
 
 

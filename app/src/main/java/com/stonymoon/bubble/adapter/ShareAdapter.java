@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.ui.share.BubbleDetailActivity;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 BubbleBean.ContentBean bean = mList.get(position);
-                //todo 设置点击打开
+                BubbleDetailActivity.startActivity(mContext, bean);
 
             }
 

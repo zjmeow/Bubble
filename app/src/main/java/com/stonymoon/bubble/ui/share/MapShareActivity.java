@@ -136,6 +136,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         mLocationClient = MapUtil.getDefaultLocationClient(new MyLocationListener());
         // 开启定位图层
         mBaiduMap.setMyLocationEnabled(true);
+        mLocationClient.start();
     }
 
     @Override
