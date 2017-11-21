@@ -309,7 +309,7 @@
 //                    if (!TextUtils.isEmpty(message.getMediaFilePath())) {
 //                    }
 //                } else {
-//                    //todo 图片消息，可能去掉这个功能
+
 //                    PhotoActivity.startActivity(mContext, message.getMediaFilePath());
 //                }
 //            }

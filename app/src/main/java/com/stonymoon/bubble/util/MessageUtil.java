@@ -26,9 +26,9 @@ public class MessageUtil {
 
     }
 
-    public static void sendEmoji(String phone) {
+    public static void sendEmoji(String phone, String emojiName) {
         Map<String, String> map = new HashMap<>();
-        map.put("emoji", "shit");
+        map.put("emoji", emojiName);
         Message message = JMessageClient.createSingleCustomMessage(phone, map);
         JMessageClient.sendMessage(message);
     }

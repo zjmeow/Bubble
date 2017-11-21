@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:contentScrim="?attr/colorPrimary"
+            app:contentScrim="#00000000"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <RelativeLayout
@@ -32,7 +32,7 @@
             <android.support.v7.widget.Toolbar
                 android:id="@+id/billboard_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="200dp"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/AlertDialog.AppCompat.Light">
@@ -51,11 +51,14 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+
+            >
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
+                android:background="@color/textBackground"
                 android:orientation="vertical"
                 android:padding="16dp">
 
@@ -74,7 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="blablabla"
-                    android:textColor="@color/primaryText"
+                    android:textColor="@color/secondText"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -85,9 +88,18 @@
                 android:padding="16dp">
 
 
+                <TextView
+                    android:id="@+id/tv_bubble_detail_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:text="这个是内容"
+                    android:textColor="@color/primaryText"
+                    android:textSize="16sp" />
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
                     android:orientation="horizontal"
 
                     >
@@ -107,51 +119,6 @@
                         android:text="名字"
                         android:textSize="18sp" />
                 </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="8dp">
-
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@drawable/shit"
-
-                        />
-
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@drawable/shit"
-
-                        />
-
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@drawable/shit"
-
-                        />
-
-                    <ImageView
-                        android:layout_width="56dp"
-                        android:layout_height="56dp"
-                        android:src="@drawable/shit" />
-
-                </LinearLayout>
-
-
-                <TextView
-                    android:id="@+id/tv_bubble_detail_content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="这个是内容"
-                    android:textColor="@color/primaryText"
-                    android:textSize="18sp" />
-
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

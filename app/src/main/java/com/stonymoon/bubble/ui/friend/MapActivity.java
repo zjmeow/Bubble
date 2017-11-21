@@ -39,6 +39,7 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -61,7 +62,9 @@ import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
 import com.stonymoon.bubble.view.FloatingMenu;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
+import com.vondear.rxtools.RxBroadcastTool;
 import com.vondear.rxtools.RxImageTool;
+import com.vondear.rxtools.RxNetTool;
 import com.vondear.rxtools.RxTool;
 
 import java.util.ArrayList;
@@ -89,7 +92,7 @@ import static com.stonymoon.bubble.util.MapUtil.zoomIn;
 
 //本地图显示附近的人
 //动态地图另外开一个地图显示
-//todo 离线表情一次性发完
+
 //todo 定位完成才能进入主页面
 //todo 维护可见列表
 public class MapActivity extends AppCompatActivity {
@@ -110,8 +113,15 @@ public class MapActivity extends AppCompatActivity {
     Button btnMapLocation;
     @BindView(R.id.iv_map_receive_emoji)
     ImageView ivReceiveEmoji;
-    @BindView(R.id.iv_map_emoji_shit1)
+    @BindView(R.id.iv_map_emoji0)
+    ImageView ivEmoji0;
+    @BindView(R.id.iv_map_emoji1)
     ImageView ivEmoji1;
+    @BindView(R.id.iv_map_emoji2)
+    ImageView ivEmoji2;
+
+
+
     @BindView(R.id.fl_map_emoji)
     FrameLayout llEmoji;
     @BindView(R.id.iv_bottom_sheet_big_emoji)
@@ -152,9 +162,28 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.iv_map_emoji_shit1)
-    void sendEmoji1() {
-        startSendEmoji(ivEmoji1);
+    @OnClick({R.id.iv_map_emoji0, R.id.iv_map_emoji1, R.id.iv_map_emoji2, R.id.iv_map_message})
+    void sendEmoji(View view) {
+        int id = view.getId();
+        switch (id) {
+            //todo 取一个优雅的名字
+            case R.id.iv_map_emoji0:
+                startSendEmoji(ivEmoji0, "e1");
+                break;
+            case R.id.iv_map_emoji1:
+                startSendEmoji(ivEmoji1, "e2");
+                break;
+            case R.id.iv_map_emoji2:
+                startSendEmoji(ivEmoji2, "e3");
+                break;
+            case R.id.iv_map_message:
+                ChatActivity.startActivity(MapActivity.this, chosenUserBean.getPhone());
+                break;
+            default:
+                break;
+        }
+
+
     }
 
 
@@ -182,18 +211,18 @@ public class MapActivity extends AppCompatActivity {
             case custom:
                 String phone = message.getFromUser().getUserName();
                 CustomContent customContent = (CustomContent) message.getContent();
-
+                String emojiName = customContent.getStringValue("emoji");
                 if (chosenUserBean != null && chosenUserBean.getPhone().equals(phone)) {
-                    receiveEmoji();
+                    receiveEmoji(emojiName);
 
                 } else if (receivedEmojiMap.get(phone) == null) {
                     receivedEmojiMap.put(phone, new LinkedList());
                     receivedEmojiMap.get(phone)
-                            .add(customContent.getStringExtra("emoji"));
+                            .add(emojiName);
 
                 } else {
                     receivedEmojiMap.get(phone)
-                            .add(customContent.getStringExtra("emoji"));
+                            .add(emojiName);
                 }
 
                 //todo 判断并且添加多种表情
@@ -276,6 +305,8 @@ public class MapActivity extends AppCompatActivity {
         RxTool.init(this);
         ivBigEmoji.bringToFront();
         setFloatingMenu();
+        //监听网络状态
+        RxBroadcastTool.initRegisterReceiverNetWork(this);
 
     }
 
@@ -500,8 +531,8 @@ public class MapActivity extends AppCompatActivity {
         }
     }
 
-    private void startSendEmoji(final View view) {
-        MessageUtil.sendEmoji(chosenUserBean.getPhone());
+    private void startSendEmoji(final View view, String emojiName) {
+        MessageUtil.sendEmoji(chosenUserBean.getPhone(), emojiName);
         ViewGroup parent = (ViewGroup) view.getParent();
         view.setClickable(false);
         final float x = view.getX();
@@ -598,11 +629,23 @@ public class MapActivity extends AppCompatActivity {
         locateUserByPhone(intent.getStringExtra("phone"));
     }
 
-    private void receiveEmoji() {
+    private void receiveEmoji(String emojiName) {
+        switch (emojiName) {
+            case "e1":
+                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            case "e2":
+                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            case "e3":
+                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            default:
+                break;
+        }
 
         ivReceiveEmoji.setVisibility(View.VISIBLE);
         final AnimationSet sendEmojiSet = new AnimationSet(true);
-
         ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
         );
@@ -635,7 +678,21 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void receiveOfflineEmoji(final Queue<String> queue) {
-        queue.remove();
+
+        String emojiName = queue.remove();
+        switch (emojiName) {
+            case "e1":
+                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            case "e2":
+                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            case "e3":
+                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            default:
+                break;
+        }
         ivReceiveEmoji.setVisibility(View.VISIBLE);
         final AnimationSet sendEmojiSet = new AnimationSet(true);
 
@@ -769,6 +826,7 @@ public class MapActivity extends AppCompatActivity {
                 @Override
                 public void onError(Object tag, Throwable e) {
                     //todo 判断是否联网
+
                     LogUtil.e(TAG, e.toString());
                 }
 

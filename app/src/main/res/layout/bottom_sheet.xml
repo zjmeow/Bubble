@@ -18,20 +18,20 @@
         android:clipToPadding="false">
 
         <ImageView
-            android:id="@+id/iv_map_emoji_shit1"
+            android:id="@+id/iv_map_emoji0"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:layout_marginLeft="100dp"
             android:src="@drawable/shit" />
 
         <ImageView
-            android:id="@+id/iv_map_emoji_shit2"
+            android:id="@+id/iv_map_emoji1"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:src="@drawable/shit" />
 
         <ImageView
-            android:id="@+id/iv_map_emoji_shit3"
+            android:id="@+id/iv_map_emoji2"
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:src="@drawable/shit" />

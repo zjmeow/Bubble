@@ -5,36 +5,6 @@
     android:layout_height="match_parent"
     android:background="#fff">
 
-    <RelativeLayout
-        android:id="@+id/titlebar"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="#2DD0CF"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="14dp"
-            android:clickable="true"
-            android:text="JChat"
-            android:textColor="#fff"
-            android:textSize="18sp" />
-
-        <TextView
-            android:id="@+id/new_user"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="12.33dp"
-            android:clickable="true"
-            android:text="新用户"
-            android:textColor="#fff"
-            android:textSize="14sp" />
-
-    </RelativeLayout>
 
 
     <LinearLayout
