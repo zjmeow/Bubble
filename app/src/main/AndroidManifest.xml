@@ -155,10 +155,10 @@
         <activity
             android:name=".ui.auth.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.auth.RegisterActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
 
 
             />
@@ -180,7 +180,7 @@
         <activity android:name=".ui.share.BubbleDetailActivity" />
         <activity
             android:name=".ui.friend.ChatActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
 
             />
         <activity android:name=".ui.friend.MessageListActivity" />
@@ -188,7 +188,7 @@
         <activity android:name=".ui.common.PhotoActivity" />
         <activity
             android:name=".ui.auth.RegisterPhoneActivity"
-            android:windowSoftInputMode="adjustPan"
+            android:windowSoftInputMode="stateHidden|adjustResize"
 
             />
         <activity android:name=".ui.common.EditActivity" />

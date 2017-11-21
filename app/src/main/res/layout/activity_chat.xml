@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <com.stonymoon.bubble.view.ChatView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/chat_view"
@@ -65,7 +66,10 @@
             app:sendTextColor="#7587A8"
             app:sendTextSize="14sp"
             app:showReceiverDisplayName="SHOW"
-            app:showSenderDisplayName="HIDE" />
+            app:showSenderDisplayName="HIDE">
+
+
+        </cn.jiguang.imui.messages.MessageList>
 
     </cn.jiguang.imui.messages.ptr.PullToRefreshLayout>
 

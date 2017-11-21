@@ -1,6 +1,7 @@
 package com.stonymoon.bubble.ui.friend;
 
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
@@ -77,7 +79,6 @@ public class ChatActivity extends AppCompatActivity {
         editText = (EditText) findViewById(R.id.et_chat_input);
         mChatView.initModule();
 
-
         initMsgAdapter();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(Intent.ACTION_HEADSET_PLUG);
@@ -108,7 +109,20 @@ public class ChatActivity extends AppCompatActivity {
 
         JMessageClient.registerEventReceiver(this);
         historyMessage = getHistoryMessages();
+        mChatView.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                if (oldBottom != 0 && bottom != 0 && (oldBottom - bottom > 100)) {
 
+                    MyMessage myMessage = new MyMessage("a", MyMessage.MessageType.RECEIVE_TEXT);
+                    myMessage.setUserInfo(otherUser);
+                    mAdapter.addToStart(myMessage, true);
+                    mAdapter.delete(myMessage);
+                    //这个地方会弹起..这个是feature不是bug(笑)
+                }
+
+            }
+        });
 
     }
 
@@ -167,11 +181,14 @@ public class ChatActivity extends AppCompatActivity {
         };
         MsgListAdapter.HoldersConfig holdersConfig = new MsgListAdapter.HoldersConfig();
         mAdapter = new MsgListAdapter<>("0", holdersConfig, imageLoader);
-
-//TODO 可以添加删除消息
         mAdapter.setMsgLongClickListener(new MsgListAdapter.OnMsgLongClickListener<MyMessage>() {
             @Override
             public void onMessageLongClick(MyMessage message) {
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                if (message.getText() != null) {
+                    cm.setText(message.getText());
+                }
+                Toast.makeText(ChatActivity.this, "内容已复制到剪贴板", Toast.LENGTH_SHORT).show();
 
             }
         });
