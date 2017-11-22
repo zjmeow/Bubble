@@ -4,56 +4,129 @@
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.stonymoon.bubble.ui.auth.RegisterActivity">
+    tools:context="com.stonymoon.bubble.ui.auth.RegisterActivity"
+
+    >
 
 
     <LinearLayout
         android:id="@+id/register_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:orientation="vertical">
 
-        <include layout="@layout/activity_base"
-            />
 
-        <EditText
-            android:id="@+id/et_register_phone_number"
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/wrapper_register_phone_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/prompt_email"
-            android:maxLines="1" />
+            android:layout_marginLeft="46dp"
+            android:layout_marginRight="46dp"
+            android:layout_marginTop="4dp">
 
+            <EditText
+                android:id="@+id/et_register_phone_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:hint="手机号"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#2C2C2C"
+                android:textColorHint="#808080"
+                android:textSize="16sp" />
+        </android.support.design.widget.TextInputLayout>
 
-
-        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-            android:id="@+id/btn_register_send_identification_code"
+        <View
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
-            android:text="发送验证码"
-            android:textStyle="bold" />
+            android:layout_height="0.67dp"
 
-        <EditText
-            android:id="@+id/et_register_identification_code"
+            android:layout_below="@id/wrapper_login_phone_number"
+            android:layout_marginLeft="46dp"
+            android:layout_marginRight="46dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/inputBackground" />
+
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="验证码"
-            android:imeActionLabel="@string/action_sign_in_short"
-            android:imeOptions="actionUnspecified"
-            android:inputType="textPassword"
-            android:maxLines="1" />
+            android:layout_marginLeft="46dp"
+            android:layout_marginRight="46dp"
+            android:layout_marginTop="4dp"
+            android:orientation="horizontal"
 
-        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+            >
+
+            <android.support.design.widget.TextInputLayout
+
+                android:id="@+id/wrapper_register_identification_code"
+                android:layout_width="138dp"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/et_register_identification_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="验证码"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#2C2C2C"
+                    android:textColorHint="#808080"
+                    android:textSize="16sp" />
+            </android.support.design.widget.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tv_register_send_identification_code"
+                android:layout_width="wrap_content"
+                android:layout_height="36dp"
+                android:layout_gravity="center"
+                android:width="110dp"
+                android:background="#F7F7F7"
+                android:gravity="center"
+                android:text="获取验证码"
+                android:textColor="@color/secondText"
+                android:textSize="16sp"
+
+                />
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/user_line"
+            android:layout_width="138dp"
+            android:layout_height="0.67dp"
+            android:layout_below="@id/wrapper_login_phone_number"
+            android:layout_marginLeft="46dp"
+            android:layout_marginRight="46dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/inputBackground" />
+
+        <Button
             android:id="@+id/btn_register_next"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="16dp"
+            android:layout_height="36dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="36dp"
+            android:background="@drawable/shape"
             android:text="下一步"
-            android:textStyle="bold" />
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
 
     </LinearLayout>
 
 
 </RelativeLayout>
+
+
+
+

@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
@@ -46,6 +47,7 @@ public class RegisterPhoneActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_register_phone);
         ButterKnife.bind(this);
         phone = getIntent().getStringExtra("phone");

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -6,37 +7,19 @@
     android:background="#fff">
 
 
-
     <LinearLayout
-        android:id="@+id/ll_name_psw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="90dp"
         android:orientation="vertical">
 
+
         <LinearLayout
-            android:id="@+id/translate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="78.67dp"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/de_login_logo"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="52.67dp"
-                android:text="Welcome" />
-
-            <View
-                android:id="@+id/view"
-                android:layout_width="match_parent"
-                android:layout_height="42dp"
-                android:background="#fff"
-                android:visibility="gone" />
-
             <RelativeLayout
-                android:id="@+id/liner1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
@@ -45,6 +28,11 @@
                 android:focusableInTouchMode="true"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/user" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/wrapper_register_username"
@@ -72,18 +60,16 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <View
-                    android:id="@+id/user_line"
                     android:layout_width="match_parent"
                     android:layout_height="0.67dp"
                     android:layout_below="@id/wrapper_register_username"
                     android:layout_marginTop="10dp"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/inputBackground" />
 
 
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/liner2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="30dip"
@@ -91,6 +77,11 @@
                 android:layout_marginTop="23dip"
                 android:orientation="horizontal">
 
+                <ImageView
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/lock" />
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/wrapper_register_password"
@@ -107,7 +98,7 @@
                         android:background="@null"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:hint="密码"
+                        android:hint="请输入密码"
                         android:inputType="textPassword"
                         android:maxLines="1"
                         android:textColor="#2C2C2C"
@@ -121,21 +112,24 @@
                     android:layout_height="0.67dp"
                     android:layout_below="@id/wrapper_register_password"
                     android:layout_marginTop="10dp"
-                    android:background="@color/colorPrimary" />
+                    android:background="@color/inputBackground" />
 
             </RelativeLayout>
+
 
             <Button
                 android:id="@+id/btn_register_register"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="36dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="36dp"
                 android:background="@drawable/shape"
                 android:text="注册"
                 android:textColor="#fff"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
+
+
         </LinearLayout>
     </LinearLayout>
 
@@ -145,8 +139,25 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="38dp">
+        android:layout_marginBottom="18dp">
 
+        <TextView
+            android:id="@+id/login_desc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="还没有账号?"
+            android:textColor="#999999"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_login_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:text="立即注册"
+            android:textColor="@color/colorPrimary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 

@@ -155,10 +155,10 @@
         <activity
             android:name=".ui.auth.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="stateHidden|adjustResize" />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.auth.RegisterActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateVisible|adjustResize"
 
 
             />
@@ -188,7 +188,7 @@
         <activity android:name=".ui.common.PhotoActivity" />
         <activity
             android:name=".ui.auth.RegisterPhoneActivity"
-            android:windowSoftInputMode="stateHidden|adjustResize"
+            android:windowSoftInputMode="stateVisible|adjustResize"
 
             />
         <activity android:name=".ui.common.EditActivity" />

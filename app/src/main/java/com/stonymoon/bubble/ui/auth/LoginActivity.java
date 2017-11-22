@@ -13,6 +13,7 @@ import android.support.design.widget.TextInputLayout;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,7 +57,7 @@ public class LoginActivity extends Activity {
     @BindView(R.id.wrapper_login_password)
     TextInputLayout wrapperLoginPassword;
     @BindView(R.id.btn_login_sign_in)
-    SubmitButton submitButton;
+    Button submitButton;
     private Map<String, Object> parameters = new HashMap<String, Object>();
     private LoginBean bean;
 
@@ -93,15 +94,6 @@ public class LoginActivity extends Activity {
         //attemptLogin();
         wrapperLoginPhoneNumber.setHint("请输入手机号");
         wrapperLoginPassword.setHint("请输入密码");
-        submitButton.setOnResultEndListener(new SubmitButton.OnResultEndListener() {
-            @Override
-            public void onResultEnd() {
-                if (bean != null) {
-                    MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
-                    finish();
-                }
-            }
-        });
 
 
     }
@@ -160,7 +152,8 @@ public class LoginActivity extends Activity {
                             @Override
                             public void gotResult(int i, String s) {
                                 Toast.makeText(LoginActivity.this, "登录成功" + s, Toast.LENGTH_SHORT).show();
-                                submitButton.doResult(true);
+                                MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
+                                finish();
 
                             }
                         });
@@ -170,8 +163,6 @@ public class LoginActivity extends Activity {
                     @Override
                     public void onError(Object tag, Throwable e) {
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                        submitButton.doResult(false);
-                        submitButton.reset();
                         LogUtil.e(TAG, e.getMessage());
                     }
 
