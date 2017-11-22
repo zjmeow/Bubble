@@ -2,21 +2,25 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+
+    >
     <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:gravity="center"
-        android:src="@mipmap/bubble"
+        android:src="@drawable/user_bubble"
 
         />
 
     <com.qmuiteam.qmui.widget.QMUIRadiusImageView
         android:id="@+id/iv_bubble_head"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:src="@mipmap/bubble"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10.5dp"
+        android:src="@mipmap/test"
+
 
         />
 
@@ -24,10 +28,10 @@
         android:id="@+id/tv_bubble_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
+        android:layout_centerInParent="true"
 
 
         />
 
-    5
+
 </RelativeLayout>

@@ -9,32 +9,32 @@
 
     <ImageView
         android:id="@+id/iv_floating_menu_3"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/shit" />
+        android:src="@drawable/ghost" />
 
     <ImageView
         android:id="@+id/iv_floating_menu_2"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/shit" />
+        android:src="@drawable/message" />
 
     <ImageView
         android:id="@+id/iv_floating_menu_1"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/shit" />
+        android:src="@drawable/friends" />
 
 
     <ImageView
         android:id="@+id/iv_floating_menu_menu"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/shit" />
+        android:src="@drawable/menu" />
 
 
 </FrameLayout>

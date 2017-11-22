@@ -23,26 +23,26 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:padding="8dp">
-        <Button
-            android:id="@+id/btn_map_switch"
-            android:layout_width="88dp"
-            android:layout_height="36dp"
+
+        <ImageView
+            android:id="@+id/iv_map_switch"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_gravity="bottom"
             android:layout_margin="8dp"
-            android:background="@color/colorPrimary"
-            android:text="切换"
+            android:src="@drawable/switch_map"
             android:textColor="#fff"
 
             />
 
 
-        <Button
-            android:id="@+id/btn_map_location"
-            android:layout_width="88dp"
-            android:layout_height="36dp"
+        <ImageView
+            android:id="@+id/iv_map_location"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
             android:layout_gravity="bottom"
             android:layout_margin="8dp"
-            android:background="@color/colorPrimary"
+            android:src="@drawable/locate"
             android:text="我的位置"
             android:textColor="#fff"
             />
@@ -51,7 +51,8 @@
             android:id="@+id/floating_menu_map"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom" />
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp" />
 
 
     </LinearLayout>
@@ -65,18 +66,22 @@
         android:layout_gravity="center"
         android:visibility="gone">
 
+        <ImageView
+            android:layout_width="96dp"
+            android:layout_height="96dp"
+            android:gravity="center"
+            android:src="@drawable/user_bubble"
+
+            />
+
         <com.qmuiteam.qmui.widget.QMUIRadiusImageView
             android:id="@+id/iv_map_bubble_head"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:src="@mipmap/bubble" />
+            android:layout_width="62.4dp"
+            android:layout_height="62.4dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="13.4dp"
+            android:src="@mipmap/test"
 
-        <TextView
-            android:id="@+id/tv_map_bubble_username"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
 
             />
 

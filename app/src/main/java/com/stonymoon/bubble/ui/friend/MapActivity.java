@@ -99,18 +99,12 @@ public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();
-    @BindView(R.id.activity_map)
-    CoordinatorLayout mainLayout;
     @BindView(R.id.map)
     MapView mapView;
     @BindView(R.id.map_bubble)
     RelativeLayout bubble;
     @BindView(R.id.iv_map_bubble_head)
     QMUIRadiusImageView headImage;
-    @BindView(R.id.tv_map_bubble_username)
-    TextView usernameText;
-    @BindView(R.id.btn_map_location)
-    Button btnMapLocation;
     @BindView(R.id.iv_map_receive_emoji)
     ImageView ivReceiveEmoji;
     @BindView(R.id.iv_map_emoji0)
@@ -410,7 +404,7 @@ public class MapActivity extends AppCompatActivity {
                 //加载小图
 
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!200x200r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
                         .into(headImage);
                 //usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
@@ -512,7 +506,7 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btn_map_switch)
+    @OnClick(R.id.iv_map_switch)
     void changeMap() {
         Intent intent = new Intent(MapActivity.this, MapShareActivity.class);
         startActivity(intent);
@@ -566,7 +560,7 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.btn_map_location)
+    @OnClick(R.id.iv_map_location)
     void locate() {
         zoomIn(mapView.getMap(), myLatLng, 30);
 
@@ -610,7 +604,7 @@ public class MapActivity extends AppCompatActivity {
                 mLocationClient.stop();
                 openBottomSheet();
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!200x200r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
                         .into(headImage);
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
@@ -752,7 +746,7 @@ public class MapActivity extends AppCompatActivity {
             QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).
-                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!200x200r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 
