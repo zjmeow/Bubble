@@ -15,8 +15,10 @@ import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
+import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -64,7 +66,6 @@ import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxBroadcastTool;
 import com.vondear.rxtools.RxImageTool;
-import com.vondear.rxtools.RxNetTool;
 import com.vondear.rxtools.RxTool;
 
 import java.util.ArrayList;
@@ -113,8 +114,8 @@ public class MapActivity extends AppCompatActivity {
     ImageView ivEmoji1;
     @BindView(R.id.iv_map_emoji2)
     ImageView ivEmoji2;
-
-
+    @BindView(R.id.iv_map_emoji3)
+    ImageView ivEmoji3;
 
     @BindView(R.id.fl_map_emoji)
     FrameLayout llEmoji;
@@ -156,20 +157,24 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.iv_map_emoji0, R.id.iv_map_emoji1, R.id.iv_map_emoji2, R.id.iv_map_message})
+    @OnClick({R.id.iv_map_emoji0, R.id.iv_map_emoji1, R.id.iv_map_emoji2, R.id.iv_map_emoji3, R.id.iv_map_message})
     void sendEmoji(View view) {
         int id = view.getId();
         switch (id) {
             //todo 取一个优雅的名字
             case R.id.iv_map_emoji0:
-                startSendEmoji(ivEmoji0, "e1");
+                startSendEmoji(ivEmoji0, "e0");
                 break;
             case R.id.iv_map_emoji1:
-                startSendEmoji(ivEmoji1, "e2");
+                startSendEmoji(ivEmoji1, "e1");
                 break;
             case R.id.iv_map_emoji2:
-                startSendEmoji(ivEmoji2, "e3");
+                startSendEmoji(ivEmoji2, "e2");
                 break;
+            case R.id.iv_map_emoji3:
+                startSendEmoji(ivEmoji3, "e3");
+                break;
+
             case R.id.iv_map_message:
                 ChatActivity.startActivity(MapActivity.this, chosenUserBean.getPhone());
                 break;
@@ -241,11 +246,11 @@ public class MapActivity extends AppCompatActivity {
                     if (receivedEmojiMap.get(phone) == null) {
                         receivedEmojiMap.put(phone, new LinkedList());
                         receivedEmojiMap.get(phone)
-                                .add(customContent.getStringExtra("emoji"));
+                                .add(customContent.getStringValue("emoji"));
 
                     } else {
                         receivedEmojiMap.get(phone)
-                                .add(customContent.getStringExtra("emoji"));
+                                .add(customContent.getStringValue("emoji"));
                     }
 
                     //todo 判断并且添加多种表情
@@ -404,7 +409,7 @@ public class MapActivity extends AppCompatActivity {
                 //加载小图
 
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!200x200r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
                         .into(headImage);
                 //usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
@@ -440,8 +445,8 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void initAnimation() {
-        ObjectAnimator animatorX = ObjectAnimator.ofFloat(bubble, "scaleX", 1.0f, 1.8f);
-        ObjectAnimator animatorY = ObjectAnimator.ofFloat(bubble, "scaleY", 1.0f, 1.8f);
+        ObjectAnimator animatorX = ObjectAnimator.ofFloat(bubble, "scaleX", 1.0f, 1.5f);
+        ObjectAnimator animatorY = ObjectAnimator.ofFloat(bubble, "scaleY", 1.0f, 1.5f);
         showBubbleSet = new AnimatorSet();
         showBubbleSet.setDuration(1000);
         showBubbleSet.setInterpolator(new SpringScaleInterpolator(0.4f));
@@ -571,7 +576,7 @@ public class MapActivity extends AppCompatActivity {
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 llEmoji,
                 "translationY",
-                RxImageTool.dp2px(120));
+                RxImageTool.dp2px(210));
         animator.setDuration(400);
         animator.start();
 
@@ -581,8 +586,9 @@ public class MapActivity extends AppCompatActivity {
         ObjectAnimator animator = ObjectAnimator.ofFloat(
                 llEmoji,
                 "translationY",
-                -RxImageTool.dp2px(120));
+                -RxImageTool.dp2px(210));
         animator.setDuration(400);
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
         animator.start();
 
     }
@@ -604,7 +610,7 @@ public class MapActivity extends AppCompatActivity {
                 mLocationClient.stop();
                 openBottomSheet();
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!200x200r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
                         .into(headImage);
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
@@ -625,14 +631,17 @@ public class MapActivity extends AppCompatActivity {
 
     private void receiveEmoji(String emojiName) {
         switch (emojiName) {
-            case "e1":
+            case "e0":
                 Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            case "e1":
+                Glide.with(this).load(R.drawable.emoji_cry).into(ivReceiveEmoji);
                 break;
             case "e2":
-                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                Glide.with(this).load(R.drawable.emoji_love).into(ivReceiveEmoji);
                 break;
             case "e3":
-                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                Glide.with(this).load(R.drawable.emoji_boring).into(ivReceiveEmoji);
                 break;
             default:
                 break;
@@ -640,11 +649,11 @@ public class MapActivity extends AppCompatActivity {
 
         ivReceiveEmoji.setVisibility(View.VISIBLE);
         final AnimationSet sendEmojiSet = new AnimationSet(true);
-        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 20f, 1, 20f,
+        ScaleAnimation scaleAnimation = new ScaleAnimation(1, 15f, 1, 15f,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f
         );
         sendEmojiSet.addAnimation(scaleAnimation);
-        sendEmojiSet.setDuration(300);
+        sendEmojiSet.setDuration(400);
         sendEmojiSet.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -668,21 +677,24 @@ public class MapActivity extends AppCompatActivity {
 
         ivReceiveEmoji.startAnimation(sendEmojiSet);
 
-
     }
 
     private void receiveOfflineEmoji(final Queue<String> queue) {
 
         String emojiName = queue.remove();
+
         switch (emojiName) {
-            case "e1":
+            case "e0":
                 Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                break;
+            case "e1":
+                Glide.with(this).load(R.drawable.emoji_cry).into(ivReceiveEmoji);
                 break;
             case "e2":
-                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                Glide.with(this).load(R.drawable.emoji_love).into(ivReceiveEmoji);
                 break;
             case "e3":
-                Glide.with(this).load(R.drawable.shit).into(ivReceiveEmoji);
+                Glide.with(this).load(R.drawable.emoji_boring).into(ivReceiveEmoji);
                 break;
             default:
                 break;
@@ -746,7 +758,7 @@ public class MapActivity extends AppCompatActivity {
             QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
             Picasso.with(MapActivity.this).
-                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!200x200r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 

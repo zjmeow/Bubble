@@ -64,11 +64,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:paddingBottom="50dp"
         android:visibility="gone">
 
         <ImageView
-            android:layout_width="96dp"
-            android:layout_height="96dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:gravity="center"
             android:src="@drawable/user_bubble"
 
@@ -76,10 +77,10 @@
 
         <com.qmuiteam.qmui.widget.QMUIRadiusImageView
             android:id="@+id/iv_map_bubble_head"
-            android:layout_width="62.4dp"
-            android:layout_height="62.4dp"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="13.4dp"
+            android:layout_marginTop="10.5dp"
             android:src="@mipmap/test"
 
 

@@ -1,49 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.stonymoon.bubble.view.MyFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fl_map_emoji"
     android:layout_width="match_parent"
-    android:layout_height="150dp"
+    android:layout_height="210dp"
     android:layout_gravity="bottom"
-    android:layout_marginBottom="-150dp"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical"
 
+
     >
 
+
     <LinearLayout
+
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="150dp"
         android:layout_gravity="bottom"
-        android:background="#FFF"
+        android:background="@drawable/shape_corner_up"
         android:clipChildren="false"
-        android:clipToPadding="false">
+        android:clipToPadding="false"
+        android:gravity="center|left"
+        android:paddingTop="18dp">
 
         <ImageView
             android:id="@+id/iv_map_emoji0"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:layout_marginLeft="100dp"
+            android:layout_margin="16dp"
+
             android:src="@drawable/shit" />
 
         <ImageView
             android:id="@+id/iv_map_emoji1"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:src="@drawable/shit" />
+            android:layout_marginRight="16dp"
+            android:src="@drawable/emoji_cry" />
 
         <ImageView
             android:id="@+id/iv_map_emoji2"
             android:layout_width="56dp"
             android:layout_height="56dp"
-            android:src="@drawable/shit" />
+            android:layout_marginRight="16dp"
+            android:src="@drawable/emoji_love" />
+
+        <ImageView
+            android:id="@+id/iv_map_emoji3"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:src="@drawable/emoji_boring" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/iv_map_message"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:src="@drawable/message" />
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="right"
+            android:layout_margin="20dp"
+            android:src="@drawable/bottom_message" />
+
 
     </LinearLayout>
 
@@ -52,6 +72,7 @@
         android:id="@+id/iv_bottom_sheet_big_emoji"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:src="@drawable/shit" />
+        android:layout_marginLeft="8dp"
+        android:src="@drawable/smile" />
 
 </com.stonymoon.bubble.view.MyFrameLayout>
