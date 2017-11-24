@@ -92,14 +92,17 @@
             android:layout_weight="1"
             android:background="@color/textBackground" />
 
-        <Button
-            android:id="@+id/btn_chat_send"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
+
+        <ImageView
+            android:id="@+id/iv_chat_send"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
-            android:text="发送"
+            android:layout_margin="8dp"
+            android:src="@drawable/fly"
 
             />
+
     </LinearLayout>
 
 </com.stonymoon.bubble.view.ChatView>

@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -35,7 +36,7 @@ public class ChatView extends RelativeLayout {
     private MessageList mMsgList;
     private LinearLayout mMenuLl;
     private PullToRefreshLayout mPtrLayout;
-    private Button button;
+    private ImageView ivSend;
 
     private EditText editText;
     private boolean mHasInit;
@@ -59,7 +60,7 @@ public class ChatView extends RelativeLayout {
     }
 
     public void initModule() {
-        button = (Button) findViewById(R.id.btn_chat_send);
+        ivSend = (ImageView) findViewById(R.id.iv_chat_send);
         editText = (EditText) findViewById(R.id.et_chat_input);
         mMsgList = (MessageList) findViewById(R.id.msg_list);
         mMenuLl = (LinearLayout) findViewById(R.id.aurora_ll_menuitem_container);
@@ -152,7 +153,7 @@ public class ChatView extends RelativeLayout {
     }
 
     public void setOnSendClickListener(View.OnClickListener listener) {
-        button.setOnClickListener(listener);
+        ivSend.setOnClickListener(listener);
 
     }
 

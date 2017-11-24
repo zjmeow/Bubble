@@ -131,7 +131,7 @@ public class MapActivity extends AppCompatActivity {
     //管理聚合地图
     private ClusterManager<MyItem> mClusterManager;
     private List<MyItem> myItems = new ArrayList<>();
-    private List<MyItem> seenItems = new ArrayList<>();
+    private List<MyItem> cacheItems = new ArrayList<>();
     private HashMap<String, Queue<String>> receivedEmojiMap = new HashMap<>();
     private boolean isFirstLoacted = true;
     private boolean isSelected = false;
@@ -400,7 +400,7 @@ public class MapActivity extends AppCompatActivity {
                 LocationBean.PoisBean bean = item.getPoisBean();
                 chosenUserBean = bean;
                 mClusterManager.clearItems();
-                baiduMap.clear();
+
                 mClusterManager.cluster();
                 mLocationClient.stop();
                 openBottomSheet();
@@ -762,6 +762,19 @@ public class MapActivity extends AppCompatActivity {
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            //todo 更好的equals
+            MyItem that = (MyItem) obj;
+            if (this.getPosition().latitude == that.getPosition().latitude &&
+                    this.getPosition().longitude == that.getPosition().longitude) {
+                return true;
+
+            }
+
+
+            return false;
+        }
     }
 
     private class MyLocationListener extends BDAbstractLocationListener {
@@ -814,18 +827,46 @@ public class MapActivity extends AppCompatActivity {
                 public void onNext(Object tag, String response) {
                     Gson gson = new Gson();
                     LocationBean bean = gson.fromJson(response, LocationBean.class);
-                    final BaiduMap baiduMap = mapView.getMap();
                     parameters.clear();
                     if (bean.getPois() == null) {
                         return;
                     }
-                    baiduMap.clear();
-                    mClusterManager.clearItems();
+                    //这里在for循环里判断，如果有移动则重绘，否则不重绘
+                    //需要判断是否存在新的用户，然后判断旧的用户是否移动，移动则重绘。
+                    //mClusterManager.clearItems();
                     myItems.clear();
                     for (LocationBean.PoisBean b : bean.getPois()) {
                         myItems.add(new MyItem(b));
                     }
-                    addMarkers(myItems);
+                    for (MyItem newItem : myItems) {
+                        Boolean isInMap = false;
+                        for (MyItem mapItem : cacheItems) {
+                            //如果两个id相同，判断是否移动
+                            if (newItem.getPoisBean().getId().equals(mapItem.getPoisBean().getId())) {
+                                isInMap = true;
+                                if (!mapItem.equals(newItem)) {
+                                    //发生了移动，重绘
+                                    mClusterManager.removeItem(mapItem);
+                                    mClusterManager.addItem(newItem);
+                                } else {
+                                    break;
+                                }
+
+                            }
+
+                        }
+
+                        if (!isInMap) {
+                            mClusterManager.addItem(newItem);
+                        }
+
+
+                    }
+                    cacheItems.clear();
+                    cacheItems.addAll(myItems);
+                    mClusterManager.cluster();
+                    //addMarkers(myItems);
+
 
                 }
 

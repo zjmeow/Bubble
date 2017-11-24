@@ -4,10 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="210dp"
     android:layout_gravity="bottom"
+    android:layout_marginBottom="-210dp"
     android:clipChildren="false"
     android:clipToPadding="false"
     android:orientation="vertical"
-
 
     >
 
