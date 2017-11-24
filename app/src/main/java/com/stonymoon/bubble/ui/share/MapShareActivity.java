@@ -69,6 +69,16 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         ShareActivity.startActivity(this, latitude, longitude);
     }
 
+    @OnClick(R.id.fab_map_refresh)
+    void fresh() {
+        itemList.clear();
+        seenItems.clear();
+        initBubble();
+
+
+    }
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -266,5 +276,6 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         }
 
     }
+
 
 }

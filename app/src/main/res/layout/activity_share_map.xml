@@ -12,6 +12,14 @@
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab_map_share"
         android:layout_width="56dp"
-        android:layout_height="56dp" />
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|right" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_map_refresh"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom|left" />
+
 
 </FrameLayout>
