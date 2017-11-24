@@ -8,6 +8,7 @@
     </style>
 
     <style name="AppTheme.WhiteStatus">
+        <item name="android:showDividers">middle</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>

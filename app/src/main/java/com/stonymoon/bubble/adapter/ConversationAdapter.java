@@ -1,6 +1,7 @@
 package com.stonymoon.bubble.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +94,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
         TextView tvFirst;
         TextView tvTime;
         TextView tvNewMessage;
-        RelativeLayout relativeLayout;
+        ConstraintLayout relativeLayout;
         public ViewHolder(View view) {
             super(view);
             ivAvatar = (QMUIRadiusImageView) view.findViewById(R.id.msg_item_head_icon);
@@ -102,7 +103,7 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             tvTime = (TextView) view.findViewById(R.id.msg_item_date);
 
             tvNewMessage = (TextView) view.findViewById(R.id.new_msg_number);
-            relativeLayout = (RelativeLayout) view.findViewById(R.id.rl_msg_item);
+            relativeLayout = (ConstraintLayout) view.findViewById(R.id.rl_msg_item);
 
 
 

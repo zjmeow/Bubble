@@ -52,6 +52,7 @@
 
 
         <LinearLayout
+            android:id="@+id/identification_code_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="46dp"
@@ -87,6 +88,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
+                android:layout_marginTop="3dp"
                 android:width="110dp"
                 android:background="#F7F7F7"
                 android:gravity="center"
@@ -98,16 +100,15 @@
 
 
         </LinearLayout>
-
         <View
             android:id="@+id/user_line"
             android:layout_width="138dp"
             android:layout_height="0.67dp"
-            android:layout_below="@id/wrapper_login_phone_number"
             android:layout_marginLeft="46dp"
             android:layout_marginRight="46dp"
             android:layout_marginTop="10dp"
             android:background="@color/inputBackground" />
+
 
         <Button
             android:id="@+id/btn_register_next"

@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.callback.GetUserInfoListCallback;
 import cn.jpush.im.android.api.model.UserInfo;
@@ -113,6 +114,11 @@ public class FriendActivity extends AppCompatActivity {
         return gestureDetector.onTouchEvent(event);
     }
 
+
+    @OnClick(R.id.iv_friend_back)
+    void back() {
+        finish();
+    }
 
 
 }

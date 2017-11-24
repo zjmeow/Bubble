@@ -22,7 +22,10 @@
         <item name="android:textColor">#ff7f7f7f</item>
     </style>
 
-    <style name="AppTheme.WhiteStatus" parent="AppTheme" />
+    <style name="AppTheme.WhiteStatus" parent="AppTheme">
+        <item name="android:showDividers">middle</item>
+
+    </style>
 
 
 </resources>

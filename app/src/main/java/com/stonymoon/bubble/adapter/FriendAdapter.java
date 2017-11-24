@@ -1,6 +1,7 @@
 package com.stonymoon.bubble.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,10 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.ui.friend.ChatActivity;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -34,7 +38,7 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         }
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_friend, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
@@ -59,21 +63,26 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         UserInfo bean = userList.get(position);
         Picasso.with(mContext)
                 .load(bean.getExtra("url"))
-                .into(holder.imageView);
+                .into(holder.ivAvatar);
         //.placeholder(R.drawable.icon_placeholder)
-        holder.titleView.setText(bean.getUserName());
+        holder.tvName.setText(bean.getDisplayName());
+        holder.tvSign.setText(bean.getSignature());
+
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView titleView;
-        LinearLayout linearLayout;
+        QMUIRadiusImageView ivAvatar;
+        TextView tvName;
+        TextView tvSign;
+        ConstraintLayout constraintLayout;
 
         public ViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view.findViewById(R.id.iv_friend_head);
-            titleView = (TextView) view.findViewById(R.id.tv_friend_text);
-            linearLayout = (LinearLayout) view.findViewById(R.id.ll_share_item);
+            ivAvatar = (QMUIRadiusImageView) view.findViewById(R.id.iv_friend_head);
+            tvName = (TextView) view.findViewById(R.id.tv_friend_text);
+            constraintLayout = (ConstraintLayout) view.findViewById(R.id.ll_friend_item);
+
+            tvSign = (TextView) view.findViewById(R.id.tv_friend_sign);
 
         }
 
