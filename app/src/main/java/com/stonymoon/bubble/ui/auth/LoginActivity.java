@@ -74,7 +74,6 @@ public class LoginActivity extends Activity {
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        QMUIStatusBarHelper.translucent(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);

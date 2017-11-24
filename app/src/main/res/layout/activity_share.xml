@@ -13,11 +13,14 @@
 
         <ImageView
             android:id="@+id/iv_share_back"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/arrow" />
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/navigation_icon" />
 
         <View
             android:layout_width="0dp"
@@ -25,6 +28,7 @@
             android:layout_weight="1" />
 
         <TextView
+
             android:id="@+id/tv_share_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -143,7 +143,6 @@ public class ShareActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
         getLocation();

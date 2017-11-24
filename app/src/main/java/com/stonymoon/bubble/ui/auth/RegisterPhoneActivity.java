@@ -47,7 +47,6 @@ public class RegisterPhoneActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_register_phone);
         ButterKnife.bind(this);
         phone = getIntent().getStringExtra("phone");

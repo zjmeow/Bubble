@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
@@ -27,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.jiguang.imui.commons.ImageLoader;
 import cn.jiguang.imui.commons.models.IMessage;
 import cn.jiguang.imui.messages.MsgListAdapter;
@@ -52,7 +56,6 @@ public class ChatActivity extends AppCompatActivity {
     //读取页面条数
     private int page = 0;
 
-
     public static void startActivity(Context context, String phone, String username, String url) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("phone", phone);
@@ -69,11 +72,16 @@ public class ChatActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.iv_chat_back)
+    void back() {
+        finish();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        ButterKnife.bind(this);
         initUser();
         mChatView = (ChatView) findViewById(R.id.chat_view);
         editText = (EditText) findViewById(R.id.et_chat_input);

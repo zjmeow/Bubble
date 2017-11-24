@@ -150,14 +150,17 @@
             </intent-filter>
         </activity>
         <activity
+
             android:name=".ui.friend.MapActivity"
             android:launchMode="singleTask" />
         <activity
             android:name=".ui.auth.LoginActivity"
             android:label="@string/title_activity_login"
+            android:theme="@style/AppTheme.WhiteStatus"
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.auth.RegisterActivity"
+            android:theme="@style/AppTheme.WhiteStatus"
             android:windowSoftInputMode="stateVisible|adjustResize"
 
 
@@ -176,18 +179,27 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.friend.FriendActivity" />
+        <activity
+            android:name=".ui.friend.FriendActivity"
+            android:theme="@style/AppTheme.WhiteStatus" />
         <activity android:name=".ui.share.BubbleDetailActivity" />
         <activity
             android:name=".ui.friend.ChatActivity"
+            android:theme="@style/AppTheme.WhiteStatus"
             android:windowSoftInputMode="stateHidden|adjustResize"
 
             />
-        <activity android:name=".ui.friend.MessageListActivity" />
-        <activity android:name=".ui.share.ShareActivity" />
+        <activity
+            android:name=".ui.friend.MessageListActivity"
+
+            android:theme="@style/AppTheme.WhiteStatus" />
+        <activity
+            android:name=".ui.share.ShareActivity"
+            android:theme="@style/AppTheme.WhiteStatus" />
         <activity android:name=".ui.common.PhotoActivity" />
         <activity
             android:name=".ui.auth.RegisterPhoneActivity"
+            android:theme="@style/AppTheme.WhiteStatus"
             android:windowSoftInputMode="stateVisible|adjustResize"
 
             />

@@ -3,7 +3,9 @@
     android:id="@+id/rl_msg_item"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true">
 
 
     <LinearLayout

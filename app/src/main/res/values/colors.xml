@@ -5,6 +5,8 @@
     <color name="colorAccent">#00A8E1</color>
     <color name="primaryText">#666666</color>
     <color name="secondText">#949494</color>
+    <color name="titleText">#1287C9</color>
+
     <color name="background">#EAEAEA</color>
     <color name="textBackground">#FCFCFC</color>
 

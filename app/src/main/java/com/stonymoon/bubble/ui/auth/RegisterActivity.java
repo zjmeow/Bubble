@@ -45,7 +45,6 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
 

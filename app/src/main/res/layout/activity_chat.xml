@@ -8,19 +8,22 @@
     android:background="@color/textBackground"
     android:orientation="vertical">
 
-    <FrameLayout
+    <android.support.v7.widget.Toolbar
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="#FFF">
 
         <ImageView
-            android:id="@+id/iv_share_back"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:id="@+id/iv_chat_back"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_gravity="left|center"
             android:layout_marginLeft="16dp"
-            android:src="@drawable/arrow" />
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:src="@drawable/navigation_icon" />
 
         <TextView
             android:id="@+id/tv_share_submit"
@@ -28,10 +31,11 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="bubble"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/titleText"
             android:textSize="20sp" />
 
-    </FrameLayout>
+
+    </android.support.v7.widget.Toolbar>
 
 
     <cn.jiguang.imui.messages.ptr.PullToRefreshLayout
