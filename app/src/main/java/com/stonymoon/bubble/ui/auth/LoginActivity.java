@@ -2,9 +2,11 @@ package com.stonymoon.bubble.ui.auth;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +27,7 @@ import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.view.MyDialog;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -36,6 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.api.BasicCallback;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -70,6 +74,7 @@ public class LoginActivity extends Activity {
         Intent intent = new Intent(this, RegisterPhoneActivity.class);
         startActivity(intent);
     }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +143,8 @@ public class LoginActivity extends Activity {
         parameters.put("password", password);
 
 
+        final MyDialog myDialog = new MyDialog(LoginActivity.this);
+        myDialog.showProgress("登录中");
         HttpUtil.sendHttpRequest(this)
                 .rxPost(url, parameters, new RxStringCallback() {
                     @Override
@@ -148,8 +155,8 @@ public class LoginActivity extends Activity {
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
-                                Toast.makeText(LoginActivity.this, "登录成功" + s, Toast.LENGTH_SHORT).show();
                                 MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
+                                myDialog.success("登陆成功");
                                 finish();
 
                             }
@@ -159,7 +166,7 @@ public class LoginActivity extends Activity {
 
                     @Override
                     public void onError(Object tag, Throwable e) {
-                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        myDialog.fail("登录失败");
                         LogUtil.e(TAG, e.getMessage());
                     }
 
@@ -196,7 +203,6 @@ public class LoginActivity extends Activity {
 
 
     }
-
 
 
 }
