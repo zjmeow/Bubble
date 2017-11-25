@@ -13,13 +13,14 @@
 
         <ImageView
             android:id="@+id/iv_share_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginLeft="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
+            android:padding="10dp"
             android:src="@drawable/navigation_icon" />
 
         <View
@@ -35,7 +36,7 @@
             android:layout_gravity="center"
             android:layout_marginRight="16dp"
             android:text="分享"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@drawable/blue_text_selector"
             android:textSize="20sp" />
     </LinearLayout>
 

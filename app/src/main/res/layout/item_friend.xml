@@ -29,7 +29,6 @@
         android:id="@+id/tv_friend_text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_weight="1"
         android:maxLines="1"
@@ -37,7 +36,8 @@
         android:textColor="#2C2C2C"
         android:textSize="16sp"
         app:layout_constraintStart_toEndOf="@+id/iv_friend_head"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="80dp" />
 
 
     <TextView
@@ -45,7 +45,6 @@
         android:layout_width="wrap_content"
         android:layout_height="18dp"
         android:layout_marginBottom="16dp"
-        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:ems="10"
         android:maxLines="1"
@@ -54,17 +53,18 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_friend_head"
-        app:layout_constraintTop_toBottomOf="@+id/tv_friend_text" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_friend_text"
+        tools:layout_editor_absoluteX="80dp" />
 
 
     <View
-        android:layout_width="match_parent"
+        android:layout_width="344dp"
         android:layout_height="1dp"
 
-        android:layout_marginStart="80dp"
         android:background="@color/textBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteX="8dp" />
 
 
 </android.support.constraint.ConstraintLayout>

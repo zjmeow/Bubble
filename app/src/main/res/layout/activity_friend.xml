@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_friend"
     android:layout_width="match_parent"
@@ -11,17 +12,20 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFF">
+        android:background="#FFF"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
+
 
         <ImageView
             android:id="@+id/iv_friend_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="left|center"
             android:layout_marginLeft="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
+            android:padding="10dp"
             android:src="@drawable/navigation_icon" />
 
         <TextView
@@ -36,6 +40,11 @@
 
     </android.support.v7.widget.Toolbar>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/tool_bar_shadow" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_friend"

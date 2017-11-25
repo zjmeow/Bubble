@@ -12,17 +12,21 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFF">
+        android:background="#FFF"
+
+
+        >
 
         <ImageView
             android:id="@+id/iv_chat_back"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="left|center"
             android:layout_marginLeft="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
+            android:padding="10dp"
             android:src="@drawable/navigation_icon" />
 
         <TextView
@@ -72,7 +76,6 @@
             app:showReceiverDisplayName="SHOW"
             app:showSenderDisplayName="HIDE">
 
-
         </cn.jiguang.imui.messages.MessageList>
 
     </cn.jiguang.imui.messages.ptr.PullToRefreshLayout>
@@ -95,13 +98,20 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_weight="1"
-            android:background="@color/textBackground" />
+            android:background="@drawable/rounded_edittext"
+            android:maxLines="5"
+            android:paddingBottom="3dp"
+            android:paddingLeft="12dp"
+            android:paddingRight="12dp"
+            android:paddingTop="3dp"
+            android:text="asasdasdasdasdasd" />
 
 
         <ImageView
+
             android:id="@+id/iv_chat_send"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:src="@drawable/fly"

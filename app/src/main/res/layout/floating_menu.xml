@@ -12,21 +12,24 @@
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/ghost" />
+        android:src="@drawable/ghost"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_floating_menu_2"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/message" />
+        android:src="@drawable/message"
+        android:visibility="gone" />
 
     <ImageView
         android:id="@+id/iv_floating_menu_1"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_gravity="center|bottom"
-        android:src="@drawable/friends" />
+        android:src="@drawable/friends"
+        android:visibility="gone" />
 
 
     <ImageView

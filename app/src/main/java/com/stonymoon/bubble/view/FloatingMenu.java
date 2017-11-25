@@ -1,5 +1,7 @@
 package com.stonymoon.bubble.view;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
@@ -48,6 +50,9 @@ public class FloatingMenu extends FrameLayout {
     }
 
     private void open() {
+        iv1.setVisibility(View.VISIBLE);
+        iv2.setVisibility(View.VISIBLE);
+        iv3.setVisibility(View.VISIBLE);
         ObjectAnimator animator1 = ObjectAnimator.ofFloat(
                 iv1, "translationY",
                 -moveDistance);
@@ -87,6 +92,18 @@ public class FloatingMenu extends FrameLayout {
         set.setDuration(400);
         set.setInterpolator(new BounceInterpolator());
         set.playTogether(animator0, animator1, animator2, animator3);
+        set.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                iv1.setVisibility(View.GONE);
+                iv2.setVisibility(View.GONE);
+                iv3.setVisibility(View.GONE);
+
+            }
+        });
+
+
+
         set.start();
 
     }

@@ -31,6 +31,7 @@ import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.view.MyDialog;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPhotoTool;
@@ -95,20 +96,16 @@ public class ShareActivity extends AppCompatActivity {
         String title = titleEt.getText().toString();
         String content = contentEt.getText().toString();
         if (title.equals("")) {
-            QMUITipDialog tipDialog = new QMUITipDialog.Builder(ShareActivity.this)
-                    .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
-                    .setTipWord("请输入标题")
-                    .create();
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("请输入标题")
+                    .setConfirmText("嗯")
+                    .show();
             return;
 
-        } else if (imageUrl == null) {
-            QMUITipDialog tipDialog = new QMUITipDialog.Builder(ShareActivity.this)
-                    .setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO)
-                    .setTipWord("来，上传一张图片")
-                    .create();
-            return;
         }
 
+        final MyDialog myDialog = new MyDialog(this);
+        myDialog.showProgress("发送中");
         String token = AuthUtil.getToken();
         parameters.put("token", token);
         parameters.put("content", content);
@@ -121,18 +118,14 @@ public class ShareActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
-                new SweetAlertDialog(ShareActivity.this, SweetAlertDialog.SUCCESS_TYPE)
-                        .setTitleText("Good job!")
-                        .setContentText("You clicked the button!")
-                        .show();
+                myDialog.success("发送成功");
                 finish();
-
             }
 
             @Override
             public void onError(Object tag, Throwable e) {
                 LogUtil.e(TAG, e.toString());
-                Toast.makeText(ShareActivity.this, "发送失败", Toast.LENGTH_SHORT).show();
+                myDialog.fail("发送失败");
             }
 
             @Override

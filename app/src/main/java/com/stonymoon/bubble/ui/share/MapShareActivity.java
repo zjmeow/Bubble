@@ -75,7 +75,6 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         seenItems.clear();
         initBubble();
 
-
     }
 
 

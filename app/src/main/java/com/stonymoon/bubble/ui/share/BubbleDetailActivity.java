@@ -3,7 +3,11 @@ package com.stonymoon.bubble.ui.share;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,9 +47,8 @@ public class BubbleDetailActivity extends AppCompatActivity {
     TextView tvAuthorName;
     @BindView(R.id.tv_bubble_detail_time)
     TextView tvTime;
-
-
-
+    @BindView(R.id.toolbar_bubble_detail)
+    Toolbar toolbar;
     private Context mContext;
     private Map parameters = new HashMap();
     private BubbleBean.ContentBean bean;
@@ -57,6 +60,16 @@ public class BubbleDetailActivity extends AppCompatActivity {
         context.startActivity(intent);
 
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     @OnClick(R.id.iv_bubble_detail_head)
@@ -87,6 +100,17 @@ public class BubbleDetailActivity extends AppCompatActivity {
         tvContent.setText(bean.getContent());
         tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
         loadUser();
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("");
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+        }
+
+
 
     }
 

@@ -62,9 +62,9 @@ import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
 import com.stonymoon.bubble.view.FloatingMenu;
+import com.stonymoon.bubble.view.MyDialog;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
-import com.vondear.rxtools.RxBroadcastTool;
 import com.vondear.rxtools.RxImageTool;
 import com.vondear.rxtools.RxTool;
 
@@ -74,7 +74,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -96,8 +95,6 @@ import static com.stonymoon.bubble.util.MapUtil.zoomIn;
 //本地图显示附近的人
 //动态地图另外开一个地图显示
 
-//todo 定位完成才能进入主页面
-//todo 维护可见列表
 public class MapActivity extends AppCompatActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
@@ -145,7 +142,7 @@ public class MapActivity extends AppCompatActivity {
     private AnimatorSet receiveEmojiSet;
     private Map<String, Object> parameters = new HashMap<>();
     private LatLng myLatLng = new LatLng(0, 0);
-
+    private MyDialog myDialog;
 
     private MyCallback callback = new MyCallback(this);
 
@@ -226,7 +223,6 @@ public class MapActivity extends AppCompatActivity {
                             .add(emojiName);
                 }
 
-                //todo 判断并且添加多种表情
                 break;
 
         }
@@ -255,7 +251,6 @@ public class MapActivity extends AppCompatActivity {
                                 .add(customContent.getStringValue("emoji"));
                     }
 
-                    //todo 判断并且添加多种表情
                     break;
 
             }
@@ -317,6 +312,10 @@ public class MapActivity extends AppCompatActivity {
         RxTool.init(this);
         ivBigEmoji.bringToFront();
         setFloatingMenu();
+        myDialog = new MyDialog(this);
+        myDialog.showProgress("地图加载中");
+
+
     }
 
     private void setFloatingMenu() {
@@ -801,6 +800,7 @@ public class MapActivity extends AppCompatActivity {
             myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
             //拿到百度地图上定位的id
             if (isFirstLoacted) {
+                myDialog.getInstance().dismiss();
                 zoomIn(mapView.getMap(), myLatLng, 30f);
                 isFirstLoacted = false;
             }
