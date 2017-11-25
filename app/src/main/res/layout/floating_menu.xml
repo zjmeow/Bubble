@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="260dp"
     android:clipChildren="false"
@@ -11,7 +11,8 @@
         android:id="@+id/iv_floating_menu_3"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/ghost"
         android:visibility="gone" />
 
@@ -19,7 +20,8 @@
         android:id="@+id/iv_floating_menu_2"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/message"
         android:visibility="gone" />
 
@@ -27,7 +29,8 @@
         android:id="@+id/iv_floating_menu_1"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/friends"
         android:visibility="gone" />
 
@@ -36,8 +39,9 @@
         android:id="@+id/iv_floating_menu_menu"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_gravity="center|bottom"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:src="@drawable/menu" />
 
 
-</FrameLayout>
+</RelativeLayout>

@@ -12,7 +12,7 @@ public class MyDialog {
 
     public MyDialog(Context context) {
         pDialog = new SweetAlertDialog(context, SweetAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.BLUE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#00A8E1"));
     }
 
     public void showProgress(String title) {

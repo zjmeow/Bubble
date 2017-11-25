@@ -116,18 +116,21 @@ public class FloatingMenu extends FrameLayout {
         iv1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                close();
                 listener.onFirstClick();
             }
         });
         iv2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                close();
                 listener.onSecondClick();
             }
         });
         iv3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
+                close();
                 listener.onThirdClick();
             }
         });

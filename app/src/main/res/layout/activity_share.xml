@@ -40,6 +40,11 @@
             android:textSize="20sp" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/toolbar"
+        android:background="@drawable/tool_bar_shadow" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="180dp"

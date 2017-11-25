@@ -42,6 +42,13 @@
     </android.support.v7.widget.Toolbar>
 
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:layout_below="@+id/title_container"
+        android:background="@drawable/tool_bar_shadow" />
+
+
     <cn.jiguang.imui.messages.ptr.PullToRefreshLayout
         android:id="@+id/pull_to_refresh_layout"
         android:layout_width="match_parent"
@@ -99,12 +106,11 @@
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
-            android:maxLines="5"
+            android:maxLines="1"
             android:paddingBottom="3dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:paddingTop="3dp"
-            android:text="asasdasdasdasdasd" />
+            android:paddingTop="3dp" />
 
 
         <ImageView

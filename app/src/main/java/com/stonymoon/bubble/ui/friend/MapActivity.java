@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
@@ -18,26 +17,20 @@ import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.BounceInterpolator;
 import android.view.animation.ScaleAnimation;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
 import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 
@@ -53,6 +46,7 @@ import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
+import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MapUtil;
@@ -214,7 +208,7 @@ public class MapActivity extends AppCompatActivity {
                     receiveEmoji(emojiName);
 
                 } else if (receivedEmojiMap.get(phone) == null) {
-                    receivedEmojiMap.put(phone, new LinkedList());
+                    receivedEmojiMap.put(phone, new LinkedList<String>());
                     receivedEmojiMap.get(phone)
                             .add(emojiName);
 
@@ -242,7 +236,7 @@ public class MapActivity extends AppCompatActivity {
                     String phone = message.getFromUser().getUserName();
                     CustomContent customContent = (CustomContent) message.getContent();
                     if (receivedEmojiMap.get(phone) == null) {
-                        receivedEmojiMap.put(phone, new LinkedList());
+                        receivedEmojiMap.put(phone, new LinkedList<String>());
                         receivedEmojiMap.get(phone)
                                 .add(customContent.getStringValue("emoji"));
 
@@ -323,6 +317,8 @@ public class MapActivity extends AppCompatActivity {
         mFloatingMenu.setOnclickListener(new FloatingMenu.OnPictureClickListener() {
             @Override
             public void onFirstClick() {
+
+
                 FriendActivity.startActivity(MapActivity.this);
             }
 
@@ -497,7 +493,7 @@ public class MapActivity extends AppCompatActivity {
     void startProfile() {
         new QMUIDialog.MessageDialogBuilder(MapActivity.this)
                 .setTitle(chosenUserBean.getUsername())
-                .setMessage(chosenUserBean.getModifTime())
+                .setMessage(DateUtil.formatTime((chosenUserBean.getModifTime())))
                 .addAction("查看资料", new QMUIDialogAction.ActionListener() {
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {

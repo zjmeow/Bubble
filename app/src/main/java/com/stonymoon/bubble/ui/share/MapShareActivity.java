@@ -69,13 +69,21 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         ShareActivity.startActivity(this, latitude, longitude);
     }
 
-    @OnClick(R.id.fab_map_refresh)
+    @OnClick(R.id.iv_map_refresh)
     void fresh() {
         itemList.clear();
         seenItems.clear();
         initBubble();
 
     }
+
+    @OnClick(R.id.iv_share_map_location)
+    void locate() {
+        zoomIn(mBaiduMap, new LatLng(latitude, longitude), 30);
+    }
+
+
+
 
 
 
