@@ -97,6 +97,8 @@
                     android:text="这个是内容"
                     android:textColor="@color/primaryText"
                     android:textSize="16sp" />
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
