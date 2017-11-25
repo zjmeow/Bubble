@@ -124,7 +124,7 @@
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="36dp"
-                android:background="@drawable/shape"
+                android:background="@drawable/blue_btn_selector"
                 android:text="注册"
                 android:textColor="#fff"
                 android:textSize="18sp" />

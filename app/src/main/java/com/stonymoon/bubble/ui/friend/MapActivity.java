@@ -84,9 +84,11 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.content.CustomContent;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
+import cn.jpush.im.android.api.event.NotificationClickEvent;
 import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
+import cn.jpush.im.android.api.model.UserInfo;
 
 import static com.stonymoon.bubble.util.MapUtil.clearMap;
 import static com.stonymoon.bubble.util.MapUtil.zoomIn;
@@ -274,6 +276,17 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
+    public void onEvent(NotificationClickEvent event) {
+        //获取事件发生的会话对象
+        LogUtil.v("MapActivity", "receive friend" + event.toString());
+        UserInfo info = event.getMessage().getFromUser();
+        ChatActivity.startActivity(this, info.getUserName());
+
+    }
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -304,9 +317,6 @@ public class MapActivity extends AppCompatActivity {
         RxTool.init(this);
         ivBigEmoji.bringToFront();
         setFloatingMenu();
-        //监听网络状态
-        RxBroadcastTool.initRegisterReceiverNetWork(this);
-
     }
 
     private void setFloatingMenu() {
@@ -484,7 +494,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.map_bubble)
+    @OnClick(R.id.iv_map_bubble_head)
     void startProfile() {
         new QMUIDialog.MessageDialogBuilder(MapActivity.this)
                 .setTitle(chosenUserBean.getUsername())
@@ -757,8 +767,11 @@ public class MapActivity extends AppCompatActivity {
             RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
             QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
             //加载小图
+            //todo 好的holder
             Picasso.with(MapActivity.this).
-                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").into(imageView);
+                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").
+                    placeholder(R.mipmap.test)
+                    .into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }
 

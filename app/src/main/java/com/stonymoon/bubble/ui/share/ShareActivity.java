@@ -50,6 +50,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.pedant.SweetAlert.SweetAlertDialog;
 
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
@@ -120,7 +121,10 @@ public class ShareActivity extends AppCompatActivity {
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
-                Toast.makeText(ShareActivity.this, response, Toast.LENGTH_SHORT).show();
+                new SweetAlertDialog(ShareActivity.this, SweetAlertDialog.SUCCESS_TYPE)
+                        .setTitleText("Good job!")
+                        .setContentText("You clicked the button!")
+                        .show();
                 finish();
 
             }

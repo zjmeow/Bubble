@@ -19,7 +19,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.LoginBean;
 import com.stonymoon.bubble.ui.friend.MapActivity;
@@ -28,7 +27,6 @@ import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
-import com.unstoppable.submitbuttonview.SubmitButton;
 
 import java.util.HashMap;
 import java.util.Map;
