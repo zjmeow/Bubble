@@ -12,7 +12,7 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFF"
+        android:background="@color/colorPrimary"
 
 
         >
@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="bubble"
-            android:textColor="@color/titleText"
-            android:textSize="20sp" />
+            android:textColor="#FFF"
+            android:textSize="18sp" />
 
 
     </android.support.v7.widget.Toolbar>
@@ -90,7 +90,7 @@
     <LinearLayout
         android:id="@+id/chat_input"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:background="#FFF"
         android:orientation="horizontal"
@@ -103,21 +103,22 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginRight="4dp"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext"
             android:maxLines="1"
-            android:paddingBottom="3dp"
+            android:paddingBottom="5dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:paddingTop="3dp" />
+            android:paddingTop="5dp"
+            android:text="asdasdasdasdasdasd" />
 
 
         <ImageView
 
             android:id="@+id/iv_chat_send"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_gravity="center"
             android:layout_margin="8dp"
             android:src="@drawable/fly"

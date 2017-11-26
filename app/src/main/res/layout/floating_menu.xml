@@ -13,7 +13,7 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/ghost"
+        android:src="@drawable/ghost_selector"
         android:visibility="gone" />
 
     <ImageView
@@ -22,7 +22,7 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/message"
+        android:src="@drawable/message_selector"
         android:visibility="gone" />
 
     <ImageView
@@ -31,14 +31,14 @@
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/friends"
+        android:src="@drawable/friends_selector"
         android:visibility="gone" />
 
 
     <ImageView
         android:id="@+id/iv_floating_menu_menu"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:src="@drawable/menu" />

@@ -179,18 +179,18 @@
 
         <activity
             android:name=".ui.friend.FriendActivity"
-            android:theme="@style/AppTheme.WhiteStatus" />
+            android:theme="@style/AppTheme.BlueStatus" />
         <activity android:name=".ui.share.BubbleDetailActivity" />
         <activity
             android:name=".ui.friend.ChatActivity"
-            android:theme="@style/AppTheme.WhiteStatus"
+            android:theme="@style/AppTheme.BlueStatus"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.friend.MessageListActivity"
-            android:theme="@style/AppTheme.WhiteStatus" />
+            android:theme="@style/AppTheme.BlueStatus" />
         <activity
             android:name=".ui.share.ShareActivity"
-            android:theme="@style/AppTheme.WhiteStatus" />
+            android:theme="@style/AppTheme.BlueStatus" />
         <activity android:name=".ui.common.PhotoActivity" />
         <activity
             android:name=".ui.auth.RegisterPhoneActivity"
@@ -199,7 +199,7 @@
         <activity android:name=".ui.common.EditActivity" />
         <activity
             android:name=".ui.share.ShareListActivity"
-            android:theme="@style/AppTheme.WhiteStatus" />
+            android:theme="@style/AppTheme.BlueStatus" />
         <activity android:name=".ui.common.SplashActivity"></activity>
     </application>
 

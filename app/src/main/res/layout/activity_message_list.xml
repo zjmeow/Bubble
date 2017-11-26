@@ -11,7 +11,7 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFF">
+        android:background="@color/colorPrimary">
 
         <ImageView
             android:id="@+id/iv_friend_back"
@@ -31,8 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="消息列表"
-            android:textColor="@color/titleText"
-            android:textSize="20sp" />
+            android:textColor="#FFF"
+            android:textSize="18sp" />
 
 
     </android.support.v7.widget.Toolbar>

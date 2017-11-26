@@ -15,5 +15,13 @@
         <item name="android:statusBarColor">@android:color/white</item>
     </style>
 
+    <style name="AppTheme.BlueStatus">
+        <item name="android:showDividers">middle</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
 
 </resources>

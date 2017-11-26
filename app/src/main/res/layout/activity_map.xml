@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_map"
     android:layout_width="match_parent"
@@ -14,46 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true" />
-
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:padding="16dp">
-
-        <ImageView
-            android:id="@+id/iv_map_switch"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentStart="true"
-            android:src="@drawable/switch_map"
-
-            />
-
-
-        <ImageView
-
-            android:id="@+id/iv_map_location"
-            android:layout_width="80dp"
-            android:layout_height="96dp"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:paddingBottom="16dp"
-            android:src="@drawable/locate"
-            />
-
-        <com.stonymoon.bubble.view.FloatingMenu
-            android:id="@+id/floating_menu_map"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            android:layout_gravity="bottom" />
-
-
-    </RelativeLayout>
 
 
     <RelativeLayout
@@ -86,7 +47,7 @@
 
     </RelativeLayout>
 
-    <include layout="@layout/bottom_sheet" />
+
 
     <ImageView
         android:id="@+id/iv_map_receive_emoji"
@@ -106,5 +67,45 @@
         android:src="@drawable/new_message"
         android:visibility="gone" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+
+        android:padding="30dp">
+
+        <ImageView
+            android:id="@+id/iv_map_switch"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/switch_selector"
+
+            />
+
+
+        <ImageView
+
+            android:id="@+id/iv_map_location"
+            android:layout_width="80dp"
+            android:layout_height="96dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingBottom="0dp"
+            android:src="@drawable/locate_selector" />
+
+        <com.stonymoon.bubble.view.FloatingMenu
+            android:id="@+id/floating_menu_map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="bottom" />
+
+
+    </RelativeLayout>
+
+    <include layout="@layout/bottom_sheet" />
 
 </android.support.design.widget.CoordinatorLayout>

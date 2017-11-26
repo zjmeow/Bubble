@@ -12,7 +12,7 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#FFF"
+        android:background="@color/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
 
@@ -34,8 +34,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="我的好友"
-            android:textColor="@color/titleText"
-            android:textSize="20sp" />
+            android:textColor="#FFF"
+            android:textSize="18sp" />
 
 
     </android.support.v7.widget.Toolbar>
