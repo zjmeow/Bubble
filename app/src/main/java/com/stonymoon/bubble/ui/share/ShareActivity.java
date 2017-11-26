@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -66,12 +67,15 @@ public class ShareActivity extends AppCompatActivity {
     EditText contentEt;
     @BindView(R.id.iv_share_picture)
     ImageView shareImage;
+    @BindView(R.id.checkBox_share)
+    CheckBox checkBox;
+
     private double latitude;
     private double longitude;
     private Uri resultUri;
     private UploadManager mUploadManager;
     private String imageUrl;
-    //todo 匿名
+
 
     public static void startActivity(Context context, double latitude, double longitude) {
         Intent intent = new Intent(context, ShareActivity.class);
@@ -103,6 +107,13 @@ public class ShareActivity extends AppCompatActivity {
             return;
 
         }
+        int anonymous;
+        if (checkBox.isChecked()) {
+            anonymous = 1;
+
+        } else {
+            anonymous = 0;
+        }
 
         final MyDialog myDialog = new MyDialog(this);
         myDialog.showProgress("发送中");
@@ -113,7 +124,7 @@ public class ShareActivity extends AppCompatActivity {
         parameters.put("image", imageUrl);
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
-        parameters.put("anonymous", 0);
+        parameters.put("anonymous", anonymous);
         String url = "upload";
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override

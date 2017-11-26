@@ -101,10 +101,8 @@ public class ConversationAdapter extends RecyclerView.Adapter<ConversationAdapte
             tvTitle = (TextView) view.findViewById(R.id.conv_item_name);
             tvFirst = (TextView) view.findViewById(R.id.msg_item_content);
             tvTime = (TextView) view.findViewById(R.id.msg_item_date);
-
             tvNewMessage = (TextView) view.findViewById(R.id.new_msg_number);
             relativeLayout = (ConstraintLayout) view.findViewById(R.id.rl_msg_item);
-
 
 
         }

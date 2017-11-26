@@ -101,9 +101,25 @@ public class BubbleDetailActivity extends AppCompatActivity {
         tvTitle.setText(bean.getTitle());
         tvContent.setText(bean.getContent());
         tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
+
+
         survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
         tvSurvival.setText("泡泡将在" + survivalMinute + "分钟后消失");
-        loadUser();
+        if (bean.getAnonymous() == 0) {
+            loadUser();
+        } else {
+            Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
+            tvAuthorName.setText("匿名用户");
+            ivHead.setClickable(false);
+
+        }
+
+
+
+
+
+
+
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("");
@@ -139,7 +155,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
                     }
                 });
-
 
     }
 

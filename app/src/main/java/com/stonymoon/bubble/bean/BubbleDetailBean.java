@@ -33,6 +33,7 @@ public class BubbleDetailBean {
          */
 
         private String content;
+
         private int id;
         private int uid;
         private String timestamp;
@@ -44,6 +45,7 @@ public class BubbleDetailBean {
         public String getContent() {
             return content;
         }
+
 
         public void setContent(String content) {
             this.content = content;

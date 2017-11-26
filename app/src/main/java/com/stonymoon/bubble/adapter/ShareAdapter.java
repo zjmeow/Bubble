@@ -1,6 +1,7 @@
 package com.stonymoon.bubble.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,8 @@ import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.ui.share.BubbleDetailActivity;
+import com.stonymoon.bubble.util.DateUtil;
+import com.stonymoon.bubble.view.FloatingMenu;
 
 import java.util.List;
 
@@ -64,18 +67,26 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 .into(holder.imageView)
         ;
         holder.titleView.setText(bean.getTitle());
+        holder.time.setText(DateUtil.CalculateTime(bean.getTime()));
+        holder.contentView.setText(bean.getContent());
+
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView titleView;
-        CardView cardView;
+        TextView contentView;
+        TextView time;
+        ConstraintLayout cardView;
 
         public ViewHolder(View view) {
             super(view);
             imageView = (ImageView) view.findViewById(R.id.iv_share_item_image);
             titleView = (TextView) view.findViewById(R.id.tv_share_item_title);
-            cardView = (CardView) view.findViewById(R.id.card_view_share_item);
+            cardView = (ConstraintLayout) view.findViewById(R.id.constraint_layout_share_item);
+            contentView = (TextView) view.findViewById(R.id.tv_share_item_content);
+            time = (TextView) view.findViewById(R.id.tv_share_item_time);
+
         }
 
     }

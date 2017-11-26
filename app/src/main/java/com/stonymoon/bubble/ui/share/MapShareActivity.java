@@ -71,10 +71,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
 
     @OnClick(R.id.iv_map_refresh)
     void fresh() {
-        itemList.clear();
-        seenItems.clear();
-        initBubble();
-
+        finish();
     }
 
 

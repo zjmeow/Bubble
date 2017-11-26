@@ -55,6 +55,16 @@ public class BubbleBean {
         private String image;
         private long deadline;
         private String content;
+        private int anonymous;
+
+        public int getAnonymous() {
+            return anonymous;
+        }
+
+        public void setAnonymous(int anonymous) {
+            this.anonymous = anonymous;
+        }
+
 
         public int getId() {
             return id;

@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.stonymoon.bubble"
-
-
-    >
+    package="com.stonymoon.bubble">
 
     <permission
         android:name="com.stonymoon.bubble.permission.JPUSH_MESSAGE"
@@ -155,7 +152,6 @@
             </intent-filter>
         </activity>
         <activity
-
             android:name=".ui.friend.MapActivity"
             android:launchMode="singleTask" />
         <activity
@@ -166,10 +162,7 @@
         <activity
             android:name=".ui.auth.RegisterActivity"
             android:theme="@style/AppTheme.WhiteStatus"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-
-
-            />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.friend.ProfileActivity"
             android:label="@string/title_activity_profile" />
@@ -191,12 +184,9 @@
         <activity
             android:name=".ui.friend.ChatActivity"
             android:theme="@style/AppTheme.WhiteStatus"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-
-            />
+            android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.friend.MessageListActivity"
-
             android:theme="@style/AppTheme.WhiteStatus" />
         <activity
             android:name=".ui.share.ShareActivity"
@@ -205,13 +195,12 @@
         <activity
             android:name=".ui.auth.RegisterPhoneActivity"
             android:theme="@style/AppTheme.WhiteStatus"
-            android:windowSoftInputMode="stateVisible|adjustResize"
-
-            />
+            android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity android:name=".ui.common.EditActivity" />
         <activity
             android:name=".ui.share.ShareListActivity"
             android:theme="@style/AppTheme.WhiteStatus" />
+        <activity android:name=".ui.common.SplashActivity"></activity>
     </application>
 
 </manifest>

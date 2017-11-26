@@ -88,4 +88,5 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
 
     }
 
+
 }
