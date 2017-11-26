@@ -49,11 +49,14 @@ public class BubbleDetailActivity extends AppCompatActivity {
     TextView tvTime;
     @BindView(R.id.toolbar_bubble_detail)
     Toolbar toolbar;
+    @BindView(R.id.tv_bubble_detail_survival_time)
+    TextView tvSurvival;
+    long survivalMinute;
+
     private Context mContext;
-    private Map parameters = new HashMap();
+    private Map<String, Object> parameters = new HashMap<>();
     private BubbleBean.ContentBean bean;
     private AUserBean userBean;
-
     public static void startActivity(Context context, BubbleBean.ContentBean bean) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
         intent.putExtra("bean", bean);
@@ -85,7 +88,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,6 +101,8 @@ public class BubbleDetailActivity extends AppCompatActivity {
         tvTitle.setText(bean.getTitle());
         tvContent.setText(bean.getContent());
         tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
+        survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
+        tvSurvival.setText("泡泡将在" + survivalMinute + "分钟后消失");
         loadUser();
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -109,7 +113,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
         }
-
 
 
     }
@@ -136,6 +139,31 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
                     }
                 });
+
+
+    }
+
+    @OnClick(R.id.btn_bubble_detail_add)
+    void add() {
+        parameters.clear();
+        parameters.put("id", bean.getId() + "");
+        HttpUtil.sendHttpRequest(this).rxPost("tap", parameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                survivalMinute++;
+                tvSurvival.setText("泡泡将在" + survivalMinute + "分钟后消失");
+            }
+
+            @Override
+            public void onError(Object tag, Throwable e) {
+
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
 
 
     }

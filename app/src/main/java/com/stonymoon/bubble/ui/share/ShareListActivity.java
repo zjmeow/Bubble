@@ -19,6 +19,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ShareListActivity extends AppCompatActivity {
 
@@ -33,13 +34,19 @@ public class ShareListActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    @OnClick(R.id.iv_share_list_back)
+    void back() {
+        finish();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_list);
         ButterKnife.bind(this);
         recyclerShare.setAdapter(adapter);
-        StaggeredGridLayoutManager manager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        manager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerShare.setLayoutManager(manager);
         initBeans();
     }

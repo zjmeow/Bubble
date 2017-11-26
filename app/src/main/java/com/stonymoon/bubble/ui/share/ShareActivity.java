@@ -71,7 +71,7 @@ public class ShareActivity extends AppCompatActivity {
     private Uri resultUri;
     private UploadManager mUploadManager;
     private String imageUrl;
-
+    //todo 匿名
 
     public static void startActivity(Context context, double latitude, double longitude) {
         Intent intent = new Intent(context, ShareActivity.class);

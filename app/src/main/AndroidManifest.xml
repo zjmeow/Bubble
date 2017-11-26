@@ -209,7 +209,9 @@
 
             />
         <activity android:name=".ui.common.EditActivity" />
-        <activity android:name=".ui.share.ShareListActivity"></activity>
+        <activity
+            android:name=".ui.share.ShareListActivity"
+            android:theme="@style/AppTheme.WhiteStatus" />
     </application>
 
 </manifest>

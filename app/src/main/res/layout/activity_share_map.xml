@@ -27,12 +27,13 @@
         />
 
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab_map_share"
+    <ImageView
+        android:id="@+id/iv_map_share"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="32dp"
+        android:src="@drawable/share"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 

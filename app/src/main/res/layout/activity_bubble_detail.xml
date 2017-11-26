@@ -98,6 +98,18 @@
                     android:textColor="@color/primaryText"
                     android:textSize="16sp" />
 
+                <Button
+                    android:id="@+id/btn_bubble_detail_add"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:text="+1" />
+
+                <TextView
+                    android:id="@+id/tv_bubble_detail_survival_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="泡泡剩余时间" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"

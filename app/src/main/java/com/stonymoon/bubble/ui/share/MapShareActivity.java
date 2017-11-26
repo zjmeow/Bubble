@@ -64,7 +64,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     private double longitude;
     private boolean isLocated = false;
 
-    @OnClick(R.id.fab_map_share)
+    @OnClick(R.id.iv_map_share)
     void share() {
         ShareActivity.startActivity(this, latitude, longitude);
     }
@@ -76,6 +76,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         initBubble();
 
     }
+
 
     @OnClick(R.id.iv_share_map_location)
     void locate() {
@@ -127,7 +128,6 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
                 return false;
             }
         });
-        initBubble();
         mBaiduMap.setOnMapStatusChangeListener(new BaiduMap.OnMapStatusChangeListener() {
             @Override
             public void onMapStatusChangeStart(MapStatus mapStatus) {
@@ -165,6 +165,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     @Override
     protected void onResume() {
         mMapView.onResume();
+        initBubble();
         super.onResume();
     }
 
@@ -190,6 +191,8 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     }
 
     private void initBubble() {
+        seenItems.clear();
+        itemList.clear();
         String url = "download";
         HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
             @Override
