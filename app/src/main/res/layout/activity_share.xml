@@ -9,7 +9,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize">
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/barColor">
 
         <ImageView
             android:id="@+id/iv_share_back"
@@ -36,8 +37,8 @@
             android:layout_gravity="center"
             android:layout_marginRight="16dp"
             android:text="分享"
-            android:textColor="@drawable/blue_text_selector"
-            android:textSize="20sp" />
+            android:textColor="@color/barText"
+            android:textSize="18sp" />
     </LinearLayout>
 
     <View
@@ -46,6 +47,7 @@
         android:layout_below="@+id/toolbar"
         android:background="@drawable/tool_bar_shadow" />
     <LinearLayout
+
         android:layout_width="match_parent"
         android:layout_height="180dp"
         android:layout_margin="16dp"
@@ -57,22 +59,31 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="2dp"
+            android:background="@null"
             android:hint="标题"
-            android:maxLength="10" />
+            android:maxLength="10"
+            android:padding="8dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#FFF"
+
+            />
 
         <EditText
-
             android:id="@+id/et_share_content"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="有什么想说的吗" />
+            android:background="@null"
+            android:hint="有什么想说的吗"
+            android:padding="8dp" />
 
     </LinearLayout>
     <ImageView
         android:id="@+id/iv_share_picture"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginLeft="16dp"
 
         android:src="@drawable/add_picture" />

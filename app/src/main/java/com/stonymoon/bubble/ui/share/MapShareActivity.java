@@ -20,7 +20,10 @@ import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.google.gson.Gson;
+import com.qmuiteam.qmui.span.QMUITextSizeSpan;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleHolder;
@@ -42,6 +45,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.support.constraint.ConstraintLayout;
+import android.text.InputType;
+import android.view.View;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -228,7 +236,32 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
         addMarkers(seenItems);
     }
 
-
+    private void showEditTextDialog() {
+        //todo 上传
+        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(MapShareActivity.this);
+        builder.setTitle("分享")
+                .setPlaceholder("在此输入想留在地图上的文字")
+                .setInputType(InputType.TYPE_CLASS_TEXT)
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        CharSequence text = builder.getEditText().getText();
+                        if (text != null && text.length() > 0) {
+                            Toast.makeText(MapShareActivity.this, "记录成功" + text, Toast.LENGTH_SHORT).show();
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(MapShareActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .show();
+    }
 
     /**
      * 每个Marker点，包含Marker点坐标以及图标
@@ -253,8 +286,10 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
 
         @Override
         public BitmapDescriptor getBitmapDescriptor() {
-            return BitmapDescriptorFactory.fromResource(R.mipmap.bubble);
-
+            ConstraintLayout bubbleLayout = (ConstraintLayout) View.inflate(MapShareActivity.this, R.layout.bubble_text, null);
+            TextView tvTitle = (TextView) bubbleLayout.findViewById(R.id.tv_bubble_map_title);
+            tvTitle.setText(bean.getTitle());
+            return BitmapDescriptorFactory.fromView(bubbleLayout);
         }
 
     }

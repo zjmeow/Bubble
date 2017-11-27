@@ -104,7 +104,7 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
 
         survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
-        tvSurvival.setText("泡泡将在" + survivalMinute + "分钟后消失");
+        tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
         if (bean.getAnonymous() == 0) {
             loadUser();
         } else {
@@ -166,7 +166,7 @@ public class BubbleDetailActivity extends AppCompatActivity {
             @Override
             public void onNext(Object tag, String response) {
                 survivalMinute++;
-                tvSurvival.setText("泡泡将在" + survivalMinute + "分钟后消失");
+                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
             }
 
             @Override

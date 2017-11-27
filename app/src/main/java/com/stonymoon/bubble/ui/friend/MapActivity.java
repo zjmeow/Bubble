@@ -136,6 +136,7 @@ public class MapActivity extends AppCompatActivity {
     private AnimatorSet receiveEmojiSet;
     private Map<String, Object> parameters = new HashMap<>();
     private LatLng myLatLng = new LatLng(0, 0);
+
     private MyDialog myDialog;
 
     private MyCallback callback = new MyCallback(this);
@@ -279,14 +280,6 @@ public class MapActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            Transition leftExplode = TransitionInflater.from(this).inflateTransition(R.transition.left_transition);
-            Transition rightExplode = TransitionInflater.from(this).inflateTransition(R.transition.right_transition);
-            getWindow().setExitTransition(rightExplode);
-            getWindow().setEnterTransition(leftExplode);
-
-        }
         //设置沉浸式状态栏
         QMUIStatusBarHelper.translucent(this);
         super.onCreate(savedInstanceState);
@@ -793,7 +786,7 @@ public class MapActivity extends AppCompatActivity {
 
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
-            myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+
             //拿到百度地图上定位的id
             if (isFirstLoacted) {
                 myDialog.getInstance().dismiss();
@@ -875,6 +868,7 @@ public class MapActivity extends AppCompatActivity {
                     cacheItems.addAll(myItems);
                     mClusterManager.cluster();
                     //addMarkers(myItems);
+                    myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
 
                 }

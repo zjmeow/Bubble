@@ -56,11 +56,7 @@ public class FriendActivity extends AppCompatActivity {
 
     public static void startActivity(Activity context) {
         Intent intent = new Intent(context, FriendActivity.class);
-        if (Build.VERSION.SDK_INT >= 21) {
-            context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(context).toBundle());
-        } else {
             context.startActivity(intent);
-        }
     }
 
     @Override

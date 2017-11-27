@@ -12,7 +12,7 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/barColor"
 
 
         >
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="bubble"
-            android:textColor="#FFF"
+            android:textColor="@color/barText"
             android:textSize="18sp" />
 
 
@@ -98,6 +98,7 @@
         android:paddingRight="8dp">
 
         <EditText
+
             android:id="@+id/et_chat_input"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -12,7 +12,7 @@
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
+        android:background="@color/barColor"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:text="我的好友"
-            android:textColor="#FFF"
+            android:textColor="@color/barText"
             android:textSize="18sp" />
 
 
