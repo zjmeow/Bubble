@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="附近的分享"
+            android:text="分享内容"
             android:textColor="@color/barText"
             android:textSize="18sp" />
 

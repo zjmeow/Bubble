@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,10 +22,13 @@ import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 
@@ -368,9 +372,48 @@ public class MyProfileActivity extends ActivityBase {
 
     @OnClick(R.id.iv_my_profile_edit)
     void edit() {
-        EditActivity.startActivity(this);
+        showEditTextDialog();
 
     }
+
+
+    private void showEditTextDialog() {
+        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(MyProfileActivity.this);
+        builder.setTitle("分享")
+                .setPlaceholder("在此输入想留在地图上的文字")
+                .setInputType(InputType.TYPE_CLASS_TEXT)
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        CharSequence text = builder.getEditText().getText();
+                        if (text != null && text.length() > 0) {
+                            JUserBean bean = new JUserBean();
+                            bean.setSignature(text.toString());
+                            JMessageClient.updateMyInfo(UserInfo.Field.signature, bean, new BasicCallback() {
+                                @Override
+                                public void gotResult(int i, String s) {
+                                    LogUtil.v("MyProfile", s);
+                                    Toast.makeText(MyProfileActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                                    finish();
+                                }
+                            });
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(MyProfileActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .show();
+    }
+
+
+
 
 
 }

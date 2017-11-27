@@ -125,6 +125,7 @@ public class ShareActivity extends AppCompatActivity {
         parameters.put("latitude", latitude);
         parameters.put("longitude", longitude);
         parameters.put("anonymous", anonymous);
+        parameters.put("type", 0);
         String url = "upload";
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override

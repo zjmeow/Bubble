@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.Target;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
@@ -37,6 +38,7 @@ import cn.jiguang.imui.messages.MsgListAdapter;
 import cn.jiguang.imui.messages.ptr.PtrHandler;
 import cn.jiguang.imui.messages.ptr.PullToRefreshLayout;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.enums.ContentType;
 import cn.jpush.im.android.api.event.MessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
@@ -281,13 +283,26 @@ public class ChatActivity extends AppCompatActivity {
     private void initUser() {
         Intent intent = getIntent();
         Conversation conversation = JMessageClient.getSingleConversation(intent.getStringExtra("phone"));
-        UserInfo targetInfo = (UserInfo) conversation.getTargetInfo();
+        if (conversation == null) {
+
+
+        }
+        otherUser = new DefaultUser("", "", "");
+
+        JMessageClient.getUserInfo(intent.getStringExtra("phone"), new GetUserInfoCallback() {
+            @Override
+            public void gotResult(int i, String s, UserInfo userInfo) {
+                otherUser.setId(userInfo.getUserName());
+                otherUser.setAvatar(userInfo.getExtra("url"));
+                otherUser.setDisplayName(userInfo.getDisplayName());
+            }
+        });
         UserInfo myInfo = JMessageClient.getMyInfo();
         String phone = myInfo.getUserName();
         String username = myInfo.getDisplayName();
         String url = myInfo.getExtra("url");
         user = new DefaultUser(phone, username, url);
-        otherUser = new DefaultUser(targetInfo.getUserName(), targetInfo.getDisplayName(), targetInfo.getExtra("url"));
+
 
     }
 

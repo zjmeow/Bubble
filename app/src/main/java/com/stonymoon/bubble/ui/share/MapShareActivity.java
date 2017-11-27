@@ -19,9 +19,11 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.span.QMUITextSizeSpan;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
@@ -286,7 +288,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
 
         @Override
         public BitmapDescriptor getBitmapDescriptor() {
-            ConstraintLayout bubbleLayout = (ConstraintLayout) View.inflate(MapShareActivity.this, R.layout.bubble_text, null);
+            RelativeLayout bubbleLayout = (RelativeLayout) View.inflate(MapShareActivity.this, R.layout.bubble_text, null);
             TextView tvTitle = (TextView) bubbleLayout.findViewById(R.id.tv_bubble_map_title);
             tvTitle.setText(bean.getTitle());
             return BitmapDescriptorFactory.fromView(bubbleLayout);
