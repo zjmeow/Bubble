@@ -18,6 +18,7 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.AUserBean;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleDetailBean;
 import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
@@ -101,10 +102,12 @@ public class BubbleDetailActivity extends AppCompatActivity {
         tvTitle.setText(bean.getTitle());
         tvContent.setText(bean.getContent());
         tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
+        bean.getClick();
 
 
-        survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
-        tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+        initDeadline();
+
+
         if (bean.getAnonymous() == 0) {
             loadUser();
         } else {
@@ -113,11 +116,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
             ivHead.setClickable(false);
 
         }
-
-
-
-
-
 
 
         setSupportActionBar(toolbar);
@@ -132,6 +130,34 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
 
     }
+
+
+    private void initDeadline() {
+        String url = "download/m/" + bean.getId();
+        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                Gson gson = new Gson();
+                BubbleDetailBean.ContentBean bubbleDetailBean = gson.fromJson(response, BubbleDetailBean.class).getContent();
+                survivalMinute = (bubbleDetailBean.getDeadline() - bubbleDetailBean.getTime()) / 60000;
+                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+            }
+
+            @Override
+            public void onError(Object tag, Throwable e) {
+                survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
+                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
+
+
+    }
+
 
     private void loadUser() {
         String url = "user/" + bean.getUid();
@@ -162,7 +188,7 @@ public class BubbleDetailActivity extends AppCompatActivity {
     void add() {
         parameters.clear();
         parameters.put("id", bean.getId() + "");
-        HttpUtil.sendHttpRequest(this).rxPost("tap", parameters, new RxStringCallback() {
+        HttpUtil.sendHttpRequest(this).rxPost("time/add", parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
                 survivalMinute++;

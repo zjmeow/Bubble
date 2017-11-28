@@ -67,26 +67,28 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 .into(holder.imageView)
         ;
         holder.titleView.setText(bean.getTitle());
-        holder.time.setText(DateUtil.CalculateTime(bean.getTime()));
-        holder.contentView.setText(bean.getContent());
-
+        if (bean.getContent().equals("")) {
+            holder.contentView.setVisibility(View.GONE);
+        } else {
+            holder.contentView.setVisibility(View.VISIBLE);
+            holder.contentView.setText(bean.getContent());
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView titleView;
         TextView contentView;
-        TextView time;
-        ConstraintLayout cardView;
+        CardView cardView;
 
         public ViewHolder(View view) {
+
+
             super(view);
             imageView = (ImageView) view.findViewById(R.id.iv_share_item_image);
             titleView = (TextView) view.findViewById(R.id.tv_share_item_title);
-            cardView = (ConstraintLayout) view.findViewById(R.id.constraint_layout_share_item);
+            cardView = (CardView) view.findViewById(R.id.constraint_layout_share_item);
             contentView = (TextView) view.findViewById(R.id.tv_share_item_content);
-            time = (TextView) view.findViewById(R.id.tv_share_item_time);
-
         }
 
     }

@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="60dp"
-    android:layout_height="40dp">
+    android:layout_width="80dp"
+    android:layout_height="40dp"
+    android:background="#000">
 
 
         <ImageView
-            android:layout_width="60dp"
+            android:layout_width="80dp"
             android:layout_height="40dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/bubble_text" />
+            android:scaleType="center"
+            android:src="@drawable/bubble_board" />
 
         <TextView
             android:id="@+id/tv_bubble_map_title"
@@ -16,10 +17,14 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="2dp"
             android:gravity="center"
-            android:text="aaaaaaaaa"
-            android:textColor="#FFF"
-            android:textSize="15sp" />
+            android:maxLength="10"
+            android:text="aaaaaaaaaaaa"
+            android:textColor="#000"
+            android:textSize="12sp"
+
+            />
 
 
 </RelativeLayout>

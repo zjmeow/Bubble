@@ -56,6 +56,24 @@ public class BubbleBean {
         private long deadline;
         private String content;
         private int anonymous;
+        private int type;
+        private int click;
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public int getClick() {
+            return click;
+        }
+
+        public void setClick(int click) {
+            this.click = click;
+        }
 
         public int getAnonymous() {
             return anonymous;

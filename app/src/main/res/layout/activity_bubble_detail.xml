@@ -26,6 +26,16 @@
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop" />
 
+                <Button
+                    android:id="@+id/btn_bubble_detail_add"
+                    android:layout_width="80dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginTop="126dp"
+                    android:text="+1" />
+
             </RelativeLayout>
 
             <android.support.v7.widget.Toolbar
@@ -88,11 +98,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:padding="16dp">
-                <Button
-                    android:id="@+id/btn_bubble_detail_add"
-                    android:layout_width="80dp"
-                    android:layout_height="50dp"
-                    android:text="+1" />
 
                 <TextView
                     android:id="@+id/tv_bubble_detail_survival_time"
@@ -134,6 +139,7 @@
             </LinearLayout>
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
+
 
 </android.support.design.widget.CoordinatorLayout>
 

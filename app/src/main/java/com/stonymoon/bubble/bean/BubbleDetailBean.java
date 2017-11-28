@@ -6,50 +6,60 @@ package com.stonymoon.bubble.bean;
 
 public class BubbleDetailBean {
 
+
     /**
-     * resource : {"content":"test","id":240,"uid":1,"timestamp":"Wed, 08 Nov 2017 13:32:39 -0000","title":"test","image":"http://oupl6wdxc.bkt.clouddn.com/nene.png","latitude":21.4945,"longitude":60.1309}
+     * code : 1
+     * message : 内容：
+     * content : {"id":176,"uid":39,"title":"啊啊啊","time":1511785426000,"latitude":26.056992,"longitude":119.19907,"image":"http://oupl6wdxc.bkt.clouddn.com/EIEEKLIHFFKIF","deadline":1512044626000,"anonymous":1,"click":0,"type":0,"content":"哦哦哦"}
      */
 
-    private ResourceBean resource;
+    private String message;
+    private ContentBean content;
 
-    public ResourceBean getResource() {
-        return resource;
+    public String getMessage() {
+        return message;
     }
 
-    public void setResource(ResourceBean resource) {
-        this.resource = resource;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public static class ResourceBean {
+    public ContentBean getContent() {
+        return content;
+    }
+
+    public void setContent(ContentBean content) {
+        this.content = content;
+    }
+
+    public static class ContentBean {
         /**
-         * content : test
-         * id : 240
-         * uid : 1
-         * timestamp : Wed, 08 Nov 2017 13:32:39 -0000
-         * title : test
-         * image : http://oupl6wdxc.bkt.clouddn.com/nene.png
-         * latitude : 21.4945
-         * longitude : 60.1309
+         * id : 176
+         * uid : 39
+         * title : 啊啊啊
+         * time : 1511785426000
+         * latitude : 26.056992
+         * longitude : 119.19907
+         * image : http://oupl6wdxc.bkt.clouddn.com/EIEEKLIHFFKIF
+         * deadline : 1512044626000
+         * anonymous : 1
+         * click : 0
+         * type : 0
+         * content : 哦哦哦
          */
-
-        private String content;
 
         private int id;
         private int uid;
-        private String timestamp;
         private String title;
-        private String image;
+        private long time;
         private double latitude;
         private double longitude;
-
-        public String getContent() {
-            return content;
-        }
-
-
-        public void setContent(String content) {
-            this.content = content;
-        }
+        private String image;
+        private long deadline;
+        private int anonymous;
+        private int click;
+        private int type;
+        private String content;
 
         public int getId() {
             return id;
@@ -67,14 +77,6 @@ public class BubbleDetailBean {
             this.uid = uid;
         }
 
-        public String getTimestamp() {
-            return timestamp;
-        }
-
-        public void setTimestamp(String timestamp) {
-            this.timestamp = timestamp;
-        }
-
         public String getTitle() {
             return title;
         }
@@ -83,12 +85,12 @@ public class BubbleDetailBean {
             this.title = title;
         }
 
-        public String getImage() {
-            return image;
+        public long getTime() {
+            return time;
         }
 
-        public void setImage(String image) {
-            this.image = image;
+        public void setTime(long time) {
+            this.time = time;
         }
 
         public double getLatitude() {
@@ -105,6 +107,54 @@ public class BubbleDetailBean {
 
         public void setLongitude(double longitude) {
             this.longitude = longitude;
+        }
+
+        public String getImage() {
+            return image;
+        }
+
+        public void setImage(String image) {
+            this.image = image;
+        }
+
+        public long getDeadline() {
+            return deadline;
+        }
+
+        public void setDeadline(long deadline) {
+            this.deadline = deadline;
+        }
+
+        public int getAnonymous() {
+            return anonymous;
+        }
+
+        public void setAnonymous(int anonymous) {
+            this.anonymous = anonymous;
+        }
+
+        public int getClick() {
+            return click;
+        }
+
+        public void setClick(int click) {
+            this.click = click;
+        }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
         }
     }
 }
