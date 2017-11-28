@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -30,7 +31,8 @@ public class MessageListActivity extends AppCompatActivity {
     ConversationAdapter adapter = new ConversationAdapter(list);
     @BindView(R.id.recycler_conversation)
     RecyclerView conversationRecycler;
-
+    @BindView(R.id.swipe_refresh_message)
+    SwipeRefreshLayout refreshLayout;
     public static void startActivity(Context context) {
         Intent intent = new Intent(context, MessageListActivity.class);
         context.startActivity(intent);
@@ -40,14 +42,6 @@ public class MessageListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= 21) {
-            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
-            Transition leftExplode = TransitionInflater.from(this).inflateTransition(R.transition.left_transition);
-            Transition rightExplode = TransitionInflater.from(this).inflateTransition(R.transition.right_transition);
-            getWindow().setExitTransition(rightExplode);
-            getWindow().setEnterTransition(leftExplode);
-
-        }
 
         setContentView(R.layout.activity_message_list);
         ButterKnife.bind(this);
@@ -55,18 +49,24 @@ public class MessageListActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         conversationRecycler.setLayoutManager(linearLayoutManager);
-
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                initMessage();
+            }
+        });
 
     }
 
     private void initMessage() {
         if (list == null) {
+            refreshLayout.setRefreshing(false);
             return;
         }
         list.clear();
         list.addAll(JMessageClient.getConversationList());
         adapter.notifyDataSetChanged();
-
+        refreshLayout.setRefreshing(false);
     }
 
     @Override

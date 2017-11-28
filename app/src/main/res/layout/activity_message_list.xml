@@ -43,7 +43,10 @@
         android:layout_below="@+id/toolbar"
         android:background="@drawable/tool_bar_shadow" />
 
-
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_message"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_conversation"
         android:layout_width="match_parent"
@@ -53,5 +56,5 @@
 
     </android.support.v7.widget.RecyclerView>
 
-
+    </android.support.v4.widget.SwipeRefreshLayout>
 </LinearLayout>
