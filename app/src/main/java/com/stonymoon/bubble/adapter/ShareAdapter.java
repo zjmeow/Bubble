@@ -82,8 +82,6 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         CardView cardView;
 
         public ViewHolder(View view) {
-
-
             super(view);
             imageView = (ImageView) view.findViewById(R.id.iv_share_item_image);
             titleView = (TextView) view.findViewById(R.id.tv_share_item_title);

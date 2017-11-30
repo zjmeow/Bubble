@@ -7,14 +7,18 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.AUserBean;
 import com.stonymoon.bubble.bean.BubbleBean;
@@ -22,6 +26,7 @@ import com.stonymoon.bubble.bean.BubbleDetailBean;
 import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
+import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
@@ -53,17 +58,22 @@ public class BubbleDetailActivity extends AppCompatActivity {
     @BindView(R.id.tv_bubble_detail_survival_time)
     TextView tvSurvival;
     long survivalMinute;
-
     private Context mContext;
     private Map<String, Object> parameters = new HashMap<>();
     private BubbleBean.ContentBean bean;
     private AUserBean userBean;
+
     public static void startActivity(Context context, BubbleBean.ContentBean bean) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
         intent.putExtra("bean", bean);
         context.startActivity(intent);
 
 
+    }
+
+    @OnClick(R.id.iv_bubble_detail_comment)
+    void comment() {
+        showEditTextDialog();
     }
 
     @Override
@@ -198,6 +208,62 @@ public class BubbleDetailActivity extends AppCompatActivity {
             @Override
             public void onError(Object tag, Throwable e) {
 
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
+
+
+    }
+
+
+    private void showEditTextDialog() {
+        final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(BubbleDetailActivity.this);
+        builder.setTitle("评论")
+                .setPlaceholder("评论")
+                .setInputType(InputType.TYPE_CLASS_TEXT)
+                .addAction("取消", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        dialog.dismiss();
+                    }
+                })
+                .addAction("确定", new QMUIDialogAction.ActionListener() {
+                    @Override
+                    public void onClick(QMUIDialog dialog, int index) {
+                        CharSequence text = builder.getEditText().getText();
+                        if (text != null && text.length() > 0) {
+                            uploadComment(text.toString(), bean.getId() + "");
+
+
+                            dialog.dismiss();
+                        } else {
+                            Toast.makeText(BubbleDetailActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                })
+                .show();
+    }
+
+    private void uploadComment(String content, String id) {
+        parameters.clear();
+        parameters.put("pid", id);
+        parameters.put("token", AuthUtil.getToken());
+        parameters.put("content", content);
+        String url = "comment";
+        HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                Toast.makeText(BubbleDetailActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onError(Object tag, Throwable e) {
+                Toast.makeText(BubbleDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
