@@ -38,7 +38,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                ListBean bean = mList.get(position);
+                ListBean bean = mList.get(position - 2);
                 ProfileActivity.startActivity(mContext, bean.getMiniUser().getPhone());
 
             }

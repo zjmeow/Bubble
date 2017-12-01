@@ -79,7 +79,6 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
     private View headView;
 
 
-
     public static void startActivity(Context context, BubbleBean.ContentBean bean) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
         intent.putExtra("bean", bean);
@@ -108,6 +107,7 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
         mContext = getApplicationContext();
         initView();
         initRecyclerView();
+
     }
 
     private void initRecyclerView() {
@@ -117,6 +117,28 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
             getComment();
         }
         recyclerComment.addHeaderView(headView);
+        recyclerComment.setPullRefreshEnabled(false);
+        recyclerComment.setLoadingMoreEnabled(true);
+        recyclerComment.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                page = 1;
+                commentBeanList.clear();
+                getComment();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (hasMoreComment) {
+                    getComment();
+                } else {
+                    recyclerComment.loadMoreComplete();
+                    Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+
     }
 
     private void initView() {
@@ -140,6 +162,7 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
         ivHead.setOnClickListener(this);
         ivComment.setOnClickListener(this);
         ivAdd.setOnClickListener(this);
+
         bean.getClick();
         initDeadline();
         if (bean.getAnonymous() == 0) {
@@ -192,9 +215,6 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
 
 
     }
-
-
-
 
 
     private void showEditTextDialog() {
@@ -264,11 +284,12 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
                 hasMoreComment = bean.getContent().isHasNextPage();
                 adapter.notifyDataSetChanged();
                 page++;
+                recyclerComment.loadMoreComplete();
             }
 
             @Override
             public void onError(Object tag, Throwable e) {
-
+                recyclerComment.refreshComplete();
             }
 
             @Override
@@ -314,11 +335,13 @@ public class BubbleDetailActivity extends AppCompatActivity implements View.OnCl
 
             case R.id.iv_bubble_detail_head:
                 ProfileActivity.startActivity(this, bean.getMiniUser().getPhone());
-
+                break;
             case R.id.iv_bubble_detail:
                 PhotoActivity.startActivity(this, bean.getImage());
+                break;
             case R.id.iv_bubble_detail_add:
                 add();
+                break;
         }
 
     }

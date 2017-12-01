@@ -180,7 +180,9 @@
         <activity
             android:name=".ui.friend.FriendActivity"
             android:theme="@style/AppTheme.BlueStatus" />
-        <activity android:name=".ui.share.BubbleDetailActivity" />
+        <activity
+            android:name=".ui.share.BubbleDetailActivity"
+            android:theme="@style/AppTheme.BlueStatus" />
         <activity
             android:name=".ui.friend.ChatActivity"
             android:theme="@style/AppTheme.BlueStatus"
