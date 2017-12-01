@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.text.InputType;
 import android.util.Log;
@@ -135,8 +136,9 @@ public class MyProfileActivity extends ActivityBase {
     }
 
     private void initDialogChooseImage() {
-        RxDialogChooseImage dialogChooseImage = new RxDialogChooseImage(mContext, TITLE);
-        dialogChooseImage.show();
+        Intent albumIntent = new Intent(Intent.ACTION_PICK, null);
+        albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(albumIntent, RxPhotoTool.GET_IMAGE_FROM_PHONE);
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -217,8 +218,9 @@ public class ShareActivity extends AppCompatActivity {
     }
 
     private void initDialogChooseImage() {
-        RxDialogChooseImage dialogChooseImage = new RxDialogChooseImage(ShareActivity.this, TITLE);
-        dialogChooseImage.show();
+        Intent albumIntent = new Intent(Intent.ACTION_PICK, null);
+        albumIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        startActivityForResult(albumIntent, RxPhotoTool.GET_IMAGE_FROM_PHONE);
     }
 
 

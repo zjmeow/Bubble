@@ -45,7 +45,7 @@ dependencies {
     compile files('src/main/libs/BaiduLBS_Android.jar')
     compile files('src/main/libs/IndoorscapeAlbumPlugin.jar')
     compile files('src/main/libs/jsms_android-1.2.0.jar')
-
+    compile 'com.jcodecraeer:xrecyclerview:1.5.2'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'cn.jiguang.imui:messagelist:0.4.9'
     compile 'cn.jiguang.imui:chatinput:0.4.8'

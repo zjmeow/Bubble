@@ -1,9 +1,5 @@
 package com.stonymoon.bubble.bean;
 
-/**
- * Created by A on 2017/11/8.
- */
-
 public class BubbleDetailBean {
 
 

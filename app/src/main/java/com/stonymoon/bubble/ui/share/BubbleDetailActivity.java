@@ -6,9 +6,13 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,13 +20,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.adapter.CommentAdapter;
 import com.stonymoon.bubble.bean.AUserBean;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleDetailBean;
+import com.stonymoon.bubble.bean.CommentBean;
 import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
@@ -32,7 +40,9 @@ import com.stonymoon.bubble.util.HttpUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -40,28 +50,35 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.http.HTTP;
 
-public class BubbleDetailActivity extends AppCompatActivity {
+public class BubbleDetailActivity extends AppCompatActivity implements View.OnClickListener {
     @BindView(R.id.iv_bubble_detail)
     ImageView ivBubbleDetail;
-    @BindView(R.id.tv_bubble_detail_title)
-    TextView tvTitle;
-    @BindView(R.id.tv_bubble_detail_content)
-    TextView tvContent;
-    @BindView(R.id.iv_bubble_detail_head)
-    ImageView ivHead;
-    @BindView(R.id.tv_bubble_detail_author_name)
-    TextView tvAuthorName;
-    @BindView(R.id.tv_bubble_detail_time)
-    TextView tvTime;
     @BindView(R.id.toolbar_bubble_detail)
     Toolbar toolbar;
-    @BindView(R.id.tv_bubble_detail_survival_time)
-    TextView tvSurvival;
-    long survivalMinute;
+
+    @BindView(R.id.recycler_bubble_detail_comment)
+    XRecyclerView recyclerComment;
+    private TextView tvTitle;
+    private TextView tvContent;
+    private ImageView ivHead;
+    private TextView tvAuthorName;
+    private TextView tvTime;
+    private TextView tvSurvival;
+    private ImageView ivComment;
+    private ImageView ivAdd;
+
+
+    private long survivalMinute;
     private Context mContext;
     private Map<String, Object> parameters = new HashMap<>();
     private BubbleBean.ContentBean bean;
-    private AUserBean userBean;
+    private List<CommentBean.ContentBean.ListBean> commentBeanList = new ArrayList<>();
+    private CommentAdapter adapter = new CommentAdapter(commentBeanList);
+    private int page = 1;
+    private boolean hasMoreComment = true;
+    private View headView;
+
+
 
     public static void startActivity(Context context, BubbleBean.ContentBean bean) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
@@ -71,10 +88,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
     }
 
-    @OnClick(R.id.iv_bubble_detail_comment)
-    void comment() {
-        showEditTextDialog();
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -86,19 +99,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
         return true;
     }
 
-    @OnClick(R.id.iv_bubble_detail_head)
-    void openProfile() {
-        ProfileActivity.startActivity(this, userBean.getContent().getPhone());
-
-    }
-
-    @OnClick(R.id.iv_bubble_detail)
-    void openImage() {
-        PhotoActivity.startActivity(this, bean.getImage());
-
-    }
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,20 +106,47 @@ public class BubbleDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_bubble_detail);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
+        initView();
+        initRecyclerView();
+    }
+
+    private void initRecyclerView() {
+        recyclerComment.setAdapter(adapter);
+        recyclerComment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        if (hasMoreComment) {
+            getComment();
+        }
+        recyclerComment.addHeaderView(headView);
+    }
+
+    private void initView() {
         Intent intent = getIntent();
         bean = (BubbleBean.ContentBean) intent.getSerializableExtra("bean");
         Glide.with(mContext).load(bean.getImage()).into(ivBubbleDetail);
+        headView = LayoutInflater.from(this).inflate(R.layout.header_bubble_detail, (ViewGroup) findViewById(R.id.layout_bubble_detail), false);
+        tvTitle = (TextView) headView.findViewById(R.id.tv_bubble_detail_title);
+        tvContent = (TextView) headView.findViewById(R.id.tv_bubble_detail_content);
+        tvTime = (TextView) headView.findViewById(R.id.tv_bubble_detail_time);
+        tvAuthorName = (TextView) headView.findViewById(R.id.tv_bubble_detail_author_name);
+        ivHead = (QMUIRadiusImageView) headView.findViewById(R.id.iv_bubble_detail_head);
+        tvSurvival = (TextView) headView.findViewById(R.id.tv_bubble_detail_survival_time);
+        ivComment = (ImageView) headView.findViewById(R.id.iv_bubble_detail_comment);
+        ivAdd = (ImageView) headView.findViewById(R.id.iv_bubble_detail_add);
+
         tvTitle.setText(bean.getTitle());
         tvContent.setText(bean.getContent());
         tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
+        ivBubbleDetail.setOnClickListener(this);
+        ivHead.setOnClickListener(this);
+        ivComment.setOnClickListener(this);
+        ivAdd.setOnClickListener(this);
         bean.getClick();
-
-
         initDeadline();
-
-
         if (bean.getAnonymous() == 0) {
-            loadUser();
+            Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
+            tvAuthorName.setText(bean.getMiniUser().getUsername());
+
+
         } else {
             Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
             tvAuthorName.setText("匿名用户");
@@ -137,8 +164,6 @@ public class BubbleDetailActivity extends AppCompatActivity {
             actionBar.setDisplayShowHomeEnabled(true);
             actionBar.setDisplayShowTitleEnabled(true);
         }
-
-
     }
 
 
@@ -169,55 +194,7 @@ public class BubbleDetailActivity extends AppCompatActivity {
     }
 
 
-    private void loadUser() {
-        String url = "user/" + bean.getUid();
-        HttpUtil.sendHttpRequest(this).rxGet(url, parameters
-                , new RxStringCallback() {
-                    @Override
-                    public void onNext(Object tag, String response) {
-                        Gson gson = new Gson();
-                        userBean = gson.fromJson(response, AUserBean.class);
-                        Glide.with(mContext).load(userBean.getContent().getImage()).into(ivHead);
-                        tvAuthorName.setText(userBean.getContent().getUsername());
-                    }
 
-                    @Override
-                    public void onError(Object tag, Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onCancel(Object tag, Throwable e) {
-
-                    }
-                });
-
-    }
-
-    @OnClick(R.id.btn_bubble_detail_add)
-    void add() {
-        parameters.clear();
-        parameters.put("id", bean.getId() + "");
-        HttpUtil.sendHttpRequest(this).rxPost("time/add", parameters, new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                survivalMinute++;
-                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
-            }
-
-            @Override
-            public void onError(Object tag, Throwable e) {
-
-            }
-
-            @Override
-            public void onCancel(Object tag, Throwable e) {
-
-            }
-        });
-
-
-    }
 
 
     private void showEditTextDialog() {
@@ -275,5 +252,75 @@ public class BubbleDetailActivity extends AppCompatActivity {
 
     }
 
+    private void getComment() {
+        parameters.clear();
+        String url = "getcomment" + "/" + bean.getId() + "/" + page;
+        HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                Gson gson = new Gson();
+                CommentBean bean = gson.fromJson(response, CommentBean.class);
+                commentBeanList.addAll(bean.getContent().getList());
+                hasMoreComment = bean.getContent().isHasNextPage();
+                adapter.notifyDataSetChanged();
+                page++;
+            }
+
+            @Override
+            public void onError(Object tag, Throwable e) {
+
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
+
+
+    }
+
+
+    void add() {
+        parameters.clear();
+        parameters.put("id", bean.getId() + "");
+        HttpUtil.sendHttpRequest(this).rxPost("time/add", parameters, new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                survivalMinute++;
+                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+            }
+
+            @Override
+            public void onError(Object tag, Throwable e) {
+
+            }
+
+            @Override
+            public void onCancel(Object tag, Throwable e) {
+
+            }
+        });
+
+
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.iv_bubble_detail_comment:
+                showEditTextDialog();
+                break;
+
+            case R.id.iv_bubble_detail_head:
+                ProfileActivity.startActivity(this, bean.getMiniUser().getPhone());
+
+            case R.id.iv_bubble_detail:
+                PhotoActivity.startActivity(this, bean.getImage());
+            case R.id.iv_bubble_detail_add:
+                add();
+        }
+
+    }
 
 }
