@@ -29,6 +29,7 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -58,7 +59,7 @@ import cn.pedant.SweetAlert.SweetAlertDialog;
 import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
 
-public class ShareActivity extends AppCompatActivity {
+public class ShareActivity extends StatusBarLightActivity {
 
     private static final String TAG = "ShareActivity";
     private static Map<String, Object> parameters = new HashMap<>();

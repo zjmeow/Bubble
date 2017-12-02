@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.util.LogUtil;
 
@@ -18,7 +19,7 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 
-public class EditActivity extends AppCompatActivity {
+public class EditActivity extends StatusBarLightActivity {
     @BindView(R.id.et_edit_signature)
     EditText etEignature;
 

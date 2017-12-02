@@ -27,6 +27,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.CommentAdapter;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.AUserBean;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleDetailBean;
@@ -50,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.http.HTTP;
 
-public class BubbleDetailActivity extends AppCompatActivity implements View.OnClickListener {
+public class BubbleDetailActivity extends StatusBarLightActivity implements View.OnClickListener {
     @BindView(R.id.iv_bubble_detail)
     ImageView ivBubbleDetail;
     @BindView(R.id.toolbar_bubble_detail)

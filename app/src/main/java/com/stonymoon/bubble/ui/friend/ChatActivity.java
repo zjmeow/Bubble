@@ -20,6 +20,7 @@ import com.bumptech.glide.request.target.Target;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
 import com.stonymoon.bubble.util.LogUtil;
@@ -45,7 +46,7 @@ import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends StatusBarLightActivity {
 
     private final static String TAG = "ChatActivity";
 

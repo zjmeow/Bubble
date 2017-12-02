@@ -8,15 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.ui.share.BubbleDetailActivity;
 import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.view.FloatingMenu;
+
+import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -38,7 +42,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         }
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_share, parent, false);
         final ViewHolder holder = new ViewHolder(view);
-        holder.cardView.setOnClickListener(new View.OnClickListener() {
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
@@ -64,29 +68,42 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         Picasso.with(mContext)
                 .load(bean.getImage())
                 .placeholder(R.mipmap.test)
-                .into(holder.imageView)
-        ;
-        holder.titleView.setText(bean.getTitle());
+                .into(holder.ivContent);
+        holder.tvTitle.setText(bean.getTitle());
         if (bean.getContent().equals("")) {
-            holder.contentView.setVisibility(View.GONE);
+            holder.tvContent.setVisibility(View.GONE);
         } else {
-            holder.contentView.setVisibility(View.VISIBLE);
-            holder.contentView.setText(bean.getContent());
+            holder.tvContent.setVisibility(View.VISIBLE);
+            holder.tvContent.setText(bean.getContent());
         }
+        holder.tvName.setText(bean.getMiniUser().getUsername());
+        holder.tvDate.setText(DateUtil.CalculateTime(bean.getTime()));
+        Picasso.with(mContext)
+                .load(bean.getMiniUser().getImage())
+                .placeholder(R.mipmap.test)
+                .into(holder.ivAvatar);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        ImageView imageView;
-        TextView titleView;
-        TextView contentView;
-        CardView cardView;
+        ImageView ivContent;
+        TextView tvTitle;
+        TextView tvContent;
+        LinearLayout linearLayout;
+        TextView tvName;
+        TextView tvDate;
+        QMUIRadiusImageView ivAvatar;
+
 
         public ViewHolder(View view) {
             super(view);
-            imageView = (ImageView) view.findViewById(R.id.iv_share_item_image);
-            titleView = (TextView) view.findViewById(R.id.tv_share_item_title);
-            cardView = (CardView) view.findViewById(R.id.constraint_layout_share_item);
-            contentView = (TextView) view.findViewById(R.id.tv_share_item_content);
+            ivContent = (ImageView) view.findViewById(R.id.iv_share_item_image);
+            tvTitle = (TextView) view.findViewById(R.id.tv_share_item_title);
+            linearLayout = (LinearLayout) view.findViewById(R.id.constraint_layout_share_item);
+            tvContent = (TextView) view.findViewById(R.id.tv_share_item_content);
+            tvName = (TextView) view.findViewById(R.id.tv_share_item_username);
+            tvDate = (TextView) view.findViewById(R.id.tv_share_item_date);
+            ivAvatar = (QMUIRadiusImageView) view.findViewById(R.id.iv_share_item_avatar);
+
         }
 
     }

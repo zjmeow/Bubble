@@ -18,6 +18,7 @@ import android.view.Window;
 
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.FriendAdapter;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.JUserBean;
 
 import java.util.ArrayList;
@@ -30,7 +31,7 @@ import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.callback.GetUserInfoListCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 
-public class FriendActivity extends AppCompatActivity {
+public class FriendActivity extends StatusBarLightActivity {
     @BindView(R.id.recycler_friend)
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh_friend)

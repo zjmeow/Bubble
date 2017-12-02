@@ -10,6 +10,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ShareAdapter;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleHolder;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
@@ -21,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ShareListActivity extends AppCompatActivity {
+public class ShareListActivity extends StatusBarLightActivity {
 
 
     @BindView(R.id.recycler_share)
