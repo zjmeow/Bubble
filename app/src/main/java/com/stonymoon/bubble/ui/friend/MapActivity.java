@@ -32,6 +32,7 @@ import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 
 import com.bumptech.glide.Glide;
@@ -42,6 +43,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.application.MyApplication;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
@@ -62,6 +64,10 @@ import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxImageTool;
 import com.vondear.rxtools.RxTool;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -306,7 +312,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void setFloatingMenu() {
-        mFloatingMenu.setMoveDistance(RxImageTool.dp2px(60));
+        mFloatingMenu.setMoveDistance(RxImageTool.dp2px(52));
         mFloatingMenu.setOnclickListener(new FloatingMenu.OnPictureClickListener() {
             @Override
             public void onFirstClick() {
@@ -363,6 +369,8 @@ public class MapActivity extends AppCompatActivity {
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
         clearMap(mapView);
+        String moduleName = MyApplication.getContext().getFilesDir().getAbsolutePath();
+        setMapCustomFile();
 
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
@@ -729,6 +737,54 @@ public class MapActivity extends AppCompatActivity {
         });
 
         ivReceiveEmoji.startAnimation(sendEmojiSet);
+
+    }
+
+    private void setMapCustomFile() {
+        String mapStyle = "[\n" +
+                "          {\n" +
+                "                    \"featureType\": \"land\",\n" +
+                "                    \"elementType\": \"geometry\",\n" +
+                "                    \"stylers\": {\n" +
+                "                              \"color\": \"#e69138ff\",\n" +
+                "                              \"hue\": \"#f6b26b\"\n" +
+                "                    }\n" +
+                "          }\n" +
+                "]";
+
+        TextureMapView.setMapCustomEnable(true);
+        FileOutputStream out = null;
+        try {
+            byte[] b = mapStyle.getBytes();
+            String moduleName = MyApplication.getContext().getFilesDir().getAbsolutePath();
+            File f = new File(moduleName + "/" + "map_style.json");
+            if (f.exists()) {
+                f.delete();
+            }
+            f.createNewFile();
+            out = new FileOutputStream(f);
+            out.write(b);
+            TextureMapView.setCustomMapStylePath(moduleName + "/map_style.json");
+            LogUtil.e(TAG, "set map /map_style.json");
+
+        } catch (IOException e) {
+            LogUtil.e(TAG, e.toString());
+        } finally {
+            try {
+                if (out != null) {
+                    out.close();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mapView.setCustomMapStylePath(MyApplication.getContext().getFilesDir().getAbsolutePath() + "/map_style.json");
+                            mapView.setMapCustomEnable(true);
+                        }
+                    });
+                }
+            } catch (IOException e) {
+                LogUtil.e(TAG, e.toString());
+            }
+        }
 
     }
 

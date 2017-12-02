@@ -39,6 +39,12 @@ public class MessageListActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.iv_message_back)
+    void back() {
+        finish();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

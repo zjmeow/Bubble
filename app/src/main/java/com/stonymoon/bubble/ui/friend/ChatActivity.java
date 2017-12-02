@@ -58,6 +58,7 @@ public class ChatActivity extends AppCompatActivity {
     //读取页面条数
     private int page = 0;
 
+
     public static void startActivity(Context context, String phone, String username, String url) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("phone", phone);

@@ -49,34 +49,6 @@ public class MainActivity extends AppCompatActivity
     FloatingActionButton fab;
     private Map<String, Object> parameters = new HashMap<String, Object>();
 
-    //定位并且发送坐标
-    @OnClick(R.id.btn_main_locate)
-    void locate() {
-
-        mLocationClient.start();
-        String url = "locate";
-        HttpUtil.sendHttpRequest(this)
-                .rxPost(url, parameters, new RxStringCallback() {
-                    @Override
-                    public void onNext(Object tag, String response) {
-                        Toast.makeText(MainActivity.this, response, Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onError(Object tag, Throwable e) {
-                        Toast.makeText(MainActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onCancel(Object tag, Throwable e) {
-
-                    }
-                });
-
-
-    }
-
     @OnClick(R.id.fab)
     void submit() {
         Intent intent = new Intent(MainActivity.this, ShareActivity.class);

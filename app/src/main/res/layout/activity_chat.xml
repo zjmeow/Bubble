@@ -14,7 +14,6 @@
         android:layout_height="?attr/actionBarSize"
         android:background="@color/barColor"
 
-
         >
 
         <ImageView
@@ -111,8 +110,7 @@
             android:paddingBottom="5dp"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
-            android:paddingTop="5dp"
-            android:text="asdasdasdasdasdasd" />
+            android:paddingTop="5dp" />
 
 
         <ImageView

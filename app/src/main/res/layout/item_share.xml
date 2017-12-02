@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp"
-
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
     android:clickable="true"
     android:focusable="true"
     android:foreground="?android:attr/selectableItemBackground"
@@ -15,7 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FAFAFA"
+
         android:orientation="vertical">
 
         <ImageView
@@ -32,7 +33,7 @@
         android:layout_marginTop="20dp"
         android:maxLines="1"
         android:text="为什么中文和英文对不整齐"
-        android:textSize="24sp" />
+        android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_share_item_content"
@@ -44,7 +45,7 @@
             android:lineSpacingExtra="8dp"
             android:maxLines="2"
             android:text="这是一件非常神奇的事情"
-            android:textColor="@color/primaryText"
+            android:textColor="@color/cardSecondText"
             android:textSize="16sp" />
 
 
@@ -57,10 +58,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_marginStart="18dp"
                 android:text="吹泡泡"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/cardText"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="评论一个"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/cardText"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
