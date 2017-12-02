@@ -14,6 +14,7 @@ import android.transition.TransitionInflater;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ConversationAdapter;
 
@@ -48,7 +49,7 @@ public class MessageListActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        QMUIStatusBarHelper.MIUISetStatusBarLightMode(this.getWindow(), false);
         setContentView(R.layout.activity_message_list);
         ButterKnife.bind(this);
         conversationRecycler.setAdapter(adapter);

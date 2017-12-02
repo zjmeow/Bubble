@@ -23,6 +23,7 @@ public class FloatingMenu extends FrameLayout {
     private ImageView iv2;
     private ImageView iv3;
     private float moveDistance;
+    private float margin = 8;
 
     private boolean isOpen = false;
 
@@ -58,10 +59,10 @@ public class FloatingMenu extends FrameLayout {
                 -moveDistance);
         ObjectAnimator animator2 = ObjectAnimator.ofFloat(
                 iv2, "translationY",
-                -moveDistance * 2);
+                -moveDistance * 2 + margin);
         ObjectAnimator animator3 = ObjectAnimator.ofFloat(
                 iv3, "translationY",
-                -moveDistance * 3);
+                -moveDistance * 3 + margin);
         ObjectAnimator animator0 = ObjectAnimator.ofFloat(
                 ivMenu, "alpha",
                 0.5F);

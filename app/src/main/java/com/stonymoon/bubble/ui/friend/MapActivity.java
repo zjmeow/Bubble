@@ -31,6 +31,8 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
@@ -292,6 +294,7 @@ public class MapActivity extends AppCompatActivity {
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
         //注意该方法要再setContentView方法之前实现
         SDKInitializer.initialize(getApplicationContext());
+        setMapCustomFile();
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         JMessageClient.registerEventReceiver(this);
@@ -312,7 +315,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
     private void setFloatingMenu() {
-        mFloatingMenu.setMoveDistance(RxImageTool.dp2px(52));
+        mFloatingMenu.setMoveDistance(RxImageTool.dp2px(60));
         mFloatingMenu.setOnclickListener(new FloatingMenu.OnPictureClickListener() {
             @Override
             public void onFirstClick() {
@@ -369,8 +372,6 @@ public class MapActivity extends AppCompatActivity {
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
         clearMap(mapView);
-        String moduleName = MyApplication.getContext().getFilesDir().getAbsolutePath();
-        setMapCustomFile();
 
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
@@ -395,6 +396,12 @@ public class MapActivity extends AppCompatActivity {
             @Override
             public void onMapStatusChangeFinish(MapStatus mapStatus) {
 
+            }
+        });
+        baiduMap.setOnMapLoadedCallback(new BaiduMap.OnMapLoadedCallback() {
+            @Override
+            public void onMapLoaded() {
+                mapView.setMapCustomEnable(true);
             }
         });
 
@@ -573,6 +580,7 @@ public class MapActivity extends AppCompatActivity {
 
     @OnClick(R.id.iv_map_location)
     void locate() {
+        mapView.setMapCustomEnable(true);
         zoomIn(mapView.getMap(), myLatLng, 30);
 
     }
@@ -740,53 +748,39 @@ public class MapActivity extends AppCompatActivity {
 
     }
 
-    private void setMapCustomFile() {
-        String mapStyle = "[\n" +
-                "          {\n" +
-                "                    \"featureType\": \"land\",\n" +
-                "                    \"elementType\": \"geometry\",\n" +
-                "                    \"stylers\": {\n" +
-                "                              \"color\": \"#e69138ff\",\n" +
-                "                              \"hue\": \"#f6b26b\"\n" +
-                "                    }\n" +
-                "          }\n" +
-                "]";
 
-        TextureMapView.setMapCustomEnable(true);
+    public void setMapCustomFile() {
         FileOutputStream out = null;
+        InputStream inputStream = null;
         try {
-            byte[] b = mapStyle.getBytes();
-            String moduleName = MyApplication.getContext().getFilesDir().getAbsolutePath();
-            File f = new File(moduleName + "/" + "map_style.json");
+            inputStream = getAssets().open("custom_configdir.txt");
+            byte[] b = new byte[inputStream.available()];
+            inputStream.read(b);
+            String moduleName = getFilesDir().getAbsolutePath();
+            File f = new File(moduleName + "/map_style.json");
             if (f.exists()) {
                 f.delete();
             }
             f.createNewFile();
             out = new FileOutputStream(f);
             out.write(b);
-            TextureMapView.setCustomMapStylePath(moduleName + "/map_style.json");
-            LogUtil.e(TAG, "set map /map_style.json");
-
+            MapView.setCustomMapStylePath(moduleName + "/map_style.json");
         } catch (IOException e) {
-            LogUtil.e(TAG, e.toString());
+            e.printStackTrace();
         } finally {
             try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
                 if (out != null) {
                     out.close();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mapView.setCustomMapStylePath(MyApplication.getContext().getFilesDir().getAbsolutePath() + "/map_style.json");
-                            mapView.setMapCustomEnable(true);
-                        }
-                    });
                 }
             } catch (IOException e) {
-                LogUtil.e(TAG, e.toString());
+                e.printStackTrace();
             }
         }
-
     }
+
 
     private class MyItem implements ClusterItem {
         private final LatLng mPosition;
