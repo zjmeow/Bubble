@@ -106,9 +106,6 @@ public class MyProfileActivity extends ActivityBase {
                 url = userInfo.getExtra("url");
                 Picasso.with(MyProfileActivity.this).load(url).into(mIvAvatar);
 
-
-
-
             }
         });
 

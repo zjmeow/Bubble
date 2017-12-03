@@ -8,7 +8,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="430dp"
         android:fitsSystemWindows="true">
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -46,12 +46,13 @@
 
                 <com.qmuiteam.qmui.widget.QMUIRadiusImageView
                     android:id="@+id/iv_profile_avatar"
-                    android:layout_width="105dp"
-                    android:layout_height="105dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
 
-                    android:layout_marginTop="72dp"
+                    android:layout_marginTop="120dp"
                     android:src="@mipmap/test"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +63,7 @@
                     android:id="@+id/tv_profile_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="aaaaaa"
                     android:textColor="@color/profileUsername"
@@ -75,7 +76,6 @@
                     android:id="@+id/tv_profile_signature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:text="aaaaaaaa"
                     android:textColor="@color/secondText"
@@ -89,8 +89,7 @@
             </android.support.constraint.ConstraintLayout>
 
             <android.support.v7.widget.Toolbar
-
-                android:id="@+id/toolbar_profile"
+                android:id="@+id/toolbar_bubble_detail"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bar_size"
                 app:layout_collapseMode="pin"
@@ -98,7 +97,6 @@
                 app:popupTheme="@style/AlertDialog.AppCompat.Light">
 
             </android.support.v7.widget.Toolbar>
-
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
@@ -120,10 +118,4 @@
         android:textColor="#FFFFFF"
         app:qmui_backgroundColor="@color/colorPrimary" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler_profile_bubble"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

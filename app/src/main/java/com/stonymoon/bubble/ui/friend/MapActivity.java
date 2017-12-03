@@ -506,7 +506,8 @@ public class MapActivity extends AppCompatActivity {
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
                         ProfileActivity.startActivity(MapActivity.this,
-                                chosenUserBean.getPhone()
+                                chosenUserBean.getPhone(), chosenUserBean.getUid() + ""
+
                         );
                         dialog.dismiss();
                     }

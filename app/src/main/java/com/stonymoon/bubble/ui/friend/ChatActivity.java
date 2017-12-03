@@ -23,6 +23,7 @@ import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
+import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.view.ChatView;
@@ -56,6 +57,7 @@ public class ChatActivity extends StatusBarLightActivity {
     private List<MyMessage> historyMessage;
     private DefaultUser user;
     private DefaultUser otherUser;
+    private String otherUserId;
     //读取页面条数
     private int page = 0;
 
@@ -209,7 +211,7 @@ public class ChatActivity extends StatusBarLightActivity {
             @Override
             public void onAvatarClick(MyMessage message) {
 
-                ProfileActivity.startActivity(ChatActivity.this, message.getFromUser().getId());
+                ProfileActivity.startActivity(ChatActivity.this, message.getFromUser().getId(), otherUserId);
 
             }
         });
@@ -297,6 +299,7 @@ public class ChatActivity extends StatusBarLightActivity {
                 otherUser.setId(userInfo.getUserName());
                 otherUser.setAvatar(userInfo.getExtra("url"));
                 otherUser.setDisplayName(userInfo.getDisplayName());
+                otherUserId = userInfo.getAddress();
             }
         });
         UserInfo myInfo = JMessageClient.getMyInfo();

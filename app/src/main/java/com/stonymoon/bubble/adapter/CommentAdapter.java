@@ -39,7 +39,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 ListBean bean = mList.get(position - 2);
-                ProfileActivity.startActivity(mContext, bean.getMiniUser().getPhone());
+                ProfileActivity.startActivity(mContext, bean.getMiniUser().getPhone(), bean.getUid() + "");
 
             }
 

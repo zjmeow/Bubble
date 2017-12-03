@@ -25,4 +25,6 @@
     <color name="cardSecondText">#868686</color>
 
 
+    <color name="profileUsername">#FFF</color>
+
 </resources>

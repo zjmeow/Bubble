@@ -22,7 +22,9 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.bean.LoginBean;
+import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -38,6 +40,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import cn.pedant.SweetAlert.SweetAlertDialog;
 
@@ -151,6 +154,13 @@ public class LoginActivity extends Activity {
                     public void onNext(Object tag, String response) {
                         Gson gson = new Gson();
                         bean = gson.fromJson(response, LoginBean.class);
+                        JUserBean jUserBean = new JUserBean();
+                        jUserBean.setAddress(bean.getContent().getId() + "");
+                        JMessageClient.updateMyInfo(UserInfo.Field.address, jUserBean, new BasicCallback() {
+                            @Override
+                            public void gotResult(int i, String s) {
+                            }
+                        });
                         AuthUtil.saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
@@ -161,6 +171,7 @@ public class LoginActivity extends Activity {
 
                             }
                         });
+
 
                     }
 

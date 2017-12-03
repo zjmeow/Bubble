@@ -6,11 +6,20 @@ public class BubbleDetailBean {
     /**
      * code : 1
      * message : 内容：
-     * content : {"id":176,"uid":39,"title":"啊啊啊","time":1511785426000,"latitude":26.056992,"longitude":119.19907,"image":"http://oupl6wdxc.bkt.clouddn.com/EIEEKLIHFFKIF","deadline":1512044626000,"anonymous":1,"click":0,"type":0,"content":"哦哦哦"}
+     * content : {"id":182,"uid":42,"title":"呀呀呀","time":1512186717000,"latitude":26.070267,"longitude":119.208032,"image":"http://oupl6wdxc.bkt.clouddn.com/EIEFELJJMLKFG","deadline":1512446157000,"anonymous":0,"click":4,"type":0,"comments":null,"content":null,"miniUser":{"username":"测试20号","phone":"13101411920","image":"http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1512300540962"}}
      */
 
+    private int code;
     private String message;
     private ContentBean content;
+
+    public int getCode() {
+        return code;
+    }
+
+    public void setCode(int code) {
+        this.code = code;
+    }
 
     public String getMessage() {
         return message;
@@ -30,18 +39,20 @@ public class BubbleDetailBean {
 
     public static class ContentBean {
         /**
-         * id : 176
-         * uid : 39
-         * title : 啊啊啊
-         * time : 1511785426000
-         * latitude : 26.056992
-         * longitude : 119.19907
-         * image : http://oupl6wdxc.bkt.clouddn.com/EIEEKLIHFFKIF
-         * deadline : 1512044626000
-         * anonymous : 1
-         * click : 0
+         * id : 182
+         * uid : 42
+         * title : 呀呀呀
+         * time : 1512186717000
+         * latitude : 26.070267
+         * longitude : 119.208032
+         * image : http://oupl6wdxc.bkt.clouddn.com/EIEFELJJMLKFG
+         * deadline : 1512446157000
+         * anonymous : 0
+         * click : 4
          * type : 0
-         * content : 哦哦哦
+         * comments : null
+         * content : null
+         * miniUser : {"username":"测试20号","phone":"13101411920","image":"http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1512300540962"}
          */
 
         private int id;
@@ -55,7 +66,9 @@ public class BubbleDetailBean {
         private int anonymous;
         private int click;
         private int type;
+        private int comments;
         private String content;
+        private MiniUserBean miniUser;
 
         public int getId() {
             return id;
@@ -145,12 +158,64 @@ public class BubbleDetailBean {
             this.type = type;
         }
 
+        public int getComments() {
+            return comments;
+        }
+
+        public void setComments(int comments) {
+            this.comments = comments;
+        }
+
         public String getContent() {
             return content;
         }
 
         public void setContent(String content) {
             this.content = content;
+        }
+
+        public MiniUserBean getMiniUser() {
+            return miniUser;
+        }
+
+        public void setMiniUser(MiniUserBean miniUser) {
+            this.miniUser = miniUser;
+        }
+
+        public static class MiniUserBean {
+            /**
+             * username : 测试20号
+             * phone : 13101411920
+             * image : http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1512300540962
+             */
+
+            private String username;
+            private String phone;
+            private String image;
+
+            public String getUsername() {
+                return username;
+            }
+
+            public void setUsername(String username) {
+                this.username = username;
+            }
+
+            public String getPhone() {
+                return phone;
+            }
+
+            public void setPhone(String phone) {
+                this.phone = phone;
+            }
+
+            public String getImage() {
+                return image;
+            }
+
+            public void setImage(String image) {
+                this.image = image;
+            }
         }
     }
 }

@@ -155,30 +155,16 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         tvSurvival = (TextView) headView.findViewById(R.id.tv_bubble_detail_survival_time);
         ivComment = (ImageView) headView.findViewById(R.id.iv_bubble_detail_comment);
         ivAdd = (ImageView) headView.findViewById(R.id.iv_bubble_detail_add);
-
-        tvTitle.setText(bean.getTitle());
-        tvContent.setText(bean.getContent());
-        tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
         ivBubbleDetail.setOnClickListener(this);
         ivHead.setOnClickListener(this);
         ivComment.setOnClickListener(this);
         ivAdd.setOnClickListener(this);
-
         bean.getClick();
         initDeadline();
-        if (bean.getAnonymous() == 0) {
-            Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
-            tvAuthorName.setText(bean.getMiniUser().getUsername());
+        setBar();
+    }
 
-
-        } else {
-            Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
-            tvAuthorName.setText("匿名用户");
-            ivHead.setClickable(false);
-
-        }
-
-
+    private void setBar() {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle("");
@@ -197,9 +183,24 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             @Override
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
-                BubbleDetailBean.ContentBean bubbleDetailBean = gson.fromJson(response, BubbleDetailBean.class).getContent();
-                survivalMinute = (bubbleDetailBean.getDeadline() - bubbleDetailBean.getTime()) / 60000;
+                BubbleDetailBean.ContentBean bean = gson.fromJson(response, BubbleDetailBean.class).getContent();
+                survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
                 tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+                tvTitle.setText(bean.getTitle());
+                tvContent.setText(bean.getContent());
+                tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
+                if (bean.getAnonymous() == 0) {
+                    Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
+                    tvAuthorName.setText(bean.getMiniUser().getUsername());
+                } else {
+                    Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
+                    tvAuthorName.setText("匿名用户");
+                    ivHead.setClickable(false);
+
+                }
+
+
+
             }
 
             @Override
@@ -333,9 +334,8 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             case R.id.iv_bubble_detail_comment:
                 showEditTextDialog();
                 break;
-
             case R.id.iv_bubble_detail_head:
-                ProfileActivity.startActivity(this, bean.getMiniUser().getPhone());
+                ProfileActivity.startActivity(this, bean.getMiniUser().getPhone(), bean.getUid() + "");
                 break;
             case R.id.iv_bubble_detail:
                 PhotoActivity.startActivity(this, bean.getImage());
