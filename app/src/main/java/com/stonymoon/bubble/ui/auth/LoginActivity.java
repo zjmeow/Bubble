@@ -29,6 +29,7 @@ import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.stonymoon.bubble.view.MyDialog;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -43,6 +44,7 @@ import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import cn.pedant.SweetAlert.SweetAlertDialog;
+import retrofit2.http.HTTP;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -141,7 +143,7 @@ public class LoginActivity extends Activity {
         if (phoneNum.equals("") || password.equals("")) {
             Toast.makeText(LoginActivity.this, "请输入正确的账户密码", Toast.LENGTH_SHORT).show();
         }
-        String url = "login";
+        String url = UrlUtil.getLogin();
         parameters.put("phone", phoneNum);
         parameters.put("password", password);
 

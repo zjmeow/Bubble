@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -61,7 +62,7 @@ public class RegisterPhoneActivity extends AppCompatActivity {
         parameters.put("password", passwordText.getText().toString());
         parameters.put("token", token(phone));
         parameters.put("phone", phone);
-        String url = "create";
+        String url = UrlUtil.getCreateUser();
         HttpUtil.sendHttpRequest(this)
                 .rxPost(url, parameters, new RxStringCallback() {
                     @Override

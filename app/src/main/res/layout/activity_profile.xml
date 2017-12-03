@@ -103,27 +103,13 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <ImageView
-        android:id="@+id/iv_profile_location"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:layout_gravity="bottom"
-        android:src="@drawable/location" />
 
-    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-        android:id="@+id/btn_profile_make_friend"
-        android:layout_width="110dp"
-        android:layout_height="50dp"
-        android:layout_gravity="bottom"
-        android:layout_marginRight="16dp"
-        android:text="加好友"
-        android:textColor="#FFFFFF"
-        app:qmui_backgroundColor="@color/colorPrimary" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_profile_bubble"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="8dp"
+        android:background="@color/textBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

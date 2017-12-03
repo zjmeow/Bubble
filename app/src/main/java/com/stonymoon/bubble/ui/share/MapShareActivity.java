@@ -35,6 +35,7 @@ import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MapUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.stonymoon.bubble.util.clusterutil.clustering.Cluster;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
@@ -200,7 +201,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     private void initBubble() {
         seenItems.clear();
         itemList.clear();
-        String url = "download";
+        String url = UrlUtil.getMapBubble();
         HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {

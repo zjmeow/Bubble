@@ -19,7 +19,6 @@
         android:layout_height="52dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10.5dp"
-        android:src="@mipmap/test"
         app:qmui_border_width="0dp"
         />
 

@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
@@ -55,10 +56,12 @@ public class ProfileBubbleAdapter extends RecyclerView.Adapter<ProfileBubbleAdap
 
     public void onBindViewHolder(ViewHolder holder, int position) {
         BubbleBean.ContentBean bean = mList.get(position);
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(bean.getImage())
                 .placeholder(R.mipmap.test)
                 .into(holder.ivContent);
+        holder.tvCommentNum.setText(bean.getComments() + "");
+        holder.tvEmojiNum.setText(bean.getClick() + "");
         holder.tvContent.setText(bean.getTitle());
     }
 
@@ -66,13 +69,16 @@ public class ProfileBubbleAdapter extends RecyclerView.Adapter<ProfileBubbleAdap
         ImageView ivContent;
         TextView tvContent;
         LinearLayout linearLayout;
-
+        TextView tvCommentNum;
+        TextView tvEmojiNum;
 
         public ViewHolder(View view) {
             super(view);
             ivContent = (ImageView) view.findViewById(R.id.iv_share_item_image);
             linearLayout = (LinearLayout) view.findViewById(R.id.constraint_layout_share_item);
             tvContent = (TextView) view.findViewById(R.id.tv_share_item_content);
+            tvCommentNum = (TextView) view.findViewById(R.id.tv_share_item_comments_num);
+            tvEmojiNum = (TextView) view.findViewById(R.id.tv_share_item_emoji_num);
         }
 
     }

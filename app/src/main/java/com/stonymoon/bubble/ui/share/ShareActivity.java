@@ -34,6 +34,7 @@ import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.stonymoon.bubble.view.MyDialog;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -128,7 +129,7 @@ public class ShareActivity extends StatusBarLightActivity {
         parameters.put("longitude", longitude);
         parameters.put("anonymous", anonymous);
         parameters.put("type", 0);
-        String url = "upload";
+        String url = UrlUtil.getImageUpload();
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
@@ -172,7 +173,7 @@ public class ShareActivity extends StatusBarLightActivity {
     private void uploadPicture(final File file) {
         SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
         String token = sharedPreferences.getString("token", "");
-        String url = "imageToken";
+        String url = UrlUtil.getImageToken();
         parameters.clear();
         parameters.put("token", token);
         final String name = generateName();

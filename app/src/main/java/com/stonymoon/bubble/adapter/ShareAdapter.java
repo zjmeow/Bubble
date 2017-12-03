@@ -65,7 +65,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     public void onBindViewHolder(ViewHolder holder, int position) {
         BubbleBean.ContentBean bean = mList.get(position);
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(bean.getImage())
                 .placeholder(R.mipmap.test)
                 .into(holder.ivContent);
@@ -78,6 +78,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 //        }
         holder.tvName.setText(bean.getMiniUser().getUsername());
         holder.tvDate.setText(DateUtil.CalculateTime(bean.getTime()));
+        holder.tvCommentNum.setText(bean.getComments() + "");
+        holder.tvEmojiNum.setText(bean.getClick() + "");
         Picasso.with(mContext)
                 .load(bean.getMiniUser().getImage())
                 .placeholder(R.mipmap.test)
@@ -91,6 +93,9 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         LinearLayout linearLayout;
         TextView tvName;
         TextView tvDate;
+        TextView tvCommentNum;
+        TextView tvEmojiNum;
+
         QMUIRadiusImageView ivAvatar;
 
 
@@ -103,7 +108,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             tvName = (TextView) view.findViewById(R.id.tv_share_item_username);
             tvDate = (TextView) view.findViewById(R.id.tv_share_item_date);
             ivAvatar = (QMUIRadiusImageView) view.findViewById(R.id.iv_share_item_avatar);
-
+            tvCommentNum = (TextView) view.findViewById(R.id.tv_share_item_comments_num);
+            tvEmojiNum = (TextView) view.findViewById(R.id.tv_share_item_emoji_num);
         }
 
     }

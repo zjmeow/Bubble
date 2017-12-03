@@ -34,6 +34,7 @@ import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 
 import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxSPTool;
@@ -286,7 +287,7 @@ public class MyProfileActivity extends ActivityBase {
 
     private void uploadHead(final File file) {
         String token = AuthUtil.getToken();
-        String url = "imageToken";
+        String url = UrlUtil.getImageToken();
         parameters.clear();
         parameters.put("token", token);
         final String name = generateName(AuthUtil.getId());
@@ -322,7 +323,7 @@ public class MyProfileActivity extends ActivityBase {
         parameters.clear();
         parameters.put("token", token);
         parameters.put("url", headUrl);
-        String url = "image";
+        String url = UrlUtil.getImageUpload();
         JUserBean bean = new JUserBean();
         bean.setUserExtras("url", headUrl);
         JMessageClient.updateMyInfo(UserInfo.Field.extras, bean, new BasicCallback() {

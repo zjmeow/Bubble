@@ -108,6 +108,7 @@
                 android:src="@drawable/share_smlie" />
 
             <TextView
+                android:id="@+id/tv_share_item_emoji_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -124,6 +125,7 @@
                 android:src="@drawable/share_comment" />
 
             <TextView
+                android:id="@+id/tv_share_item_comments_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

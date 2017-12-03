@@ -8,6 +8,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,6 +28,7 @@ import com.stonymoon.bubble.ui.common.PhotoActivity;
 
 import com.stonymoon.bubble.ui.share.ShareActivity;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.activity.ActivityBase;
@@ -80,7 +83,6 @@ public class ProfileActivity extends StatusBarLightActivity {
     }
 
 
-    @OnClick(R.id.btn_profile_make_friend)
     void sendMessage() {
         ContactManager.sendInvitationRequest(phone, "", "请求加你为好友", new BasicCallback() {
             @Override
@@ -145,7 +147,7 @@ public class ProfileActivity extends StatusBarLightActivity {
 
     }
 
-    @OnClick(R.id.iv_profile_location)
+
     void locate() {
         Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra("phone", phone);//创一个intent用于传值
@@ -158,6 +160,12 @@ public class ProfileActivity extends StatusBarLightActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
+            case R.id.menu_make_friend:
+                sendMessage();
+                break;
+            case R.id.menu_locate:
+                locate();
                 break;
         }
         return true;
@@ -177,7 +185,7 @@ public class ProfileActivity extends StatusBarLightActivity {
     }
 
     private void initBubble() {
-        String url = "download/" + uid;
+        String url = UrlUtil.getUserBubble(uid);
         HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
@@ -200,6 +208,13 @@ public class ProfileActivity extends StatusBarLightActivity {
         });
 
 
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile, menu);
+        return true;
     }
 
 

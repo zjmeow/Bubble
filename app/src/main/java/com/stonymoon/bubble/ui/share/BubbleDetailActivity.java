@@ -38,6 +38,7 @@ import com.stonymoon.bubble.ui.friend.ProfileActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
@@ -50,6 +51,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import retrofit2.http.HTTP;
+import retrofit2.http.Url;
 
 public class BubbleDetailActivity extends StatusBarLightActivity implements View.OnClickListener {
     @BindView(R.id.iv_bubble_detail)
@@ -67,12 +69,12 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private TextView tvSurvival;
     private ImageView ivComment;
     private ImageView ivAdd;
-
+    private BubbleBean.ContentBean bean;
 
     private long survivalMinute;
     private Context mContext;
     private Map<String, Object> parameters = new HashMap<>();
-    private BubbleBean.ContentBean bean;
+
     private List<CommentBean.ContentBean.ListBean> commentBeanList = new ArrayList<>();
     private CommentAdapter adapter = new CommentAdapter(commentBeanList);
     private int page = 1;
@@ -178,11 +180,12 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
 
 
     private void initDeadline() {
-        String url = "download/m/" + bean.getId();
+        String url = UrlUtil.getBubbleDetail(bean.getId() + "");
         HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
+
                 BubbleDetailBean.ContentBean bean = gson.fromJson(response, BubbleDetailBean.class).getContent();
                 survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
                 tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
@@ -252,7 +255,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         parameters.put("pid", id);
         parameters.put("token", AuthUtil.getToken());
         parameters.put("content", content);
-        String url = "comment";
+        String url = UrlUtil.postBubbleComments();
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
@@ -276,7 +279,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
 
     private void getComment() {
         parameters.clear();
-        String url = "getcomment" + "/" + bean.getId() + "/" + page;
+        String url = UrlUtil.getBubbleComments(bean.getId() + "", page + "");
         HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
@@ -307,7 +310,8 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     void add() {
         parameters.clear();
         parameters.put("id", bean.getId() + "");
-        HttpUtil.sendHttpRequest(this).rxPost("time/add", parameters, new RxStringCallback() {
+        String url = UrlUtil.getBubbleAddTime();
+        HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
                 survivalMinute++;
