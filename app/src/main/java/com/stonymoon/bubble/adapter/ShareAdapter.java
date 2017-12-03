@@ -69,13 +69,13 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
                 .load(bean.getImage())
                 .placeholder(R.mipmap.test)
                 .into(holder.ivContent);
-        holder.tvTitle.setText(bean.getTitle());
-        if (bean.getContent().equals("")) {
-            holder.tvContent.setVisibility(View.GONE);
-        } else {
-            holder.tvContent.setVisibility(View.VISIBLE);
-            holder.tvContent.setText(bean.getContent());
-        }
+        holder.tvContent.setText(bean.getTitle());
+//        if (bean.getContent().equals("")) {
+//            holder.tvContent.setVisibility(View.GONE);
+//        } else {
+//            holder.tvContent.setVisibility(View.VISIBLE);
+//            holder.tvContent.setText(bean.getContent());
+//        }
         holder.tvName.setText(bean.getMiniUser().getUsername());
         holder.tvDate.setText(DateUtil.CalculateTime(bean.getTime()));
         Picasso.with(mContext)
@@ -86,7 +86,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView ivContent;
-        TextView tvTitle;
+        //TextView tvTitle;
         TextView tvContent;
         LinearLayout linearLayout;
         TextView tvName;
@@ -97,7 +97,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
         public ViewHolder(View view) {
             super(view);
             ivContent = (ImageView) view.findViewById(R.id.iv_share_item_image);
-            tvTitle = (TextView) view.findViewById(R.id.tv_share_item_title);
+            //tvTitle = (TextView) view.findViewById(R.id.tv_share_item_title);
             linearLayout = (LinearLayout) view.findViewById(R.id.constraint_layout_share_item);
             tvContent = (TextView) view.findViewById(R.id.tv_share_item_content);
             tvName = (TextView) view.findViewById(R.id.tv_share_item_username);

@@ -9,10 +9,12 @@
     tools:context="com.stonymoon.bubble.ui.friend.FriendActivity">
 
     <android.support.v7.widget.Toolbar
+
         android:id="@+id/title_container"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="@dimen/bar_size"
         android:background="@color/barColor"
+        app:contentInsetStart="6dp"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
 

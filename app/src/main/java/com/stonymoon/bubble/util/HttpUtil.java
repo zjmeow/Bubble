@@ -16,6 +16,7 @@ public class HttpUtil {
     private static final String tableId = "1000002164";
     private static final String ak = "A61df0d768beeecce052cc58283d84c2";
     private static final int pageSize = 40;
+    private static final String TAG = "HttpUtil";
     private static Map<String, Object> createParameters = new HashMap<>();
     private static Map<String, Object> updateLocateParameters = new HashMap<>();
     private static Map<String, Object> updateMapParameters = new HashMap<>();
@@ -47,13 +48,14 @@ public class HttpUtil {
         novate.rxPost("geodata/v4/poi/create", createParameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
-                Toast.makeText(context, response, Toast.LENGTH_SHORT).show();
+
+
             }
 
             @Override
             public void onError(Object tag, Throwable e) {
-                Toast.makeText(context, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+
+                LogUtil.e(TAG, e.toString());
             }
 
             @Override
@@ -80,8 +82,8 @@ public class HttpUtil {
 
             @Override
             public void onError(Object tag, Throwable e) {
-                Toast.makeText(context, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                //Toast.makeText(context, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                LogUtil.e(TAG, e.toString());
             }
 
             @Override
@@ -131,7 +133,7 @@ public class HttpUtil {
 
             @Override
             public void onError(Object tag, Throwable e) {
-                Toast.makeText(context, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "上传失败，请检查网络", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
 

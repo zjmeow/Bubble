@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_share"
     android:layout_width="match_parent"
@@ -7,39 +8,34 @@
     android:orientation="vertical"
     tools:context="com.stonymoon.bubble.ui.share.ShareActivity">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/barColor">
+        android:layout_height="@dimen/bar_size"
+        android:background="@color/barColor"
+        app:contentInsetStart="6dp">
 
         <ImageView
             android:id="@+id/iv_share_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="center"
-            android:layout_marginLeft="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/navigation_icon" />
 
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
         <TextView
 
             android:id="@+id/tv_share_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center|end"
             android:layout_marginRight="16dp"
             android:text="分享"
             android:textColor="@color/barText"
             android:textSize="18sp" />
-    </LinearLayout>
+    </android.support.v7.widget.Toolbar>
 
     <View
         android:layout_width="match_parent"
