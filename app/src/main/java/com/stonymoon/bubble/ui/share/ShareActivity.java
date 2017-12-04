@@ -184,7 +184,6 @@ public class ShareActivity extends StatusBarLightActivity {
                         Gson gson = new Gson();
                         String token = gson.fromJson(response, ContentBean.class).getContent();
                         upload(file, token, name);
-
                     }
 
                     @Override

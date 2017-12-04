@@ -165,7 +165,8 @@
             android:windowSoftInputMode="stateVisible|adjustResize" />
         <activity
             android:name=".ui.friend.ProfileActivity"
-            android:label="@string/title_activity_profile" />
+            android:label="@string/title_activity_profile"
+            android:theme="@style/AppTheme.BlueStatus" />
         <activity
             android:name=".ui.common.MyProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />

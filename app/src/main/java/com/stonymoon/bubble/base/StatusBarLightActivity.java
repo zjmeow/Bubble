@@ -7,15 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
-/**
- * Created by Administrator on 2017/12/3.
- */
 
 public class StatusBarLightActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        QMUIStatusBarHelper.setStatusBarLightMode(this);
+        //QMUIStatusBarHelper.setStatusBarLightMode(this);
     }
 
 }

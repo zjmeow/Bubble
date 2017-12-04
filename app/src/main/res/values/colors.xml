@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#00A8E1</color>
-    <color name="colorPrimaryDark">#2B2E33</color>
+    <color name="colorPrimaryDark">#00A8E1</color>
     <color name="colorAccent">#0EADF3</color>
     <color name="primaryText">#666666</color>
     <color name="secondText">#949494</color>
@@ -19,8 +19,9 @@
     <color name="blue_btn_text_70">#E0F8F8</color>
     <color name="blue_btn_text_press">#99E4E4</color>
 
-    <color name="barColor">#FFF</color>
-    <color name="barText">#99B1CD</color>
+    <color name="barColor">#00A8E1</color>
+    <color name="bartextt">#99B1CD</color>
+    <color name="barText">#FFF</color>
     <color name="cardText">#99B1CD</color>
     <color name="cardSecondText">#868686</color>
 

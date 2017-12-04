@@ -16,6 +16,7 @@
     </style>
 
     <style name="AppTheme.BlueStatus">
+        <item name="android:actionMenuTextColor">#000</item>
         <item name="android:showDividers">middle</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

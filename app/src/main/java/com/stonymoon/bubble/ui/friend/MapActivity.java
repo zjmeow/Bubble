@@ -6,14 +6,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.transition.Transition;
-import android.transition.TransitionInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -31,10 +27,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
-import com.baidu.mapapi.map.MapStatusUpdate;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
-import com.baidu.mapapi.map.TextureMapView;
 import com.baidu.mapapi.model.LatLng;
 
 import com.bumptech.glide.Glide;
@@ -45,7 +38,6 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
-import com.stonymoon.bubble.application.MyApplication;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
@@ -294,7 +286,7 @@ public class MapActivity extends AppCompatActivity {
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
         //注意该方法要再setContentView方法之前实现
         SDKInitializer.initialize(getApplicationContext());
-        setMapCustomFile();
+        //setMapCustomFile();
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         JMessageClient.registerEventReceiver(this);
@@ -341,9 +333,9 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mLocationClient.stop();
         JMessageClient.unRegisterEventReceiver(this);
         mapView.onDestroy();
-        mLocationClient.stop();
         //JMessageClient.logout();
 
     }
@@ -372,7 +364,6 @@ public class MapActivity extends AppCompatActivity {
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
         clearMap(mapView);
-
         mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
@@ -849,8 +840,13 @@ public class MapActivity extends AppCompatActivity {
                 HttpUtil.getUser(MapActivity.this, id, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
+
                         Gson gson = new Gson();
                         LocationBean bean = gson.fromJson(response, LocationBean.class);
+                        if (bean == null || bean.getPois() == null) {
+                            return;
+                        }
+
                         locationId = bean.getPois().get(0).getId();
                         AuthUtil.setLocationId(locationId);
                     }

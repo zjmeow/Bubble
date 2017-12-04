@@ -1,5 +1,7 @@
 package com.stonymoon.bubble.ui.share;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import com.stonymoon.bubble.ui.friend.ProfileActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -58,6 +61,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     ImageView ivBubbleDetail;
     @BindView(R.id.toolbar_bubble_detail)
     Toolbar toolbar;
+
 
     @BindView(R.id.recycler_bubble_detail_comment)
     XRecyclerView recyclerComment;
@@ -185,10 +189,9 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             @Override
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
-
                 BubbleDetailBean.ContentBean bean = gson.fromJson(response, BubbleDetailBean.class).getContent();
                 survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
-                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
                 tvTitle.setText(bean.getTitle());
                 tvContent.setText(bean.getContent());
                 tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
@@ -209,7 +212,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             @Override
             public void onError(Object tag, Throwable e) {
                 survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
-                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60);
             }
 
             @Override
@@ -315,7 +318,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             @Override
             public void onNext(Object tag, String response) {
                 survivalMinute++;
-                tvSurvival.setText("泡泡将在" + (survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟" + "后破掉");
+                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
             }
 
             @Override
@@ -346,9 +349,17 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 break;
             case R.id.iv_bubble_detail_add:
                 add();
+                ObjectAnimator animatorX = ObjectAnimator.ofFloat(ivAdd, "scaleX", 0.8f, 1.0f);
+                ObjectAnimator animatorY = ObjectAnimator.ofFloat(ivAdd, "scaleY", 0.8f, 1.0f);
+                AnimatorSet showBubbleSet = new AnimatorSet();
+                showBubbleSet.setDuration(1000);
+                showBubbleSet.setInterpolator(new SpringScaleInterpolator(0.4f));
+                showBubbleSet.playTogether(animatorX, animatorY);
+                showBubbleSet.start();
                 break;
         }
 
     }
+
 
 }

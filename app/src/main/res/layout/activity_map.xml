@@ -21,13 +21,7 @@
 
 
 
-    <ImageView
-        android:id="@+id/iv_map_receive_emoji"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
-        android:layout_gravity="center"
-        android:src="@drawable/shit"
-        android:visibility="gone" />
+
 
     <ImageView
         android:id="@+id/iv_map_receive_message"
@@ -57,7 +51,6 @@
 
 
         <ImageView
-
             android:id="@+id/iv_map_location"
             android:layout_width="80dp"
             android:layout_height="96dp"
@@ -79,4 +72,11 @@
 
     <include layout="@layout/bottom_sheet" />
 
+    <ImageView
+        android:id="@+id/iv_map_receive_emoji"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center"
+        android:src="@drawable/shit"
+        android:visibility="gone" />
 </android.support.design.widget.CoordinatorLayout>
