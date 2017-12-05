@@ -12,15 +12,16 @@
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="275dp"
-        android:fitsSystemWindows="true">
+        android:fitsSystemWindows="true"
+        app:popupTheme="@style/OverflowMenu">
 
         <android.support.design.widget.CollapsingToolbarLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:contentScrim="@color/barColor"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed"
+            app:popupTheme="@style/OverflowMenu">
             <!--app:contentScrim="#00000000"-->
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -45,7 +46,7 @@
                 android:layout_height="?actionBarSize"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/AlertDialog.AppCompat.Light">
+                app:popupTheme="@style/OverflowMenu">
 
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.CollapsingToolbarLayout>

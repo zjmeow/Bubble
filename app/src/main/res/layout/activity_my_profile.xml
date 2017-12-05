@@ -27,7 +27,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:cardCornerRadius="16dp"
-
             >
 
             <LinearLayout
@@ -139,15 +138,6 @@
             android:layout_height="0dp"
             android:layout_weight="32" />
 
-        <com.qmuiteam.qmui.widget.QMUIRadiusImageView
-            android:id="@+id/iv_edit_profile_avatar"
-            android:layout_width="0dp"
-            android:layout_height="156dp"
-            android:layout_gravity="center"
-            android:layout_weight="122"
-            android:scaleType="centerCrop"
-            app:qmui_corner_radius="5dp"
-            app:qmui_is_circle="false" />
 
         <View
             android:layout_width="0dp"
@@ -158,3 +148,122 @@
 
 
 </RelativeLayout>
+
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/layout_bubble_detail"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:fitsSystemWindows="true">
+
+
+<android.support.design.widget.AppBarLayout
+    android:theme="@style/AppTheme.AppBarOverlay"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CollapsingToolbarLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        app:popupTheme="@style/OverflowMenu"
+        app:contentScrim="@color/barColor"
+        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+        <!--app:contentScrim="#00000000"-->
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:layout_collapseMode="parallax">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/iv_profile_background"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/test" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#8000" />
+
+            </FrameLayout>
+
+            <com.qmuiteam.qmui.widget.QMUIRadiusImageView
+                android:id="@+id/iv_edit_profile_avatar"
+                android:layout_width="105dp"
+                android:layout_height="105dp"
+
+                android:layout_marginTop="72dp"
+                android:src="@mipmap/test"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:qmui_border_width="0dp" />
+
+            <TextView
+                android:id="@+id/tv_edit_profile_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:text="aaaaaa"
+                android:textColor="@color/profileUsername"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_profile_avatar" />
+
+            <TextView
+                android:id="@+id/tv_edit_profile_signature"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:text="aaaaaaaa"
+                android:textColor="@color/secondText"
+
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.v7.widget.Toolbar
+
+            android:id="@+id/toolbar_profile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bar_size"
+            app:layout_collapseMode="pin"
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+            app:popupTheme="@style/OverflowMenu"
+
+            >
+
+        </android.support.v7.widget.Toolbar>
+
+    </android.support.design.widget.CollapsingToolbarLayout>
+
+</android.support.design.widget.AppBarLayout>
+
+
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/recycler_profile_bubble"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/textBackground"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+</android.support.design.widget.CoordinatorLayout>

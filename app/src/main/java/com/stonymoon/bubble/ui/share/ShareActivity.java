@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.map.MapView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -129,7 +130,7 @@ public class ShareActivity extends StatusBarLightActivity {
         parameters.put("longitude", longitude);
         parameters.put("anonymous", anonymous);
         parameters.put("type", 0);
-        String url = UrlUtil.getImageUpload();
+        String url = UrlUtil.getShare();
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
@@ -155,6 +156,7 @@ public class ShareActivity extends StatusBarLightActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MapView.setCustomMapStylePath(getFilesDir().getAbsolutePath() + "/map_style.json");
         setContentView(R.layout.activity_share);
         ButterKnife.bind(this);
         getLocation();
@@ -167,6 +169,7 @@ public class ShareActivity extends StatusBarLightActivity {
         Intent intent = getIntent();
         latitude = intent.getDoubleExtra("latitude", 0);
         longitude = intent.getDoubleExtra("longitude", 0);
+
 
     }
 

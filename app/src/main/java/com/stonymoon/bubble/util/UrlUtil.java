@@ -53,7 +53,7 @@ public class UrlUtil {
     }
 
     public static String getBubbleDetail(String id) {
-        return "bubbles/id";
+        return "bubbles/" + id;
     }
 
 

@@ -1,122 +1,51 @@
 [
           {
-                    "featureType": "water",
+                    "featureType": "land",
                     "elementType": "all",
                     "stylers": {
-                              "color": "#021019"
+                              "color": "#f8f8f8ff"
                     }
           },
           {
-                    "featureType": "highway",
+                    "featureType": "water",
                     "elementType": "geometry.fill",
                     "stylers": {
-                              "color": "#000000"
-                    }
-          },
-          {
-                    "featureType": "highway",
-                    "elementType": "geometry.stroke",
-                    "stylers": {
-                              "color": "#147a92"
-                    }
-          },
-          {
-                    "featureType": "arterial",
-                    "elementType": "geometry.fill",
-                    "stylers": {
-                              "color": "#000000"
-                    }
-          },
-          {
-                    "featureType": "arterial",
-                    "elementType": "geometry.stroke",
-                    "stylers": {
-                              "color": "#0b3d51"
+                              "color": "#95dff0ff"
                     }
           },
           {
                     "featureType": "local",
-                    "elementType": "geometry",
-                    "stylers": {
-                              "color": "#000000"
-                    }
-          },
-          {
-                    "featureType": "land",
-                    "elementType": "all",
-                    "stylers": {
-                              "color": "#08304b"
-                    }
-          },
-          {
-                    "featureType": "railway",
                     "elementType": "geometry.fill",
                     "stylers": {
-                              "color": "#000000"
+                              "color": "#ffffffff"
+                    }
+          },
+          {
+                    "featureType": "highway",
+                    "elementType": "geometry.fill",
+                    "stylers": {
+                              "color": "#f9f2d5ff"
                     }
           },
           {
                     "featureType": "railway",
-                    "elementType": "geometry.stroke",
+                    "elementType": "all",
                     "stylers": {
-                              "color": "#08304b"
+                              "color": "#ffe24200"
                     }
           },
           {
                     "featureType": "subway",
-                    "elementType": "geometry",
-                    "stylers": {
-                              "lightness": -70
-                    }
-          },
-          {
-                    "featureType": "building",
-                    "elementType": "geometry.fill",
-                    "stylers": {
-                              "color": "#000000"
-                    }
-          },
-          {
-                    "featureType": "all",
-                    "elementType": "labels.text.fill",
-                    "stylers": {
-                              "color": "#857f7f"
-                    }
-          },
-          {
-                    "featureType": "all",
-                    "elementType": "labels.text.stroke",
-                    "stylers": {
-                              "color": "#000000"
-                    }
-          },
-          {
-                    "featureType": "building",
-                    "elementType": "geometry",
-                    "stylers": {
-                              "color": "#022338"
-                    }
-          },
-          {
-                    "featureType": "green",
-                    "elementType": "geometry",
-                    "stylers": {
-                              "color": "#062032"
-                    }
-          },
-          {
-                    "featureType": "boundary",
                     "elementType": "all",
                     "stylers": {
-                              "color": "#1e1c1c"
+                              "color": "#ffe24200"
                     }
           },
           {
-                    "featureType": "land",
+                    "featureType": "manmade",
                     "elementType": "all",
                     "stylers": {
-                              "color": "#000000ff",
-                              "hue": "#000000"
+                              "color": "#f8f4ebff"
                     }
           }
 ]

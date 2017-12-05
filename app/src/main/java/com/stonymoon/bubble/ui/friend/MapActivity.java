@@ -286,7 +286,7 @@ public class MapActivity extends AppCompatActivity {
         //在使用SDK各组件之前初始化context信息，传入ApplicationContext
         //注意该方法要再setContentView方法之前实现
         SDKInitializer.initialize(getApplicationContext());
-        //setMapCustomFile();
+        setMapCustomFile();
         setContentView(R.layout.activity_map);
         ButterKnife.bind(this);
         JMessageClient.registerEventReceiver(this);
@@ -741,7 +741,7 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    public void setMapCustomFile() {
+    private void setMapCustomFile() {
         FileOutputStream out = null;
         InputStream inputStream = null;
         try {

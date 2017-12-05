@@ -70,7 +70,6 @@ public class RegisterPhoneActivity extends AppCompatActivity {
                         Toast.makeText(RegisterPhoneActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                         //注册聊天帐号
                         RegisterOptionalUserInfo userInfo = new RegisterOptionalUserInfo();
-
                         userInfo.setNickname(usernameText.getText().toString());
                         JMessageClient.register(
                                 phone,

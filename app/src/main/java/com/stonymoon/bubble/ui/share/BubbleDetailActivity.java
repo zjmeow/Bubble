@@ -5,6 +5,8 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +47,8 @@ import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -73,7 +77,9 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private TextView tvSurvival;
     private ImageView ivComment;
     private ImageView ivAdd;
+    private TextView tvEmojiNumber;
     private BubbleBean.ContentBean bean;
+    private ImageView ivSurvival;
 
     private long survivalMinute;
     private Context mContext;
@@ -82,6 +88,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private List<CommentBean.ContentBean.ListBean> commentBeanList = new ArrayList<>();
     private CommentAdapter adapter = new CommentAdapter(commentBeanList);
     private int page = 1;
+    private int emojiNumber;
     private boolean hasMoreComment = true;
     private View headView;
 
@@ -161,6 +168,11 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         tvSurvival = (TextView) headView.findViewById(R.id.tv_bubble_detail_survival_time);
         ivComment = (ImageView) headView.findViewById(R.id.iv_bubble_detail_comment);
         ivAdd = (ImageView) headView.findViewById(R.id.iv_bubble_detail_add);
+        tvEmojiNumber = (TextView) headView.findViewById(R.id.tv_bubble_detail_emoji_number);
+        ivSurvival = (ImageView) headView.findViewById(R.id.iv_bubble_detail_time);
+
+
+
         ivBubbleDetail.setOnClickListener(this);
         ivHead.setOnClickListener(this);
         ivComment.setOnClickListener(this);
@@ -190,11 +202,14 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 BubbleDetailBean.ContentBean bean = gson.fromJson(response, BubbleDetailBean.class).getContent();
-                survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
+                survivalMinute = (bean.getDeadline() - System.currentTimeMillis()) / 60000;
                 tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
                 tvTitle.setText(bean.getTitle());
                 tvContent.setText(bean.getContent());
                 tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
+
+                emojiNumber = bean.getClick();
+                tvEmojiNumber.setText(emojiNumber + "");
                 if (bean.getAnonymous() == 0) {
                     Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
                     tvAuthorName.setText(bean.getMiniUser().getUsername());
@@ -211,8 +226,8 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
 
             @Override
             public void onError(Object tag, Throwable e) {
-                survivalMinute = (bean.getDeadline() - bean.getTime()) / 60000;
-                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60);
+                survivalMinute = (bean.getDeadline() - System.currentTimeMillis()) / 60000;
+                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
             }
 
             @Override
@@ -318,6 +333,8 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             @Override
             public void onNext(Object tag, String response) {
                 survivalMinute++;
+                emojiNumber++;
+                tvEmojiNumber.setText(emojiNumber + "");
                 tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
             }
 
@@ -349,13 +366,21 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 break;
             case R.id.iv_bubble_detail_add:
                 add();
-                ObjectAnimator animatorX = ObjectAnimator.ofFloat(ivAdd, "scaleX", 0.8f, 1.0f);
-                ObjectAnimator animatorY = ObjectAnimator.ofFloat(ivAdd, "scaleY", 0.8f, 1.0f);
+                ObjectAnimator animatorX = ObjectAnimator.ofFloat(ivAdd, "scaleX", 0.7f, 1.0f);
+                ObjectAnimator animatorY = ObjectAnimator.ofFloat(ivAdd, "scaleY", 0.7f, 1.0f);
                 AnimatorSet showBubbleSet = new AnimatorSet();
                 showBubbleSet.setDuration(1000);
                 showBubbleSet.setInterpolator(new SpringScaleInterpolator(0.4f));
                 showBubbleSet.playTogether(animatorX, animatorY);
                 showBubbleSet.start();
+                ObjectAnimator animatorX1 = ObjectAnimator.ofFloat(ivSurvival, "scaleX", 0.7f, 1.0f);
+                ObjectAnimator animatorY1 = ObjectAnimator.ofFloat(ivSurvival, "scaleY", 0.7f, 1.0f);
+                AnimatorSet showBubbleSet1 = new AnimatorSet();
+                showBubbleSet1.setDuration(1000);
+                showBubbleSet1.setInterpolator(new SpringScaleInterpolator(0.4f));
+                showBubbleSet1.playTogether(animatorX1, animatorY1);
+                showBubbleSet1.start();
+
                 break;
         }
 

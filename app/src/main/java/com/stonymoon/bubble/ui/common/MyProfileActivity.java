@@ -73,8 +73,6 @@ public class MyProfileActivity extends ActivityBase {
     @BindView(R.id.tv_edit_profile_signature)
     TextView tvSignature;
 
-
-
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();

@@ -196,6 +196,7 @@ public class MapShareActivity extends Activity implements OnMapLoadedCallback {
     public void onMapLoaded() {
         ms = new MapStatus.Builder().zoom(9).build();
         mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newMapStatus(ms));
+        mMapView.setMapCustomEnable(true);
     }
 
     private void initBubble() {
