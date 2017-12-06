@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.ui.auth.RegisterActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
@@ -16,7 +17,7 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.api.BasicCallback;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @OnClick(R.id.rl_splash_login)
     void login() {

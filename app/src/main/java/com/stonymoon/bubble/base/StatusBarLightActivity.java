@@ -8,7 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 
 
-public class StatusBarLightActivity extends AppCompatActivity {
+public class StatusBarLightActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

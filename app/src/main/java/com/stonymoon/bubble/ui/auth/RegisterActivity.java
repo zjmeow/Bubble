@@ -8,8 +8,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.vondear.rxtools.RxTool;
@@ -25,7 +23,7 @@ import cn.jpush.sms.listener.SmscodeListener;
 
 import static com.vondear.rxtools.RxConstTool.REGEX_MOBILE_SIMPLE;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegisterActivity extends BaseActivity {
 
 
     @BindView(R.id.et_register_phone_number)

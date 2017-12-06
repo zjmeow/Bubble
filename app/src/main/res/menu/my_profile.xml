@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_edit"
+        android:title="编辑个性签名"
+        app:showAsAction="withText|collapseActionView" />
+    <item
+        android:id="@+id/menu_logout"
+        android:title="注销"
+        app:showAsAction="withText|collapseActionView" />
+
+</menu>

@@ -6,10 +6,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -30,11 +34,12 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
+import com.stonymoon.bubble.base.ActivityCollector;
+import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
-import com.stonymoon.bubble.ui.friend.ProfileActivity;
-import com.stonymoon.bubble.ui.share.MapShareActivity;
+import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 
@@ -43,8 +48,6 @@ import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxSPTool;
-import com.vondear.rxtools.activity.ActivityBase;
-import com.vondear.rxtools.view.dialog.RxDialogChooseImage;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
@@ -63,15 +66,15 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
 
-public class MyProfileActivity extends ActivityBase {
+import static com.stonymoon.bubble.util.AuthUtil.logout;
+
+public class MyProfileActivity extends StatusBarLightActivity {
 
     @BindView(R.id.iv_edit_profile_avatar)
     ImageView mIvAvatar;
@@ -83,14 +86,15 @@ public class MyProfileActivity extends ActivityBase {
     ImageView ivBackground;
     @BindView(R.id.recycler_edit_profile_bubble)
     RecyclerView mRecyclerView;
-
+    @BindView(R.id.toolbar_edit_profile)
+    Toolbar toolbar;
 
     private List<BubbleBean.ContentBean> mList = new ArrayList<>();
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
-
+    private Context mContext = this;
     private String url;
 
     public static void startActivity(Context context) {
@@ -108,6 +112,7 @@ public class MyProfileActivity extends ActivityBase {
         initUpload();
         setProfile();
         initBubble();
+        setBar();
     }
 
     private void setProfile() {
@@ -127,6 +132,18 @@ public class MyProfileActivity extends ActivityBase {
             }
         });
 
+    }
+
+    private void setBar() {
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("");
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
+            actionBar.setDisplayShowTitleEnabled(true);
+        }
     }
 
 
@@ -213,8 +230,6 @@ public class MyProfileActivity extends ActivityBase {
                 error(R.drawable.circle_elves_ball).
                 fallback(R.drawable.circle_elves_ball).
                 into(imageView);
-
-
         return (new File(RxPhotoTool.getImageAbsolutePath(this, uri)));
     }
 
@@ -385,14 +400,13 @@ public class MyProfileActivity extends ActivityBase {
     //todo 在菜单上设置这个东西
     void edit() {
         showEditTextDialog();
-
     }
 
 
     private void showEditTextDialog() {
         final QMUIDialog.EditTextDialogBuilder builder = new QMUIDialog.EditTextDialogBuilder(MyProfileActivity.this);
-        builder.setTitle("分享")
-                .setPlaceholder("在此输入想留在地图上的文字")
+        builder.setTitle("简介")
+                .setPlaceholder("一行话介绍下自己")
                 .setInputType(InputType.TYPE_CLASS_TEXT)
                 .addAction("取消", new QMUIDialogAction.ActionListener() {
                     @Override
@@ -406,13 +420,14 @@ public class MyProfileActivity extends ActivityBase {
                         CharSequence text = builder.getEditText().getText();
                         if (text != null && text.length() > 0) {
                             JUserBean bean = new JUserBean();
-                            bean.setSignature(text.toString());
+                            final String sign = text.toString();
+                            bean.setSignature(sign);
                             JMessageClient.updateMyInfo(UserInfo.Field.signature, bean, new BasicCallback() {
                                 @Override
                                 public void gotResult(int i, String s) {
                                     LogUtil.v("MyProfile", s);
                                     Toast.makeText(MyProfileActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                                    finish();
+                                    tvSignature.setText(sign);
                                 }
                             });
                             dialog.dismiss();
@@ -450,7 +465,29 @@ public class MyProfileActivity extends ActivityBase {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.my_profile, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+            case R.id.menu_edit:
+                edit();
+                break;
+            case R.id.menu_logout:
+                logout();
+                ActivityCollector.finishAll();
+                LoginActivity.startActivity(this);
+                break;
+        }
+        return true;
+    }
 
 
 }

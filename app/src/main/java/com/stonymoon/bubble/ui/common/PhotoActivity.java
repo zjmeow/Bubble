@@ -10,11 +10,12 @@ import android.view.WindowManager;
 import com.github.chrisbanes.photoview.PhotoView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class PhotoActivity extends AppCompatActivity {
+public class PhotoActivity extends BaseActivity {
     @BindView(R.id.photo_view)
     PhotoView photoView;
     private String url;

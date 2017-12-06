@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.bean.BubbleBean;
@@ -56,7 +55,7 @@ public class ProfileBubbleAdapter extends RecyclerView.Adapter<ProfileBubbleAdap
 
     public void onBindViewHolder(ViewHolder holder, int position) {
         BubbleBean.ContentBean bean = mList.get(position);
-        Glide.with(mContext)
+        Picasso.with(mContext)
                 .load(bean.getImage())
                 .placeholder(R.mipmap.test)
                 .into(holder.ivContent);

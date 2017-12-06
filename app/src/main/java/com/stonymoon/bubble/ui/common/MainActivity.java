@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.baidu.location.LocationClient;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.ui.auth.RegisterActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
@@ -38,7 +39,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     public LocationClient mLocationClient = null;
     @BindView(R.id.text)

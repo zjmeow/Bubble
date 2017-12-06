@@ -38,6 +38,7 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.LocationBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
@@ -89,7 +90,7 @@ import static com.stonymoon.bubble.util.MapUtil.zoomIn;
 //本地图显示附近的人
 //动态地图另外开一个地图显示
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends BaseActivity {
     private static final String TAG = "MapActivity";
     public LocationClient mLocationClient = null;
     public BDAbstractLocationListener myListener = new MyLocationListener();

@@ -27,6 +27,7 @@ import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleHolder;
 import com.stonymoon.bubble.bean.LocationBean;
@@ -62,7 +63,7 @@ import static com.stonymoon.bubble.util.MapUtil.clearMap;
 import static com.stonymoon.bubble.util.MapUtil.zoomIn;
 
 
-public class MapShareActivity extends Activity implements OnMapLoadedCallback {
+public class MapShareActivity extends BaseActivity implements OnMapLoadedCallback {
     public LocationClient mLocationClient = null;
     private MapView mMapView;
     private BaiduMap mBaiduMap;

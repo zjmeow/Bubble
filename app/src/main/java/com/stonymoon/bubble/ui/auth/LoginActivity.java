@@ -2,6 +2,7 @@ package com.stonymoon.bubble.ui.auth;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.bean.LoginBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
@@ -49,12 +51,11 @@ import retrofit2.http.HTTP;
 import static android.Manifest.permission.READ_CONTACTS;
 
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends BaseActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_READ_CONTACTS = 0;
 
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-    };
+
     @BindView(R.id.et_login_phone_number)
     EditText phoneNumberView;
     @BindView(R.id.et_login_password)
@@ -67,6 +68,11 @@ public class LoginActivity extends Activity {
     Button submitButton;
     private Map<String, Object> parameters = new HashMap<String, Object>();
     private LoginBean bean;
+
+    public static void startActivity(Context context) {
+        Intent intent = new Intent(context, LoginActivity.class);
+        context.startActivity(intent);
+    }
 
     @OnClick(R.id.btn_login_sign_in)
     void login() {
@@ -98,10 +104,9 @@ public class LoginActivity extends Activity {
                 return false;
             }
         });
-        //attemptLogin();
+        attemptLogin();
         wrapperLoginPhoneNumber.setHint("请输入手机号");
         wrapperLoginPassword.setHint("请输入密码");
-
 
     }
 
@@ -128,7 +133,6 @@ public class LoginActivity extends Activity {
         return false;
     }
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -137,7 +141,6 @@ public class LoginActivity extends Activity {
             }
         }
     }
-
 
     private void login(final String phoneNum, final String password) {
         if (phoneNum.equals("") || password.equals("")) {
@@ -192,7 +195,6 @@ public class LoginActivity extends Activity {
 
     }
 
-
     //如果登录过则直接进入主页面
     private void attemptLogin() {
         //判断是否已经登录
@@ -216,7 +218,6 @@ public class LoginActivity extends Activity {
 
 
     }
-
 
 }
 

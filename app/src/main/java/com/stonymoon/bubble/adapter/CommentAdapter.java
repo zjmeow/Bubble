@@ -1,11 +1,14 @@
 package com.stonymoon.bubble.adapter;
 
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.squareup.picasso.Picasso;
@@ -44,7 +47,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             }
 
         });
-
+        holder.constraintLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                ClipboardManager cm = (ClipboardManager) mContext.getSystemService(Context.CLIPBOARD_SERVICE);
+                if (holder.tvContent.getText() != null) {
+                    cm.setText(holder.tvContent.getText().toString());
+                }
+                Toast.makeText(mContext, "内容已复制到剪贴板", Toast.LENGTH_SHORT).show();
+                return true;
+            }
+        });
 
         return holder;
 
@@ -72,6 +85,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
         TextView tvName;
         TextView tvContent;
         TextView tvDate;
+        ConstraintLayout constraintLayout;
 
 
         public ViewHolder(View view) {
@@ -80,7 +94,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             tvName = (TextView) view.findViewById(R.id.tv_comment_item_username);
             tvDate = (TextView) view.findViewById(R.id.tv_comment_item_date);
             tvContent = (TextView) view.findViewById(R.id.tv_comment_item_content);
-
+            constraintLayout = (ConstraintLayout) view.findViewById(R.id.constraint_layout_comment_item);
         }
 
     }

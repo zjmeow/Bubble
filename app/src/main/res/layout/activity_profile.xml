@@ -4,6 +4,7 @@
     android:id="@+id/layout_bubble_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/textBackground"
     android:fitsSystemWindows="true">
 
 
@@ -98,7 +99,6 @@
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
                 app:popupTheme="@style/OverflowMenu"
-
                 >
 
             </android.support.v7.widget.Toolbar>
@@ -111,9 +111,9 @@
 
 
     <android.support.v7.widget.RecyclerView
+
         android:id="@+id/recycler_profile_bubble"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/textBackground"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 </android.support.design.widget.CoordinatorLayout>

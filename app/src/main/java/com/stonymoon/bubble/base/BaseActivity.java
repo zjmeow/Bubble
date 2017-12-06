@@ -3,6 +3,7 @@ package com.stonymoon.bubble.base;
 import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.support.annotation.Nullable;
 import android.support.v4.app.SupportActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,55 +12,22 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.util.LogUtil;
 
-public abstract class BaseActivity extends AppCompatActivity {
-    Toolbar toolbar;
-
-
+public class BaseActivity extends AppCompatActivity {
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                break;
-            default:
-                break;
-        }
-        return true;
-
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutId());
-        toolbar = (Toolbar) findViewById(R.id.toolbar_base);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
-            actionBar.setDisplayShowTitleEnabled(true);
-        }
-
+        LogUtil.d("BaseActivity", getClass().getSimpleName());
+        ActivityCollector.addActivity(this);
     }
 
-
-    protected void setToolbarColor(int color) {
-        toolbar.setBackgroundColor(color);
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ActivityCollector.removeActivity(this);
     }
 
-    protected void setToolbarTitle(String text) {
-        getSupportActionBar().setTitle(text);
-    }
-
-    protected void setToolbarTextColor(int color) {
-        toolbar.setTitleTextColor(color);
-    }
-
-    protected abstract int getLayoutId();
 
 
 }

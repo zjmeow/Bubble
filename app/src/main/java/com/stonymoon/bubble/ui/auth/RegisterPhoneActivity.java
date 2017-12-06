@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
@@ -30,7 +31,7 @@ import cn.jpush.sms.SMSSDK;
 import cn.jpush.sms.listener.SmscheckListener;
 import cn.jpush.sms.listener.SmscodeListener;
 
-public class RegisterPhoneActivity extends AppCompatActivity {
+public class RegisterPhoneActivity extends BaseActivity {
 
     @BindView(R.id.et_register_username)
     EditText usernameText;
