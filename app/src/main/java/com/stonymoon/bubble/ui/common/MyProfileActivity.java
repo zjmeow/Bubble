@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -27,8 +29,11 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
+import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.ui.friend.ProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -48,8 +53,10 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -72,7 +79,14 @@ public class MyProfileActivity extends ActivityBase {
     TextView tvUsername;
     @BindView(R.id.tv_edit_profile_signature)
     TextView tvSignature;
+    @BindView(R.id.iv_edit_profile_background)
+    ImageView ivBackground;
+    @BindView(R.id.recycler_edit_profile_bubble)
+    RecyclerView mRecyclerView;
 
+
+    private List<BubbleBean.ContentBean> mList = new ArrayList<>();
+    private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
     private UploadManager mUploadManager;
     private Uri resultUri;
     private Map<String, Object> parameters = new HashMap<String, Object>();
@@ -93,6 +107,7 @@ public class MyProfileActivity extends ActivityBase {
         initView();
         initUpload();
         setProfile();
+        initBubble();
     }
 
     private void setProfile() {
@@ -104,6 +119,10 @@ public class MyProfileActivity extends ActivityBase {
                 tvSignature.setText(userInfo.getSignature());
                 url = userInfo.getExtra("url");
                 Picasso.with(MyProfileActivity.this).load(url).into(mIvAvatar);
+                Picasso.with(MyProfileActivity.this)
+                        .load(url)
+                        .transform(new jp.wasabeef.picasso.transformations.BlurTransformation(MyProfileActivity.this, 14, 5))
+                        .into(ivBackground);
 
             }
         });
@@ -113,15 +132,12 @@ public class MyProfileActivity extends ActivityBase {
 
 
     protected void initView() {
-
         mIvAvatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 initDialogChooseImage();
             }
         });
-
-
         mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -129,6 +145,8 @@ public class MyProfileActivity extends ActivityBase {
                 return true;
             }
         });
+        mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
     private void initDialogChooseImage() {
@@ -195,6 +213,7 @@ public class MyProfileActivity extends ActivityBase {
                 error(R.drawable.circle_elves_ball).
                 fallback(R.drawable.circle_elves_ball).
                 into(imageView);
+
 
         return (new File(RxPhotoTool.getImageAbsolutePath(this, uri)));
     }
@@ -363,12 +382,7 @@ public class MyProfileActivity extends ActivityBase {
         return builder.toString() + System.currentTimeMillis();
     }
 
-    @OnClick(R.id.iv_my_profile_back)
-    void back() {
-        finish();
-    }
-
-    @OnClick(R.id.iv_my_profile_edit)
+    //todo 在菜单上设置这个东西
     void edit() {
         showEditTextDialog();
 
@@ -410,6 +424,31 @@ public class MyProfileActivity extends ActivityBase {
                 .show();
     }
 
+    private void initBubble() {
+        String url = UrlUtil.getUserBubble(AuthUtil.getId());
+        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
+            @Override
+            public void onNext(Object tag, String response) {
+                Gson gson = new Gson();
+                BubbleBean bean = gson.fromJson(response, BubbleBean.class);
+                mList.addAll(bean.getContent());
+                adapter.notifyDataSetChanged();
+
+            }
+
+            @Override
+            public void onError(Object tag, com.tamic.novate.Throwable e) {
+
+            }
+
+            @Override
+            public void onCancel(Object tag, com.tamic.novate.Throwable e) {
+
+            }
+        });
+
+
+    }
 
 
 

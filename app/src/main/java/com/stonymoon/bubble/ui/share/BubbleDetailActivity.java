@@ -172,7 +172,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         ivSurvival = (ImageView) headView.findViewById(R.id.iv_bubble_detail_time);
 
 
-
         ivBubbleDetail.setOnClickListener(this);
         ivHead.setOnClickListener(this);
         ivComment.setOnClickListener(this);
@@ -203,7 +202,12 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 Gson gson = new Gson();
                 BubbleDetailBean.ContentBean bean = gson.fromJson(response, BubbleDetailBean.class).getContent();
                 survivalMinute = (bean.getDeadline() - System.currentTimeMillis()) / 60000;
-                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                if (survivalMinute > 0) {
+                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                } else {
+                    tvSurvival.setText("泡泡已过期");
+                }
+
                 tvTitle.setText(bean.getTitle());
                 tvContent.setText(bean.getContent());
                 tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
@@ -221,13 +225,16 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 }
 
 
-
             }
 
             @Override
             public void onError(Object tag, Throwable e) {
                 survivalMinute = (bean.getDeadline() - System.currentTimeMillis()) / 60000;
-                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                if (survivalMinute > 0) {
+                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                } else {
+                    tvSurvival.setText("泡泡已过期");
+                }
             }
 
             @Override
@@ -335,7 +342,12 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 survivalMinute++;
                 emojiNumber++;
                 tvEmojiNumber.setText(emojiNumber + "");
-                tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                if (survivalMinute > 0) {
+                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                } else {
+
+                }
+
             }
 
             @Override
@@ -379,8 +391,9 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 showBubbleSet1.setDuration(1000);
                 showBubbleSet1.setInterpolator(new SpringScaleInterpolator(0.4f));
                 showBubbleSet1.playTogether(animatorX1, animatorY1);
-                showBubbleSet1.start();
-
+                if (survivalMinute > 0) {
+                    showBubbleSet1.start();
+                }
                 break;
         }
 

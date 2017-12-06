@@ -1,155 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EAEAEA"
-    android:orientation="horizontal"
-    >
-
-    <ImageView
-        android:id="@+id/iv_my_profile_back"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="36dp"
-        android:src="@drawable/arrow" />
-
-    <FrameLayout
-        android:id="@+id/fl_edit_profile_detail"
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:layout_alignParentBottom="true"
-        android:layout_margin="16dp">
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_edit_profile_detail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:cardCornerRadius="16dp"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-
-                >
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="32dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="16dp"
-                    android:gravity="right"
-                    android:orientation="horizontal">
-
-                    <ImageView
-                        android:id="@+id/iv_my_profile_edit"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:src="@drawable/edit" />
-
-                </LinearLayout>
-
-                <TextView
-                    android:id="@+id/tv_edit_profile_username"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="32dp"
-                    android:gravity="center"
-                    android:textColor="@color/primaryText"
-                    android:textSize="24sp" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="收到了200个emoji"
-                    android:textColor="@color/secondText"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/tv_edit_profile_signature"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="24dp"
-                    android:gravity="center"
-
-                    android:textColor="@color/secondText"
-                    android:textSize="16sp" />
-
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="3dp"
-                    android:layout_gravity="bottom"
-                    android:layout_marginTop="140dp"
-                    android:background="#EAEAEA" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="16dp">
-
-                    <ImageView
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="16dp"
-                        android:src="@drawable/love" />
-
-
-                    <View
-                        android:layout_width="0dp"
-                        android:layout_height="0dp"
-                        android:layout_weight="1" />
-
-                    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
-                        android:id="@+id/btn_edit_profile_make_friend"
-                        android:layout_width="110dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginRight="16dp"
-                        android:text="加好友"
-                        android:textColor="#FFFFFF"
-                        app:qmui_backgroundColor="@color/colorPrimary"
-
-                        />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
-
-        </android.support.v7.widget.CardView>
-    </FrameLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/fl_edit_profile_detail"
-        android:layout_marginBottom="-78dp">
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="32" />
-
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="174" />
-
-    </LinearLayout>
-
-
-</RelativeLayout>
-
-
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
@@ -160,18 +9,18 @@ android:fitsSystemWindows="true">
 
 
 <android.support.design.widget.AppBarLayout
-    android:theme="@style/AppTheme.AppBarOverlay"
     android:layout_width="match_parent"
     android:layout_height="350dp"
-    android:fitsSystemWindows="true">
+    android:fitsSystemWindows="true"
+    android:theme="@style/AppTheme.AppBarOverlay">
 
     <android.support.design.widget.CollapsingToolbarLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        app:popupTheme="@style/OverflowMenu"
         app:contentScrim="@color/barColor"
-        app:layout_scrollFlags="scroll|exitUntilCollapsed">
+        app:layout_scrollFlags="scroll|exitUntilCollapsed"
+        app:popupTheme="@style/OverflowMenu">
         <!--app:contentScrim="#00000000"-->
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
@@ -184,7 +33,7 @@ android:fitsSystemWindows="true">
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/iv_profile_background"
+                    android:id="@+id/iv_edit_profile_background"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:fitsSystemWindows="true"
@@ -223,7 +72,7 @@ android:fitsSystemWindows="true">
                 android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_profile_avatar" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_edit_profile_avatar" />
 
             <TextView
                 android:id="@+id/tv_edit_profile_signature"
@@ -233,11 +82,10 @@ android:fitsSystemWindows="true">
                 android:gravity="center"
                 android:text="aaaaaaaa"
                 android:textColor="@color/secondText"
-
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_edit_profile_username" />
 
 
         </android.support.constraint.ConstraintLayout>
@@ -261,7 +109,7 @@ android:fitsSystemWindows="true">
 
 
 <android.support.v7.widget.RecyclerView
-    android:id="@+id/recycler_profile_bubble"
+    android:id="@+id/recycler_edit_profile_bubble"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/textBackground"
