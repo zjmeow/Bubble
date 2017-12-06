@@ -14,7 +14,9 @@ import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
 
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.FriendAdapter;
@@ -36,7 +38,8 @@ public class FriendActivity extends StatusBarLightActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.swipe_refresh_friend)
     SwipeRefreshLayout refreshLayout;
-
+    @BindView(R.id.iv_friend_no_friend)
+    ImageView ivNoFriend;
     private List<UserInfo> mList = new ArrayList<>();
     FriendAdapter adapter = new FriendAdapter(mList);
 
@@ -71,6 +74,7 @@ public class FriendActivity extends StatusBarLightActivity {
             public void gotResult(int i, String s, List<UserInfo> list) {
                 if (list == null) {
                     refreshLayout.setRefreshing(false);
+                    ivNoFriend.setVisibility(View.VISIBLE);
                     return;
                 }
                 mList.addAll(list);

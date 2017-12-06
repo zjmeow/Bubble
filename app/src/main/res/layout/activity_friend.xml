@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_friend"
@@ -8,8 +8,16 @@
     android:orientation="vertical"
     tools:context="com.stonymoon.bubble.ui.friend.FriendActivity">
 
-    <android.support.v7.widget.Toolbar
+    <ImageView
+        android:id="@+id/iv_friend_no_friend"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:src="@drawable/no_friend"
+        android:visibility="gone" />
 
+
+    <android.support.v7.widget.Toolbar
         android:id="@+id/title_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/bar_size"
@@ -46,13 +54,17 @@
         android:layout_width="match_parent"
         android:layout_height="3dp"
         android:layout_below="@+id/toolbar"
+        android:layout_marginTop="@dimen/bar_size"
         android:background="@drawable/tool_bar_shadow" />
 
     <android.support.v4.widget.SwipeRefreshLayout
+
         android:id="@+id/swipe_refresh_friend"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
     <android.support.v7.widget.RecyclerView
+
         android:id="@+id/recycler_friend"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -60,4 +72,5 @@
     </android.support.v7.widget.RecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

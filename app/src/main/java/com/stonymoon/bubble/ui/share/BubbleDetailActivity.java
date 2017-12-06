@@ -146,13 +146,37 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 if (hasMoreComment) {
                     getComment();
                 } else {
-                    recyclerComment.loadMoreComplete();
-                    Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
+                    loadNothing();
                 }
             }
+
+
         });
 
 
+    }
+
+    private void loadNothing() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Thread.sleep(1000);
+                } catch (Exception e) {
+
+                } finally {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            recyclerComment.loadMoreComplete();
+                            Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                }
+
+            }
+        }.start();
     }
 
     private void initView() {
