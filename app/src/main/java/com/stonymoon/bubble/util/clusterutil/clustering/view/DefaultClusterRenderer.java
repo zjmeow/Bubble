@@ -172,7 +172,7 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
         ShapeDrawable outline = new ShapeDrawable(new OvalShape());
         outline.getPaint().setColor(0x80ffffff); // Transparent white.
         LayerDrawable background = new LayerDrawable(new Drawable[]{outline, mColoredCircleBackground});
-        int strokeWidth = (int) (mDensity * 3);
+        int strokeWidth = (int) (mDensity * 4);
         background.setLayerInset(1, strokeWidth, strokeWidth, strokeWidth, strokeWidth);
         return background;
     }
@@ -186,17 +186,20 @@ public class DefaultClusterRenderer<T extends ClusterItem> implements
         squareTextView.setId(R.id.text);
         int twelveDpi = (int) (12 * mDensity);
         squareTextView.setPadding(twelveDpi, twelveDpi, twelveDpi, twelveDpi);
+        squareTextView.setTextColor(Color.parseColor("#FFFFFF"));
         return squareTextView;
     }
 
     private int getColor(int clusterSize) {
-        final float hueRange = 220;
-        final float sizeRange = 300;
-        final float size = Math.min(clusterSize, sizeRange);
-        final float hue = (sizeRange - size) * (sizeRange - size) / (sizeRange * sizeRange) * hueRange;
-        return Color.HSVToColor(new float[]{
-                hue, 1f, .6f
-        });
+//        final float hueRange = 220;
+//        final float sizeRange = 300;
+//        final float size = Math.min(clusterSize, sizeRange);
+//        final float hue = (sizeRange - size) * (sizeRange - size) / (sizeRange * sizeRange) * hueRange;
+//        return Color.HSVToColor(new float[]{
+//                hue, 1f, .6f
+//        });
+
+        return Color.parseColor("#5EA9BC");
     }
 
     protected String getClusterText(int bucket) {

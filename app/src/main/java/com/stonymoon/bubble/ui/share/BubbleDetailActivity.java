@@ -363,7 +363,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
-                survivalMinute++;
+                survivalMinute += 60;
                 emojiNumber++;
                 tvEmojiNumber.setText(emojiNumber + "");
                 if (survivalMinute > 0) {
