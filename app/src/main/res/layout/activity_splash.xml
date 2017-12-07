@@ -21,7 +21,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/rl_splash_register"
+        android:id="@+id/rl_splash_login"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="100dp"
@@ -31,7 +31,8 @@
         app:layout_constraintLeft_toLeftOf="parent">
 
         <TextView
-            android:id="@+id/rl_splash_login"
+
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -41,6 +42,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_splash_register"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:background="@color/red"

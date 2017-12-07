@@ -33,7 +33,6 @@ public class SplashActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         attemptLogin();
@@ -43,21 +42,22 @@ public class SplashActivity extends BaseActivity {
 
     //如果登录过则直接进入主页面
     private void attemptLogin() {
+        JMessageClient.init(SplashActivity.this, true);
         //判断是否已经登录
         String token = AuthUtil.getToken();
-        String id = AuthUtil.getId();
+        final String id = AuthUtil.getId();
         String phone = AuthUtil.getPhone();
         String password = AuthUtil.getPassword();
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
-            MapActivity.startActivity(this, id);
+
             JMessageClient.login(phone, password, new BasicCallback() {
                 @Override
                 public void gotResult(int i, String s) {
+                    MapActivity.startActivity(SplashActivity.this, id);
                     finish();
                 }
             });
-
 
         }
 

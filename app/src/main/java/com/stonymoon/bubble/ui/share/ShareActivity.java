@@ -29,6 +29,7 @@ import com.qiniu.android.storage.UploadManager;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.ContentBean;
+import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
@@ -212,7 +213,11 @@ public class ShareActivity extends StatusBarLightActivity {
                         //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
                         imageUrl = "http://oupl6wdxc.bkt.clouddn.com/" + key;
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
-                        Toast.makeText(ShareActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                        if (info.isOK()) {
+                            Toast.makeText(ShareActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ShareActivity.this, "请检查网络或者文件大小不能超过5M", Toast.LENGTH_SHORT).show();
+                        }
 
                     }
                 }, null);

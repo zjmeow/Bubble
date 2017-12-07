@@ -7,6 +7,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
@@ -97,7 +99,7 @@ public class MapActivity extends BaseActivity {
     @BindView(R.id.map)
     MapView mapView;
     @BindView(R.id.map_bubble)
-    RelativeLayout bubble;
+    ConstraintLayout bubble;
     @BindView(R.id.iv_map_bubble_head)
     QMUIRadiusImageView headImage;
     @BindView(R.id.iv_map_receive_emoji)
@@ -403,6 +405,10 @@ public class MapActivity extends BaseActivity {
             public boolean onClusterItemClick(MyItem item) {
                 zoomIn(baiduMap, item.getPosition(), 30f);
                 LocationBean.PoisBean bean = item.getPoisBean();
+                if (String.valueOf(bean.getUid()).equals(AuthUtil.getId())) {
+                    Toast.makeText(MapActivity.this, "我", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 chosenUserBean = bean;
                 mClusterManager.clearItems();
 
@@ -416,8 +422,10 @@ public class MapActivity extends BaseActivity {
                 Picasso.with(MapActivity.this).
                         load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
                         .into(headImage);
+
                 //usernameText.setText(bean.getUsername());
                 bubble.setVisibility(View.VISIBLE);
+
                 isSelected = true;
                 showBubbleSet.start();
                 return false;
@@ -797,11 +805,9 @@ public class MapActivity extends BaseActivity {
         public BitmapDescriptor getBitmapDescriptor() {
             RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
             QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
-            //加载小图
-            //todo 好的holder
             Picasso.with(MapActivity.this).
                     load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").
-                    placeholder(R.mipmap.test)
+                    placeholder(R.drawable.avatar_holder)
                     .into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
         }

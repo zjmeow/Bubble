@@ -77,6 +77,9 @@ public class FriendActivity extends StatusBarLightActivity {
                     ivNoFriend.setVisibility(View.VISIBLE);
                     return;
                 }
+                if (list.size() == 0) {
+                    ivNoFriend.setVisibility(View.VISIBLE);
+                }
                 mList.addAll(list);
                 runOnUiThread(new Runnable() {
                     @Override

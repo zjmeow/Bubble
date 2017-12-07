@@ -10,11 +10,12 @@
 
     <ImageView
         android:id="@+id/iv_friend_no_friend"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="250dp"
+        android:layout_height="250dp"
         android:layout_gravity="center"
         android:src="@drawable/no_friend"
-        android:visibility="gone" />
+
+        />
 
 
     <android.support.v7.widget.Toolbar

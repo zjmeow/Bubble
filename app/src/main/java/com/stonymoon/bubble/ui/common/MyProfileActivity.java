@@ -309,8 +309,12 @@ public class MyProfileActivity extends StatusBarLightActivity {
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
-                        Toast.makeText(MyProfileActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
+                        if (info.isOK()) {
+                            Toast.makeText(MyProfileActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
 
+                        } else {
+                            Toast.makeText(MyProfileActivity.this, "请检查网络或者文件大小不能超过5M", Toast.LENGTH_SHORT).show();
+                        }
                         uploadUrl("http://oupl6wdxc.bkt.clouddn.com/" + key, (String) parameters.get("token"));
 
                     }

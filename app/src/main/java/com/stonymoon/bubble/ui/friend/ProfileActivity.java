@@ -82,7 +82,7 @@ public class ProfileActivity extends StatusBarLightActivity {
 
     }
 
-
+    @OnClick(R.id.btn_profile_make_friend)
     void sendMessage() {
         ContactManager.sendInvitationRequest(phone, "", "请求加你为好友", new BasicCallback() {
             @Override
@@ -92,7 +92,7 @@ public class ProfileActivity extends StatusBarLightActivity {
                 if (0 == responseCode) {
                     Toast.makeText(ProfileActivity.this, "发送请求成功", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(ProfileActivity.this, "请求发送失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ProfileActivity.this, "已经是好友了哟", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -160,9 +160,6 @@ public class ProfileActivity extends StatusBarLightActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                break;
-            case R.id.menu_make_friend:
-                sendMessage();
                 break;
             case R.id.menu_locate:
                 locate();

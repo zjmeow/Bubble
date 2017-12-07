@@ -47,7 +47,7 @@
         android:supportsRtl="true"
         android:testOnly="false"
         android:theme="@style/AppTheme"
-        tools:replace="icon">
+        tools:replace="icon,label">
 
         <!-- 极光推送引入 -->
         <!-- Required SDK 核心功能 -->
@@ -124,7 +124,8 @@
         <!-- Required. AppKey copied from Portal -->
         <meta-data
             android:name="JPUSH_APPKEY"
-            android:value="5ea265d3bb081fc58ff16a41" />
+            android:value="a0623cb4a34fc2a633ffc047"
+            tools:replace="android:value" />
 
         <!-- 极光推送结束 -->
 
@@ -145,11 +146,7 @@
             android:name=".ui.common.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".ui.friend.MapActivity"
@@ -203,7 +200,15 @@
         <activity
             android:name=".ui.share.ShareListActivity"
             android:theme="@style/AppTheme.BlueStatus" />
-        <activity android:name=".ui.common.SplashActivity"></activity>
+        <activity
+            android:name=".ui.common.SplashActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

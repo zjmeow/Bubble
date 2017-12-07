@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.telecom.PhoneAccount;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -45,8 +46,6 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
-import cn.pedant.SweetAlert.SweetAlertDialog;
-import retrofit2.http.HTTP;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -82,7 +81,7 @@ public class LoginActivity extends BaseActivity {
 
     @OnClick(R.id.tv_login_register)
     void register() {
-        Intent intent = new Intent(this, RegisterPhoneActivity.class);
+        Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
     }
 

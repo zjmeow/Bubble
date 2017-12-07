@@ -10,7 +10,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_height="400dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -52,7 +52,7 @@
                     android:layout_width="105dp"
                     android:layout_height="105dp"
 
-                    android:layout_marginTop="72dp"
+                    android:layout_marginTop="68dp"
                     android:src="@mipmap/test"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
@@ -78,15 +78,36 @@
                     android:id="@+id/tv_profile_signature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginTop="4dp"
                     android:gravity="center"
                     android:text="aaaaaaaa"
-                    android:textColor="@color/secondText"
 
+                    android:textColor="@color/secondText"
                     android:textSize="16sp"
+                    app:layout_constraintBottom_toTopOf="@+id/btn_profile_make_friend"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+
+                <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+                    android:id="@+id/btn_profile_make_friend"
+                    android:layout_width="110dp"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="76dp"
+                    android:background="@drawable/blue_btn_selector"
+                    android:text="加好友"
+                    android:textColor="#FFF"
+                    android:textSize="16sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.508"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:qmui_backgroundColor="@color/colorPrimary" />
 
 
             </android.support.constraint.ConstraintLayout>
