@@ -56,11 +56,20 @@ public class RegisterActivity extends BaseActivity {
     @OnClick(R.id.tv_register_send_identification_code)
     void sendCode() {
 
+
         boolean isPhone = Pattern.matches(REGEX_MOBILE_SIMPLE, phoneNumberText.getText().toString());
         if (!isPhone) {
             Toast.makeText(RegisterActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
         } else {
             phone = phoneNumberText.getText().toString();
+
+
+            RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
+            finish();
+
+            // TODO: 2017/12/8  暂时关闭验证码
+
+
             phoneNumberText.setFocusable(false);
             phoneNumberText.setEnabled(false);
             phoneNumberText.setTextColor(Color.GRAY);

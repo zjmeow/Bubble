@@ -48,6 +48,7 @@
         android:layout_below="@+id/toolbar"
         android:background="@drawable/tool_bar_shadow" />
     <android.support.v7.widget.RecyclerView
+
         android:id="@+id/recycler_share"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

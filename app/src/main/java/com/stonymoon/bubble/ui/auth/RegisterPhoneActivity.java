@@ -28,9 +28,7 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.options.RegisterOptionalUserInfo;
 import cn.jpush.im.api.BasicCallback;
-import cn.jpush.sms.SMSSDK;
-import cn.jpush.sms.listener.SmscheckListener;
-import cn.jpush.sms.listener.SmscodeListener;
+
 
 public class RegisterPhoneActivity extends BaseActivity {
 
@@ -71,6 +69,9 @@ public class RegisterPhoneActivity extends BaseActivity {
                     public void onNext(Object tag, String response) {
                         //注册聊天帐号
                         RegisterOptionalUserInfo userInfo = new RegisterOptionalUserInfo();
+                        Map<String, String> para = new HashMap<String, String>();
+                        para.put("url", "http://oupl6wdxc.bkt.clouddn.com/EIEFJILJELJEG");
+                        userInfo.setExtras(para);
                         userInfo.setNickname(usernameText.getText().toString());
                         JMessageClient.register(
                                 phone,
@@ -87,7 +88,7 @@ public class RegisterPhoneActivity extends BaseActivity {
 
                     @Override
                     public void onError(Object tag, Throwable e) {
-                        Toast.makeText(RegisterPhoneActivity.this, "加载失败，请检查网络", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RegisterPhoneActivity.this, "网络异常或者用户已经存在", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
                     }
 

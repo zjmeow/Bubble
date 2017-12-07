@@ -583,7 +583,7 @@ public class MapActivity extends BaseActivity {
     @OnClick(R.id.iv_map_location)
     void locate() {
         mapView.setMapCustomEnable(true);
-        zoomIn(mapView.getMap(), myLatLng, 30);
+        zoomIn(mapView.getMap(), myLatLng, 18);
         mClusterManager.clearItems();
         mClusterManager.cluster();
         addMarkers(myItems);

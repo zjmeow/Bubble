@@ -280,6 +280,9 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
                         dialog.dismiss();
+                        page = 1;
+                        hasMoreComment = true;
+                        getComment();
                     }
                 })
                 .addAction("确定", new QMUIDialogAction.ActionListener() {
@@ -288,8 +291,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                         CharSequence text = builder.getEditText().getText();
                         if (text != null && text.length() > 0) {
                             uploadComment(text.toString(), bean.getId() + "");
-
-
                             dialog.dismiss();
                         } else {
                             Toast.makeText(BubbleDetailActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();

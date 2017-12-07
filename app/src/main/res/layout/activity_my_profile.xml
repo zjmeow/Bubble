@@ -44,13 +44,27 @@ android:layout_height="match_parent"
                     android:layout_height="match_parent"
                     android:background="#8000" />
 
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom"
+                    android:background="#5000" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|center"
+                    android:layout_marginBottom="18dp"
+                    android:text="最近的动态"
+                    android:textColor="#FFF"
+                    android:textSize="18sp" />
+
             </FrameLayout>
 
             <com.qmuiteam.qmui.widget.QMUIRadiusImageView
                 android:id="@+id/iv_edit_profile_avatar"
                 android:layout_width="105dp"
                 android:layout_height="105dp"
-
                 android:layout_marginTop="72dp"
                 android:src="@mipmap/test"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,6 +91,8 @@ android:layout_height="match_parent"
                 android:id="@+id/tv_edit_profile_signature"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginTop="4dp"
                 android:gravity="center"
                 android:text="aaaaaaaa"

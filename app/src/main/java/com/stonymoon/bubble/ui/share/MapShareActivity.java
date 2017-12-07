@@ -316,7 +316,7 @@ public class MapShareActivity extends BaseActivity implements OnMapLoadedCallbac
             latitude = location.getLatitude();    //获取纬度信息
             longitude = location.getLongitude();    //获取经度信息
             if (isLocated == false) {
-                zoomIn(mBaiduMap, new LatLng(latitude, longitude), 30);
+                zoomIn(mBaiduMap, new LatLng(latitude, longitude), 18);
             }
             isLocated = true;
 
