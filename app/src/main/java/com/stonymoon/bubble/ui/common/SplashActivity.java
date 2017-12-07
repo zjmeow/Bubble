@@ -50,12 +50,13 @@ public class SplashActivity extends BaseActivity {
         String password = AuthUtil.getPassword();
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
-
+            MapActivity.startActivity(SplashActivity.this, id);
+            finish();
             JMessageClient.login(phone, password, new BasicCallback() {
                 @Override
                 public void gotResult(int i, String s) {
-                    MapActivity.startActivity(SplashActivity.this, id);
-                    finish();
+
+
                 }
             });
 

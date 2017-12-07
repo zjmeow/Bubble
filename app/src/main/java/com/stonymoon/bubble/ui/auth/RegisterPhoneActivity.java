@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.UrlUtil;
@@ -68,7 +69,6 @@ public class RegisterPhoneActivity extends BaseActivity {
                 .rxPost(url, parameters, new RxStringCallback() {
                     @Override
                     public void onNext(Object tag, String response) {
-                        Toast.makeText(RegisterPhoneActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                         //注册聊天帐号
                         RegisterOptionalUserInfo userInfo = new RegisterOptionalUserInfo();
                         userInfo.setNickname(usernameText.getText().toString());
@@ -77,7 +77,8 @@ public class RegisterPhoneActivity extends BaseActivity {
                                 passwordText.getText().toString(), userInfo, new BasicCallback() {
                                     @Override
                                     public void gotResult(int i, String s) {
-                                        Toast.makeText(RegisterPhoneActivity.this, s, Toast.LENGTH_SHORT).show();
+                                        ActivityCollector.finishAll();
+                                        LoginActivity.startActivity(RegisterPhoneActivity.this);
                                     }
                                 });
 

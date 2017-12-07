@@ -10,7 +10,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_height="440dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -45,6 +45,20 @@
                         android:layout_height="match_parent"
                         android:background="#8000" />
 
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_gravity="bottom"
+                        android:background="#5000" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom|center"
+                        android:layout_marginBottom="18dp"
+                        android:text="最近的动态"
+                        android:textColor="#FFF"
+                        android:textSize="18sp" />
                 </FrameLayout>
 
                 <com.qmuiteam.qmui.widget.QMUIRadiusImageView
@@ -90,20 +104,21 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_profile_username" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_profile_username"
+                    app:layout_constraintVertical_bias="0.233" />
 
                 <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
                     android:id="@+id/btn_profile_make_friend"
                     android:layout_width="110dp"
                     android:layout_height="48dp"
-                    android:layout_marginBottom="76dp"
+                    android:layout_marginBottom="100dp"
                     android:background="@drawable/blue_btn_selector"
                     android:text="加好友"
                     android:textColor="#FFF"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.508"
+                    app:layout_constraintHorizontal_bias="0.498"
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -119,16 +134,13 @@
                 android:layout_height="@dimen/bar_size"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways|snap"
-                app:popupTheme="@style/OverflowMenu"
-                >
+                app:popupTheme="@style/OverflowMenu">
 
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.CollapsingToolbarLayout>
 
     </android.support.design.widget.AppBarLayout>
-
-
 
 
     <android.support.v7.widget.RecyclerView

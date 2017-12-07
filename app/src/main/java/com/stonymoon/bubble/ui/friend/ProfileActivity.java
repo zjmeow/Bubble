@@ -182,7 +182,7 @@ public class ProfileActivity extends StatusBarLightActivity {
     }
 
     private void initBubble() {
-        String url = UrlUtil.getUserBubble(uid);
+        String url = UrlUtil.guestGetBubble(uid);
         HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
             @Override
             public void onNext(Object tag, String response) {
@@ -190,6 +190,10 @@ public class ProfileActivity extends StatusBarLightActivity {
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
                 mList.addAll(bean.getContent());
                 adapter.notifyDataSetChanged();
+                if (mList.size() == 0) {
+
+
+                }
 
             }
 

@@ -396,6 +396,8 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onMapLoaded() {
                 mapView.setMapCustomEnable(true);
+
+
             }
         });
 
@@ -411,7 +413,6 @@ public class MapActivity extends BaseActivity {
                 }
                 chosenUserBean = bean;
                 mClusterManager.clearItems();
-
                 mClusterManager.cluster();
                 mLocationClient.stop();
                 openBottomSheet();
@@ -583,6 +584,9 @@ public class MapActivity extends BaseActivity {
     void locate() {
         mapView.setMapCustomEnable(true);
         zoomIn(mapView.getMap(), myLatLng, 30);
+        mClusterManager.clearItems();
+        mClusterManager.cluster();
+        addMarkers(myItems);
 
     }
 

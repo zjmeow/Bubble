@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.vondear.rxtools.RxTool;
 
@@ -97,6 +98,7 @@ public class RegisterActivity extends BaseActivity {
             @Override
             public void checkCodeFail(int errCode, final String errMsg) {
                 Toast.makeText(RegisterActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+
             }
         });
 

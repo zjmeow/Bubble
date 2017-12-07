@@ -76,14 +76,22 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
 //            holder.tvContent.setVisibility(View.VISIBLE);
 //            holder.tvContent.setText(bean.getContent());
 //        }
-        holder.tvName.setText(bean.getMiniUser().getUsername());
+
         holder.tvDate.setText(DateUtil.CalculateTime(bean.getTime()));
         holder.tvCommentNum.setText(bean.getComments() + "");
         holder.tvEmojiNum.setText(bean.getClick() + "");
-        Picasso.with(mContext)
-                .load(bean.getMiniUser().getImage())
-                .placeholder(R.mipmap.test)
-                .into(holder.ivAvatar);
+        if (bean.getAnonymous() == 0) {
+            holder.tvName.setText(bean.getMiniUser().getUsername());
+            Picasso.with(mContext)
+                    .load(bean.getMiniUser().getImage())
+                    .placeholder(R.mipmap.test)
+                    .into(holder.ivAvatar);
+        } else {
+            holder.tvName.setText("匿名用户");
+            Picasso.with(mContext)
+                    .load(R.drawable.anonymous)
+                    .into(holder.ivAvatar);
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

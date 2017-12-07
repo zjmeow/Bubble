@@ -9,9 +9,10 @@
     <!--android:title="加好友"-->
     <!--app:showAsAction="withText|collapseActionView" />-->
     <item
+
         android:id="@+id/menu_locate"
-        android:icon="@drawable/locate"
+        android:icon="@drawable/bar_locate"
         android:title="在地图上定位"
-        app:showAsAction="always|collapseActionView" />
+        app:showAsAction="always" />
 
 </menu>
