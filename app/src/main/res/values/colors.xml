@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#9DCADD</color>
     <color name="colorPrimaryDark">#9DCADD</color>
-    <color name="colorAccent">#FFDDCD</color>
+    <color name="colorAccent">#FCA2BA</color>
     <color name="primaryText">#666666</color>
     <color name="secondText">#949494</color>
 
@@ -30,6 +30,6 @@
     <color name="splash_button">#9DCADD</color>
 
 
-    <color name="swipe_refresh">#FcA2BA</color>
+    <color name="swipe_refresh">#FCA2BA</color>
 
 </resources>

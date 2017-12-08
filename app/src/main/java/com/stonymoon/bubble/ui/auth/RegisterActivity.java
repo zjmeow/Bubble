@@ -75,17 +75,17 @@ public class RegisterActivity extends BaseActivity {
             RxTool.countDown(tvSendCode, 60000, 1000, "获取验证码");
             tvSendCode.setClickable(false);
 
-            SMSSDK.getInstance().getSmsCodeAsyn(phone, "1", new SmscodeListener() {
-                @Override
-                public void getCodeSuccess(final String uuid) {
-                    // 获取验证码成功，uuid 为此次获取的唯一标识码。
-                }
-
-                @Override
-                public void getCodeFail(int errCode, final String errMsg) {
-                    // 获取验证码失败 errCode 为错误码，详情请见文档后面的错误码表；errMsg 为错误描述。
-                }
-            });
+//            SMSSDK.getInstance().getSmsCodeAsyn(phone, "1", new SmscodeListener() {
+//                @Override
+//                public void getCodeSuccess(final String uuid) {
+//                    // 获取验证码成功，uuid 为此次获取的唯一标识码。
+//                }
+//
+//                @Override
+//                public void getCodeFail(int errCode, final String errMsg) {
+//                    // 获取验证码失败 errCode 为错误码，详情请见文档后面的错误码表；errMsg 为错误描述。
+//                }
+//            });
 
         }
 

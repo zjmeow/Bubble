@@ -129,7 +129,8 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:qmui_backgroundColor="@color/colorPrimary" />
+                    app:qmui_backgroundColor="@color/colorPrimary"
+                    app:qmui_borderWidth="0dp" />
 
 
             </android.support.constraint.ConstraintLayout>

@@ -9,34 +9,24 @@
     <LinearLayout
         android:id="@+id/ll_bubble_detail_title"
         android:layout_width="match_parent"
-        android:layout_height="110dp"
-        android:background="@color/textBackground"
+        android:layout_height="60dp"
+        android:background="#FFF"
         android:orientation="vertical"
         android:padding="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_editor_absoluteY="0dp">
+        app:layout_constraintRight_toRightOf="parent">
 
         <TextView
             android:id="@+id/tv_bubble_detail_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
-            android:layout_marginTop="16dp"
             android:text="blablabla"
             android:textColor="@color/primaryText"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tv_bubble_detail_time"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginLeft="1dp"
-            android:text="blablabla"
-            android:textColor="@color/secondText"
-            android:textSize="16sp" />
+
     </LinearLayout>
 
     <android.support.constraint.ConstraintLayout
@@ -54,8 +44,9 @@
             android:id="@+id/tv_bubble_detail_survival_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="泡泡剩余时间"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/iv_bubble_detail_time"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintStart_toStartOf="@+id/iv_bubble_detail_time"
@@ -63,27 +54,13 @@
 
         <ImageView
             android:id="@+id/iv_bubble_detail_add"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_marginStart="40dp"
             android:src="@drawable/emoji"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-
-            android:id="@+id/tv_bubble_detail_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="70dp"
-            android:layout_marginTop="32dp"
-            android:text="这个是内容"
-            android:textColor="@color/secondText"
-            android:textSize="16sp"
-
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_bubble_detail_emoji_number" />
 
 
 
@@ -91,8 +68,9 @@
             android:id="@+id/tv_bubble_detail_emoji_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="emoji"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/iv_bubble_detail_add"
             app:layout_constraintStart_toStartOf="@+id/iv_bubble_detail_add"
             app:layout_constraintTop_toBottomOf="@+id/iv_bubble_detail_add"
@@ -101,8 +79,8 @@
 
         <ImageView
             android:id="@+id/iv_bubble_detail_time"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:textColor="@color/primaryText"
 
             app:layout_constraintEnd_toStartOf="@+id/iv_bubble_detail_comment"
@@ -113,8 +91,8 @@
 
         <ImageView
             android:id="@+id/iv_bubble_detail_comment"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
+            android:layout_width="23dp"
+            android:layout_height="23dp"
             android:layout_marginEnd="40dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -125,13 +103,34 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:text="评论"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="@+id/iv_bubble_detail_comment"
             app:layout_constraintStart_toStartOf="@+id/iv_bubble_detail_comment"
             app:layout_constraintTop_toBottomOf="@+id/iv_bubble_detail_comment" />
 
     </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.4dp"
+        android:background="@drawable/tool_bar_shadow" />
+
+    <TextView
+        android:id="@+id/tv_bubble_detail_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:text="这个是内容"
+        android:textColor="@color/secondText"
+        android:textSize="14sp"
+
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_bubble_detail_emoji_number" />
+
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -143,22 +142,56 @@
 
         <com.qmuiteam.qmui.widget.QMUIRadiusImageView
             android:id="@+id/iv_bubble_detail_head"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:src="@mipmap/test" />
 
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
         <TextView
             android:id="@+id/tv_bubble_detail_author_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="18dp"
+            android:layout_marginStart="16dp"
             android:text="username"
-            android:textSize="17sp"
+            android:textSize="13sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_bubble_detail_head" />
 
+            <TextView
+                android:id="@+id/tv_bubble_detail_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="1dp"
 
+                android:layout_marginStart="16dp"
+                android:text="blablabla"
+                android:textColor="@color/secondText"
+                android:textSize="10sp"
+
+                />
+
+        </LinearLayout>
     </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:background="@color/textBackground">
+
+        <View
+            android:layout_width="5dp"
+            android:layout_height="24dp"
+            android:background="@color/colorPrimary" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="5dp"
+            android:text="评论" />
+    </LinearLayout>
 </LinearLayout>
