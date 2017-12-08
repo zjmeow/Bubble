@@ -36,6 +36,8 @@ import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.activity.ActivityBase;
 
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -65,6 +67,8 @@ public class ProfileActivity extends StatusBarLightActivity {
     Toolbar toolbar;
     @BindView(R.id.recycler_profile_bubble)
     RecyclerView mRecyclerView;
+    @BindView(R.id.tv_profile_no_bubble)
+    TextView tvNoBubble;
 
 
 
@@ -195,11 +199,10 @@ public class ProfileActivity extends StatusBarLightActivity {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
                 mList.addAll(bean.getContent());
-                adapter.notifyDataSetChanged();
-                if (mList.size() == 0) {
-
-
+                if (mList.isEmpty()) {
+                    tvNoBubble.setVisibility(View.VISIBLE);
                 }
+                adapter.notifyDataSetChanged();
 
             }
 

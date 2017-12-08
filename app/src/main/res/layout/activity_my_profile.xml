@@ -10,7 +10,7 @@ android:layout_height="match_parent"
 
 <android.support.design.widget.AppBarLayout
     android:layout_width="match_parent"
-    android:layout_height="350dp"
+    android:layout_height="wrap_content"
     android:fitsSystemWindows="true"
     android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -130,4 +130,17 @@ android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <TextView
+        android:id="@+id/tv_edit_profile_no_bubble"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="最近没有冒过泡"
+        android:textColor="@color/secondText"
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+
 </android.support.design.widget.CoordinatorLayout>

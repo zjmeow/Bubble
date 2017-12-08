@@ -42,6 +42,7 @@ import com.stonymoon.bubble.ui.friend.ProfileActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.SpringScaleInterpolator;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
@@ -89,7 +90,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private CommentAdapter adapter = new CommentAdapter(commentBeanList);
     private int page = 1;
     private int emojiNumber;
-    private boolean hasMoreComment = true;
     private View headView;
 
 
@@ -127,9 +127,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private void initRecyclerView() {
         recyclerComment.setAdapter(adapter);
         recyclerComment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        if (hasMoreComment) {
-            getComment();
-        }
+        getComment();
         recyclerComment.addHeaderView(headView);
         recyclerComment.setPullRefreshEnabled(false);
         recyclerComment.setLoadingMoreEnabled(true);
@@ -143,11 +141,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
 
             @Override
             public void onLoadMore() {
-                if (hasMoreComment) {
-                    getComment();
-                } else {
-                    loadNothing();
-                }
+                loadNothing();
             }
 
 
@@ -169,8 +163,8 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            recyclerComment.loadMoreComplete();
-                            Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
+                            getComment();
+
                         }
                     });
                 }
@@ -280,9 +274,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
                         dialog.dismiss();
-                        page = 1;
-                        hasMoreComment = true;
-                        getComment();
+
                     }
                 })
                 .addAction("确定", new QMUIDialogAction.ActionListener() {
@@ -291,6 +283,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                         CharSequence text = builder.getEditText().getText();
                         if (text != null && text.length() > 0) {
                             uploadComment(text.toString(), bean.getId() + "");
+
                             dialog.dismiss();
                         } else {
                             Toast.makeText(BubbleDetailActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
@@ -310,12 +303,17 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             @Override
             public void onNext(Object tag, String response) {
                 Toast.makeText(BubbleDetailActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
-
+                page = 1;
+                commentBeanList.clear();
+                getComment();
             }
 
             @Override
             public void onError(Object tag, Throwable e) {
                 Toast.makeText(BubbleDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
+                LogUtil.e(TAG, e.getMessage());
+
+
             }
 
             @Override
@@ -335,8 +333,12 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 CommentBean bean = gson.fromJson(response, CommentBean.class);
+                if (bean.getContent().getList().isEmpty()) {
+                    Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
+                    recyclerComment.loadMoreComplete();
+                    return;
+                }
                 commentBeanList.addAll(bean.getContent().getList());
-                hasMoreComment = bean.getContent().isHasNextPage();
                 adapter.notifyDataSetChanged();
                 page++;
                 recyclerComment.loadMoreComplete();

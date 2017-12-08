@@ -150,13 +150,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <TextView
+        android:id="@+id/tv_profile_no_bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="470dp"
-        android:text="最近没有冒泡"
+        android:text="最近没有冒过泡"
         android:textColor="@color/secondText"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:visibility="gone"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_profile_bubble"
@@ -166,4 +168,6 @@
 
 
     </android.support.v7.widget.RecyclerView>
+
+
 </android.support.design.widget.CoordinatorLayout>

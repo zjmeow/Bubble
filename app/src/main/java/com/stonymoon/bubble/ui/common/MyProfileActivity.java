@@ -88,6 +88,9 @@ public class MyProfileActivity extends StatusBarLightActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.toolbar_edit_profile)
     Toolbar toolbar;
+    @BindView(R.id.tv_edit_profile_no_bubble)
+    TextView tvNoBubble;
+
 
     private List<BubbleBean.ContentBean> mList = new ArrayList<>();
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
@@ -401,7 +404,6 @@ public class MyProfileActivity extends StatusBarLightActivity {
         return builder.toString() + System.currentTimeMillis();
     }
 
-    //todo 在菜单上设置这个东西
     void edit() {
         showEditTextDialog();
     }
@@ -451,6 +453,9 @@ public class MyProfileActivity extends StatusBarLightActivity {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
                 mList.addAll(bean.getContent());
+                if (mList.isEmpty()) {
+                    tvNoBubble.setVisibility(View.VISIBLE);
+                }
                 adapter.notifyDataSetChanged();
 
             }
