@@ -91,7 +91,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private int page = 1;
     private int emojiNumber;
     private View headView;
-
+    private boolean isFirstGetComment = true;
 
     public static void startActivity(Context context, BubbleBean.ContentBean bean) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
@@ -164,7 +164,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                         @Override
                         public void run() {
                             getComment();
-
                         }
                     });
                 }
@@ -333,7 +332,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 CommentBean bean = gson.fromJson(response, CommentBean.class);
-                if (bean.getContent().getList().isEmpty()) {
+                if (bean.getContent().getList().isEmpty() && !isFirstGetComment) {
                     Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
                     recyclerComment.loadMoreComplete();
                     return;
@@ -342,6 +341,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 adapter.notifyDataSetChanged();
                 page++;
                 recyclerComment.loadMoreComplete();
+                isFirstGetComment = false;
             }
 
             @Override
@@ -387,7 +387,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
 
             }
         });
-
 
     }
 

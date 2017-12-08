@@ -62,6 +62,7 @@ public class ChatActivity extends StatusBarLightActivity {
     private int page = 0;
 
 
+
     public static void startActivity(Context context, String phone, String username, String url) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra("phone", phone);
@@ -89,6 +90,7 @@ public class ChatActivity extends StatusBarLightActivity {
         setContentView(R.layout.activity_chat);
         ButterKnife.bind(this);
         initUser();
+
         mChatView = (ChatView) findViewById(R.id.chat_view);
         editText = (EditText) findViewById(R.id.et_chat_input);
         mChatView.initModule();
@@ -267,6 +269,7 @@ public class ChatActivity extends StatusBarLightActivity {
     protected void onDestroy() {
         super.onDestroy();
         JMessageClient.unRegisterEventReceiver(this);
+        JMessageClient.exitConversation();
     }
 
     public void onEventMainThread(MessageEvent event) {
@@ -288,8 +291,6 @@ public class ChatActivity extends StatusBarLightActivity {
         Intent intent = getIntent();
         Conversation conversation = JMessageClient.getSingleConversation(intent.getStringExtra("phone"));
         if (conversation == null) {
-
-
         }
         otherUser = new DefaultUser("", "", "");
 
@@ -302,6 +303,8 @@ public class ChatActivity extends StatusBarLightActivity {
                 otherUserId = userInfo.getAddress();
             }
         });
+
+        JMessageClient.enterSingleConversation(otherUser.getId());
         UserInfo myInfo = JMessageClient.getMyInfo();
         String phone = myInfo.getUserName();
         String username = myInfo.getDisplayName();
