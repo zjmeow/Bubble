@@ -12,7 +12,7 @@ public class StatusBarLightActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //QMUIStatusBarHelper.setStatusBarLightMode(this);
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
     }
 
 }

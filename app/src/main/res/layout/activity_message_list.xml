@@ -13,14 +13,16 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bar_size"
         android:background="@color/barColor"
-        app:contentInsetStart="6dp">
+        app:contentInsetStart="6dp"
+
+
+        >
 
         <ImageView
             android:id="@+id/iv_message_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="left|center"
-            android:layout_marginLeft="16dp"
+            android:layout_gravity="start|center"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
@@ -46,6 +48,7 @@
         android:background="@drawable/tool_bar_shadow" />
 
     <android.support.v4.widget.SwipeRefreshLayout
+
         android:id="@+id/swipe_refresh_message"
         android:layout_width="match_parent"
         android:layout_height="match_parent">

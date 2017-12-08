@@ -6,6 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bar_size"
+        app:contentInsetStart="30dp"
+        app:title="登录"
+        app:titleTextColor="@color/splash_button" />
+
 
     <LinearLayout
         android:id="@+id/ll_name_psw"
@@ -119,18 +126,19 @@
             </RelativeLayout>
 
 
-            <Button
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
                 android:id="@+id/btn_login_sign_in"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="36dp"
-                android:background="@drawable/blue_btn_selector"
                 android:text="登录"
-                android:textColor="#fff"
-                android:textSize="18sp" />
-
+                android:textColor="#FFF"
+                android:textSize="16sp"
+                app:qmui_backgroundColor="@color/splash_button"
+                app:qmui_borderColor="@color/splash_button"
+                app:qmui_radius="5dp" />
 
         </LinearLayout>
     </LinearLayout>

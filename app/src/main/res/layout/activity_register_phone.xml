@@ -6,7 +6,12 @@
     android:layout_height="match_parent"
     android:background="#fff">
 
-
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bar_size"
+        app:contentInsetStart="30dp"
+        app:title="注册"
+        app:titleTextColor="@color/splash_button" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -117,48 +122,23 @@
             </RelativeLayout>
 
 
-            <Button
+            <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
                 android:id="@+id/btn_register_register"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_marginLeft="30dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="36dp"
-                android:background="@drawable/blue_btn_selector"
                 android:text="注册"
-                android:textColor="#fff"
-                android:textSize="18sp" />
+                android:textColor="#FFF"
+                android:textSize="16sp"
+                app:qmui_backgroundColor="@color/splash_button"
+                app:qmui_borderColor="@color/splash_button"
+                app:qmui_radius="5dp" />
 
 
         </LinearLayout>
     </LinearLayout>
 
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="18dp">
-
-        <TextView
-            android:id="@+id/login_desc"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="还没有账号?"
-            android:textColor="#999999"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/tv_login_register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:text="立即注册"
-            android:textColor="@color/colorPrimary"
-            android:textSize="12sp" />
-
-    </LinearLayout>
 
 </RelativeLayout>

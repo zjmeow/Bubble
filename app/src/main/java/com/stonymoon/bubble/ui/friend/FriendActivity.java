@@ -59,6 +59,7 @@ public class FriendActivity extends StatusBarLightActivity {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         initFriend();
+        refreshLayout.setColorSchemeResources(R.color.swipe_refresh, R.color.white);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

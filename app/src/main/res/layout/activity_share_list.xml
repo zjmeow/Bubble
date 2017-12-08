@@ -24,7 +24,6 @@
             android:id="@+id/iv_share_list_back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"

@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
@@ -22,13 +23,13 @@ import cn.jpush.im.api.BasicCallback;
 
 public class SplashActivity extends BaseActivity {
 
-    @OnClick(R.id.rl_splash_login)
+    @OnClick(R.id.btn_splash_login)
     void login() {
         Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
-    @OnClick(R.id.rl_splash_register)
+    @OnClick(R.id.btn_splash_register)
     void register() {
         Intent intent = new Intent(SplashActivity.this, RegisterActivity.class);
         startActivity(intent);
@@ -37,6 +38,7 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        QMUIStatusBarHelper.translucent(this);
         setContentView(R.layout.activity_splash);
         askForPermission();
         attemptLogin();

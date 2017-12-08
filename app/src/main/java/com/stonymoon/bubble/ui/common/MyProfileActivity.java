@@ -57,6 +57,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -349,6 +350,7 @@ public class MyProfileActivity extends StatusBarLightActivity {
                     @Override
                     public void onError(Object tag, com.tamic.novate.Throwable e) {
 
+
                     }
                 }
 
@@ -453,6 +455,7 @@ public class MyProfileActivity extends StatusBarLightActivity {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
                 mList.addAll(bean.getContent());
+                Collections.reverse(mList);
                 if (mList.isEmpty()) {
                     tvNoBubble.setVisibility(View.VISIBLE);
                 }
@@ -462,7 +465,8 @@ public class MyProfileActivity extends StatusBarLightActivity {
 
             @Override
             public void onError(Object tag, com.tamic.novate.Throwable e) {
-
+                LogUtil.e(TAG, e.getMessage());
+                tvNoBubble.setVisibility(View.VISIBLE);
             }
 
             @Override

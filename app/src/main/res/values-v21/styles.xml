@@ -5,6 +5,7 @@
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+
     </style>
 
     <style name="AppTheme.WhiteStatus">
@@ -24,5 +25,13 @@
         <item name="android:statusBarColor">@color/barColor</item>
     </style>
 
+    <style name="AppTheme" parent="QMUI.Compat.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:contentInsetStart">6dp</item>
+        <item name="android:icon">@drawable/navigation_icon</item>
+    </style>
 
 </resources>

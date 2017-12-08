@@ -187,6 +187,7 @@
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity
             android:name=".ui.friend.MessageListActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.BlueStatus" />
         <activity
             android:name=".ui.share.ShareActivity"

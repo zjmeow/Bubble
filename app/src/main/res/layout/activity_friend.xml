@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bar_size"
         android:background="@color/barColor"
+        android:theme="@style/AppTheme"
         app:contentInsetStart="6dp"
         app:popupTheme="@style/AppTheme.PopupOverlay">
 
@@ -33,7 +34,6 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="left|center"
-            android:layout_marginLeft="16dp"
             android:background="?android:attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"

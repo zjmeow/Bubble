@@ -30,6 +30,7 @@ import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.ui.share.ShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -39,6 +40,7 @@ import com.vondear.rxtools.activity.ActivityBase;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -199,6 +201,7 @@ public class ProfileActivity extends StatusBarLightActivity {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
                 mList.addAll(bean.getContent());
+                Collections.reverse(mList);
                 if (mList.isEmpty()) {
                     tvNoBubble.setVisibility(View.VISIBLE);
                 }
@@ -208,7 +211,8 @@ public class ProfileActivity extends StatusBarLightActivity {
 
             @Override
             public void onError(Object tag, Throwable e) {
-
+                tvNoBubble.setVisibility(View.VISIBLE);
+                LogUtil.e(TAG, e.getMessage());
             }
 
             @Override

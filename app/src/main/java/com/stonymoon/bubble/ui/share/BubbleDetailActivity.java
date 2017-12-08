@@ -238,7 +238,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                     Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
                     tvAuthorName.setText("匿名用户");
                     ivHead.setClickable(false);
-
                 }
 
 

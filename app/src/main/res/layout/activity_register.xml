@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_register"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.stonymoon.bubble.ui.auth.RegisterActivity"
-
     >
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bar_size"
+        app:contentInsetStart="30dp"
+        app:title="注册"
+        app:titleTextColor="@color/splash_button" />
 
 
     <LinearLayout
@@ -47,7 +54,7 @@
             android:layout_below="@id/wrapper_login_phone_number"
             android:layout_marginLeft="46dp"
             android:layout_marginRight="46dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="0dp"
             android:background="@color/inputBackground" />
 
 
@@ -82,45 +89,48 @@
                     android:textColorHint="#808080"
                     android:textSize="16sp" />
             </android.support.design.widget.TextInputLayout>
-
             <TextView
                 android:id="@+id/tv_register_send_identification_code"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
                 android:layout_gravity="center"
+                android:layout_marginLeft="20dp"
                 android:layout_marginTop="3dp"
                 android:width="110dp"
                 android:background="#F7F7F7"
                 android:gravity="center"
                 android:text="获取验证码"
                 android:textColor="@color/secondText"
-                android:textSize="16sp"
+                android:textSize="16sp" />
 
-                />
 
 
         </LinearLayout>
+
+
         <View
             android:id="@+id/user_line"
             android:layout_width="138dp"
             android:layout_height="0.67dp"
             android:layout_marginLeft="46dp"
             android:layout_marginRight="46dp"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="0dp"
             android:background="@color/inputBackground" />
 
 
-        <Button
+        <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
             android:id="@+id/btn_register_next"
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
             android:layout_marginTop="36dp"
-            android:background="@drawable/blue_btn_selector"
             android:text="下一步"
-            android:textColor="#fff"
-            android:textSize="18sp" />
+            android:textColor="#FFF"
+            android:textSize="16sp"
+            app:qmui_backgroundColor="@color/splash_button"
+            app:qmui_borderColor="@color/splash_button"
+            app:qmui_radius="5dp" />
 
 
     </LinearLayout>

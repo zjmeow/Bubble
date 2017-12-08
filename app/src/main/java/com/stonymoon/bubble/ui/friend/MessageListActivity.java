@@ -56,6 +56,7 @@ public class MessageListActivity extends StatusBarLightActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         conversationRecycler.setLayoutManager(linearLayoutManager);
+        refreshLayout.setColorSchemeResources(R.color.swipe_refresh, R.color.white);
         refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

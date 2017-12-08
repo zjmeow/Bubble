@@ -8,7 +8,7 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
     <dimen name="bar_size">48dp</dimen>
-    <dimen name="bubble_detail_bar">275dp</dimen>
+    <dimen name="bubble_detail_bar">300dp</dimen>
     <dimen name="bubble_detail_header">110dp</dimen>
 
 
