@@ -408,7 +408,6 @@ public class MapActivity extends BaseActivity {
                 zoomIn(baiduMap, item.getPosition(), 30f);
                 LocationBean.PoisBean bean = item.getPoisBean();
                 if (String.valueOf(bean.getUid()).equals(AuthUtil.getId())) {
-                    Toast.makeText(MapActivity.this, "我", Toast.LENGTH_SHORT).show();
                     return true;
                 }
                 chosenUserBean = bean;

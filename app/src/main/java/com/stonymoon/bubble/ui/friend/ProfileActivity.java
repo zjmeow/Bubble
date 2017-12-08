@@ -24,9 +24,11 @@ import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
 import com.stonymoon.bubble.adapter.ShareAdapter;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 
 import com.stonymoon.bubble.ui.share.ShareActivity;
+import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
@@ -75,6 +77,10 @@ public class ProfileActivity extends StatusBarLightActivity {
 
 
     public static void startActivity(Context context, String phone, String uid) {
+        if (AuthUtil.getPhone().equals(phone)) {
+            MyProfileActivity.startActivity(context);
+            return;
+        }
         Intent intent = new Intent(context, ProfileActivity.class);
         intent.putExtra("phone", phone);
         intent.putExtra("uid", uid);

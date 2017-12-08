@@ -10,7 +10,7 @@
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="440dp"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true"
         android:theme="@style/AppTheme.AppBarOverlay">
 
@@ -29,8 +29,10 @@
                 app:layout_collapseMode="parallax">
 
                 <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_width="0dp"
+                    android:layout_height="424dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent">
 
                     <ImageView
                         android:id="@+id/iv_profile_background"
@@ -86,19 +88,22 @@
                     android:textSize="24sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_profile_avatar" />
+                    app:layout_constraintTop_toBottomOf="@+id/iv_profile_avatar"
+                    tools:layout_editor_absoluteX="141dp" />
 
                 <TextView
                     android:id="@+id/tv_profile_signature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
+                    android:layout_marginEnd="16dp"
                     android:layout_marginLeft="16dp"
                     android:layout_marginRight="16dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="4dp"
+
                     android:gravity="center"
                     android:text="aaaaaaaa"
-
                     android:textColor="@color/secondText"
                     android:textSize="16sp"
                     app:layout_constraintBottom_toTopOf="@+id/btn_profile_make_friend"
@@ -144,11 +149,21 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="470dp"
+        android:text="最近没有冒泡"
+        android:textColor="@color/secondText"
+        android:textSize="18sp" />
 
     <android.support.v7.widget.RecyclerView
-
         android:id="@+id/recycler_profile_bubble"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+    </android.support.v7.widget.RecyclerView>
 </android.support.design.widget.CoordinatorLayout>

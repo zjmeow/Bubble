@@ -46,7 +46,6 @@ public class RegisterActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         ButterKnife.bind(this);
-
         SMSSDK.getInstance().initSdk(this);
         SMSSDK.getInstance().setIntervalTime(60000);
 

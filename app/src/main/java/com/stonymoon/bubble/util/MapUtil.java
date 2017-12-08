@@ -37,7 +37,7 @@ public class MapUtil {
         //可选，定位SDK内部是一个service，并放到了独立进程。
         //设置是否在stop的时候杀死这个进程，默认（建议）不杀死，即setIgnoreKillProcess(true)
 
-        option.setEnableSimulateGps(false);
+        option.setEnableSimulateGps(true);
 //可选，设置是否需要过滤GPS仿真结果，默认需要，即参数为false
         mLocationClient.setLocOption(option);
 //mLocationClient为第二步初始化过的LocationClient对象

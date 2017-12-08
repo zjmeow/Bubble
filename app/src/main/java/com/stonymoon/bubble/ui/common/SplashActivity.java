@@ -1,6 +1,8 @@
 package com.stonymoon.bubble.ui.common;
 
+import android.Manifest;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -11,6 +13,7 @@ import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.ui.auth.RegisterActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
+import com.vondear.rxtools.RxPermissionsTool;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,7 +38,12 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        askForPermission();
         attemptLogin();
+        //todo 极光debug，发布时要去掉
+        JMessageClient.setDebugMode(true);
+        //初始化极光推送,是否开启缓存消息
+        JMessageClient.init(SplashActivity.this, true);
         ButterKnife.bind(this);
     }
 
@@ -61,6 +69,33 @@ public class SplashActivity extends BaseActivity {
             });
 
         }
+
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //强制拿到权限
+        for (int i : grantResults) {
+            if (i == -1) {
+                Toast.makeText(SplashActivity.this, "必须获取权限才能正常使用定位和分享功能", Toast.LENGTH_SHORT).show();
+                askForPermission();
+            }
+
+
+        }
+
+    }
+
+    private void askForPermission() {
+        RxPermissionsTool.with(this).addPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+                .addPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+                .addPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .addPermission(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .addPermission(Manifest.permission.READ_PHONE_STATE)
+                .initPermission();
 
 
     }
