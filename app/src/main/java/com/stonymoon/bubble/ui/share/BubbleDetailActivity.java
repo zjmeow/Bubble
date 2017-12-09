@@ -80,7 +80,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private ImageView ivAdd;
     private TextView tvEmojiNumber;
     private BubbleBean.ContentBean bean;
-    private ImageView ivSurvival;
 
     private long survivalMinute;
     private Context mContext;
@@ -186,7 +185,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         ivComment = (ImageView) headView.findViewById(R.id.iv_bubble_detail_comment);
         ivAdd = (ImageView) headView.findViewById(R.id.iv_bubble_detail_add);
         tvEmojiNumber = (TextView) headView.findViewById(R.id.tv_bubble_detail_emoji_number);
-        ivSurvival = (ImageView) headView.findViewById(R.id.iv_bubble_detail_time);
 
 
         ivBubbleDetail.setOnClickListener(this);
@@ -410,15 +408,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 showBubbleSet.setInterpolator(new SpringScaleInterpolator(0.4f));
                 showBubbleSet.playTogether(animatorX, animatorY);
                 showBubbleSet.start();
-                ObjectAnimator animatorX1 = ObjectAnimator.ofFloat(ivSurvival, "scaleX", 0.7f, 1.0f);
-                ObjectAnimator animatorY1 = ObjectAnimator.ofFloat(ivSurvival, "scaleY", 0.7f, 1.0f);
-                AnimatorSet showBubbleSet1 = new AnimatorSet();
-                showBubbleSet1.setDuration(1000);
-                showBubbleSet1.setInterpolator(new SpringScaleInterpolator(0.4f));
-                showBubbleSet1.playTogether(animatorX1, animatorY1);
-                if (survivalMinute > 0) {
-                    showBubbleSet1.start();
-                }
                 break;
         }
 

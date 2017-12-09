@@ -5,8 +5,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:paddingBottom="50dp"
-    android:visibility="gone">
+    android:paddingBottom="50dp">
 
     <ImageView
         android:id="@+id/imageView3"
@@ -25,7 +24,7 @@
         android:layout_width="52dp"
         android:layout_height="52dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="11.5dp"
+        android:layout_marginTop="10dp"
         android:src="@mipmap/test"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

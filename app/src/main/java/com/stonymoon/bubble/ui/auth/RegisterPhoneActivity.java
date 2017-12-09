@@ -50,6 +50,7 @@ public class RegisterPhoneActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_phone);
         ButterKnife.bind(this);
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
         phone = getIntent().getStringExtra("phone");
 
 

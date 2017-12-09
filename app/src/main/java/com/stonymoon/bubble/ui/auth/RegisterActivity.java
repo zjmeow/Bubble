@@ -8,6 +8,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.BaseActivity;
@@ -45,7 +46,9 @@ public class RegisterActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
         ButterKnife.bind(this);
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
         SMSSDK.getInstance().initSdk(this);
         SMSSDK.getInstance().setIntervalTime(60000);
 

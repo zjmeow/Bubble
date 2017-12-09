@@ -47,6 +47,7 @@ public class SplashActivity extends BaseActivity {
         //初始化极光推送,是否开启缓存消息
         JMessageClient.init(SplashActivity.this, true);
         ButterKnife.bind(this);
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
     }
 
 

@@ -110,6 +110,12 @@ public class ShareActivity extends StatusBarLightActivity {
                     .show();
             return;
 
+        } else if (imageUrl == null || imageUrl.equals("")) {
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("请上传一张图片")
+                    .setConfirmText("嗯")
+                    .show();
+            return;
         }
         int anonymous;
         if (checkBox.isChecked()) {

@@ -9,24 +9,29 @@ android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
 <android.support.design.widget.AppBarLayout
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fitsSystemWindows="true"
     android:theme="@style/AppTheme.AppBarOverlay">
 
     <android.support.design.widget.CollapsingToolbarLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         app:contentScrim="@color/barColor"
         app:layout_scrollFlags="scroll|exitUntilCollapsed"
-        app:popupTheme="@style/OverflowMenu">
+        app:popupTheme="@style/OverflowMenu"
+
+
+        >
         <!--app:contentScrim="#00000000"-->
         <android.support.constraint.ConstraintLayout
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:layout_collapseMode="parallax">
+            android:fitsSystemWindows="true">
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -47,12 +52,6 @@ android:layout_height="match_parent"
                     android:layout_height="match_parent"
                     android:background="#8000" />
 
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:layout_gravity="bottom"
-                    android:background="#5000" />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -61,6 +60,12 @@ android:layout_height="match_parent"
                     android:text="最近的动态"
                     android:textColor="#FFF"
                     android:textSize="18sp" />
+                <ImageView
+
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom"
+                    android:background="#5000" />
 
             </FrameLayout>
 
@@ -109,16 +114,20 @@ android:layout_height="match_parent"
         </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.Toolbar
-
             android:id="@+id/toolbar_edit_profile"
             android:layout_width="match_parent"
             android:layout_height="@dimen/bar_size"
+            app:contentInsetLeft="0dp"
+            app:contentInsetStart="0dp"
             app:layout_collapseMode="pin"
             app:layout_scrollFlags="scroll|enterAlways|snap"
             app:popupTheme="@style/OverflowMenu"
+            app:title="最近动态"
+            app:titleTextColor="@color/barText"
             >
 
         </android.support.v7.widget.Toolbar>
+
 
     </android.support.design.widget.CollapsingToolbarLayout>
 

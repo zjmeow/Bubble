@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.JUserBean;
@@ -107,6 +108,7 @@ public class LoginActivity extends BaseActivity {
         wrapperLoginPhoneNumber.setHint("请输入手机号");
         wrapperLoginPassword.setHint("请输入密码");
 
+        QMUIStatusBarHelper.setStatusBarLightMode(this);
     }
 
     //申请权限
