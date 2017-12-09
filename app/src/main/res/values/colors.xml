@@ -18,9 +18,9 @@
     <color name="blue_btn_text_70">#E0F8F8</color>
     <color name="blue_btn_text_press">#99E4E4</color>
 
-    <color name="barColor">#FFF</color>
+    <color name="barColor">#9DCADD</color>
     <color name="bartextt">#9DCADD</color>
-    <color name="barText">#9DCADD</color>
+    <color name="barText">#FFF</color>
     <color name="cardText">#99B1CD</color>
     <color name="cardSecondText">#868686</color>
 
@@ -28,8 +28,6 @@
     <color name="profileUsername">#FFF</color>
 
     <color name="splash_button">#9DCADD</color>
-
-
     <color name="swipe_refresh">#FCA2BA</color>
 
 </resources>

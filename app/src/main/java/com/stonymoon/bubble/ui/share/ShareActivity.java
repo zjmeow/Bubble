@@ -71,6 +71,8 @@ public class ShareActivity extends StatusBarLightActivity {
     ImageView shareImage;
     @BindView(R.id.checkBox_share)
     CheckBox checkBox;
+    @BindView(R.id.iv_share_show_picture)
+    ImageView ivShow;
 
     private double latitude;
     private double longitude;
@@ -241,7 +243,7 @@ public class ShareActivity extends StatusBarLightActivity {
                             load(data.getData()).
                             diskCacheStrategy(DiskCacheStrategy.RESULT).
                             thumbnail(0.5f).
-                            into(shareImage);
+                            into(ivShow);
 
                 }
 
