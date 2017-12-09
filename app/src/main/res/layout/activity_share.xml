@@ -143,7 +143,7 @@
                     android:id="@+id/iv_share_picture"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
-                    android:padding="10dp"
+                    android:padding="12dp"
                     android:src="@drawable/add_picture" />
 
 
