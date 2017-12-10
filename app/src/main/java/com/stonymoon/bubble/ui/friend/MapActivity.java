@@ -77,6 +77,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.content.CustomContent;
 import cn.jpush.im.android.api.event.ContactNotifyEvent;
 import cn.jpush.im.android.api.event.MessageEvent;
@@ -220,7 +221,7 @@ public class MapActivity extends BaseActivity {
                     receivedEmojiMap.get(phone)
                             .add(emojiName);
                 }
-
+                ivMessage.setVisibility(View.VISIBLE);
                 break;
 
         }
@@ -264,8 +265,14 @@ public class MapActivity extends BaseActivity {
     public void onEvent(ContactNotifyEvent event) {
         //获取事件发生的会话对象
         LogUtil.v("MapActivity", "receive friend" + event.toString());
-        String target = JMessageClient.getMyInfo().getUserName();
-        showMessagePositiveDialog(event.getFromUsername(), target);
+        JMessageClient.getUserInfo(event.getFromUsername(), new GetUserInfoCallback() {
+            @Override
+            public void gotResult(int i, String s, UserInfo userInfo) {
+                showMessagePositiveDialog(userInfo.getDisplayName(), userInfo.getUserName());
+            }
+        });
+
+
 
     }
 
@@ -483,7 +490,7 @@ public class MapActivity extends BaseActivity {
                     public void onClick(QMUIDialog dialog, int index) {
                         switch (index) {
                             case 0:
-                                ContactManager.declineInvitation(username, "", targetUsername + "拒绝了你的请求", callback);
+                                ContactManager.declineInvitation(targetUsername, "", "", callback);
                                 dialog.dismiss();
                                 break;
                             case 1:
@@ -539,6 +546,7 @@ public class MapActivity extends BaseActivity {
             bubble.clearAnimation();
             bubble.setVisibility(View.GONE);
             isSelected = false;
+            chosenUserBean = null;
             addMarkers(myItems);
             closeBottomSheet();
         }

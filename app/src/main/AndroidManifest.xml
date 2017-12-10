@@ -183,6 +183,7 @@
             android:theme="@style/AppTheme.BlueStatus" />
         <activity
             android:name=".ui.friend.ChatActivity"
+            android:launchMode="singleTask"
             android:theme="@style/AppTheme.BlueStatus"
             android:windowSoftInputMode="stateHidden|adjustResize" />
         <activity

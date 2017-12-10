@@ -49,6 +49,7 @@ import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 
 import static android.Manifest.permission.READ_CONTACTS;
+import static com.stonymoon.bubble.base.ActivityCollector.finishAll;
 
 
 public class LoginActivity extends BaseActivity {
@@ -171,9 +172,9 @@ public class LoginActivity extends BaseActivity {
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
-                                MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
                                 myDialog.success("登陆成功");
-                                finish();
+                                finishAll();
+                                MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
 
                             }
                         });

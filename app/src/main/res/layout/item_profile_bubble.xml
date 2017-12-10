@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="180dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/test" />
+            android:src="@drawable/detail_holder" />
         <!--<TextView-->
         <!--android:id="@+id/tv_share_item_title"-->
         <!--android:layout_width="wrap_content"-->
@@ -44,8 +44,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:lineSpacingExtra="8dp"
-            android:maxLines="2"
-            android:text="这是一件非常神奇的事情"
             android:textColor="@color/cardSecondText"
             android:textSize="16sp" />
 

@@ -84,7 +84,7 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             holder.tvName.setText(bean.getMiniUser().getUsername());
             Picasso.with(mContext)
                     .load(bean.getMiniUser().getImage())
-                    .placeholder(R.mipmap.test)
+                    .placeholder(R.drawable.detail_holder)
                     .into(holder.ivAvatar);
         } else {
             holder.tvName.setText("匿名用户");

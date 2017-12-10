@@ -16,7 +16,6 @@
         android:id="@+id/iv_comment_item_avatar"
         android:layout_width="36dp"
         android:layout_height="36dp"
-        android:src="@mipmap/test"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:qmui_border_width="0dp" />
@@ -27,7 +26,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
-        android:text="这个是用户名"
         android:textSize="13sp"
         app:layout_constraintBottom_toBottomOf="@+id/iv_comment_item_avatar"
         app:layout_constraintStart_toEndOf="@+id/iv_comment_item_avatar"
@@ -42,7 +40,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:lineSpacingExtra="6dp"
-        android:text="测试这个是评论这个是评论这个是评论这个是评论这个是评论这个是评论"
+
         android:textColor="@color/primaryText"
         android:textSize="12sp"
         app:layout_constraintRight_toRightOf="parent"
