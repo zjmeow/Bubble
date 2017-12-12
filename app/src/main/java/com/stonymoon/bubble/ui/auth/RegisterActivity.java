@@ -36,8 +36,7 @@ public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.et_register_identification_code)
     EditText identificationText;
-    @BindView(R.id.btn_register_next)
-    Button registerButton;
+
 
     private String phone = "";
 
@@ -60,6 +59,7 @@ public class RegisterActivity extends BaseActivity {
 
 
         boolean isPhone = Pattern.matches(REGEX_MOBILE_SIMPLE, phoneNumberText.getText().toString());
+
         if (!isPhone) {
             Toast.makeText(RegisterActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
         } else {
@@ -98,7 +98,7 @@ public class RegisterActivity extends BaseActivity {
     @OnClick(R.id.btn_register_next)
     void register() {
 
-        RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
+        //RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
         SMSSDK.getInstance().checkSmsCodeAsyn(phone, identificationText.getText().toString(), new SmscheckListener() {
             @Override
             public void checkCodeSuccess(final String code) {

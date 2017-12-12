@@ -70,7 +70,7 @@
                 android:layout_marginTop="16dp"
                 android:background="@null"
                 android:hint="标题"
-                android:maxLength="10"
+                android:maxLength="16"
                 android:textSize="18sp"
 
 

@@ -55,6 +55,7 @@
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:hint="用户名"
+                        android:maxLength="8"
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textColor="#2C2C2C"

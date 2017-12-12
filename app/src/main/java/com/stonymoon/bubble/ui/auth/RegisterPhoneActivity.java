@@ -13,6 +13,7 @@ import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.StringCheckUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
@@ -58,6 +59,18 @@ public class RegisterPhoneActivity extends BaseActivity {
 
     @OnClick(R.id.btn_register_register)
     void successRegister() {
+        String username = usernameText.getText().toString().trim();
+        String password = passwordText.getText().toString();
+        if (username == null || username.equals("")) {
+            Toast.makeText(RegisterPhoneActivity.this, "请输入正确的用户名", Toast.LENGTH_SHORT).show();
+        }
+
+        boolean isPassword = StringCheckUtil.isPassword(password);
+        if (!isPassword) {
+            Toast.makeText(RegisterPhoneActivity.this, "密码必须在6位以上", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         parameters.clear();
         parameters.put("username", usernameText.getText().toString());
         parameters.put("password", passwordText.getText().toString());
