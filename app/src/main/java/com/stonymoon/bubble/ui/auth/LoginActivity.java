@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.telecom.PhoneAccount;
 import android.view.KeyEvent;
 import android.view.View;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.bean.LoginBean;
@@ -52,7 +54,7 @@ import static android.Manifest.permission.READ_CONTACTS;
 import static com.stonymoon.bubble.base.ActivityCollector.finishAll;
 
 
-public class LoginActivity extends BaseActivity {
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private static final int REQUEST_READ_CONTACTS = 0;
 
@@ -105,11 +107,16 @@ public class LoginActivity extends BaseActivity {
                 return false;
             }
         });
-        attemptLogin();
+        //attemptLogin();
         wrapperLoginPhoneNumber.setHint("请输入手机号");
         wrapperLoginPassword.setHint("请输入密码");
-
         QMUIStatusBarHelper.setStatusBarLightMode(this);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 
     //申请权限
@@ -217,7 +224,6 @@ public class LoginActivity extends BaseActivity {
 
 
         }
-
 
     }
 

@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.BaseActivity;
@@ -30,6 +31,10 @@ public class RegisterActivity extends BaseActivity {
 
     @BindView(R.id.et_register_phone_number)
     EditText phoneNumberText;
+    @BindView(R.id.btn_register_next)
+    QMUIRoundButton btnNext;
+
+
     @BindView(R.id.tv_register_send_identification_code)
     TextView tvSendCode;
 
@@ -51,27 +56,24 @@ public class RegisterActivity extends BaseActivity {
         SMSSDK.getInstance().initSdk(this);
         SMSSDK.getInstance().setIntervalTime(60000);
 
+
     }
 
     //发送验证码，发送完以后手机号不能修改
     @OnClick(R.id.tv_register_send_identification_code)
     void sendCode() {
-
-
         boolean isPhone = Pattern.matches(REGEX_MOBILE_SIMPLE, phoneNumberText.getText().toString());
 
         if (!isPhone) {
             Toast.makeText(RegisterActivity.this, "请输入正确的手机号", Toast.LENGTH_SHORT).show();
+            return;
         } else {
             phone = phoneNumberText.getText().toString();
 
 
-            RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
-            finish();
-
             // TODO: 2017/12/8  暂时关闭验证码
 
-
+            Toast.makeText(this, "短信验证码暂时失效，输入1234即可", Toast.LENGTH_SHORT).show();
             phoneNumberText.setFocusable(false);
             phoneNumberText.setEnabled(false);
             phoneNumberText.setTextColor(Color.GRAY);
@@ -97,8 +99,15 @@ public class RegisterActivity extends BaseActivity {
 
     @OnClick(R.id.btn_register_next)
     void register() {
+        String code = identificationText.getText().toString();
+        if (code.equals("1234")) {
+            RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
+            finish();
+        } else {
+            Toast.makeText(RegisterActivity.this, "请输入正确的验证码", Toast.LENGTH_SHORT).show();
+        }
 
-        //RegisterPhoneActivity.startActivity(RegisterActivity.this, phone);
+
         SMSSDK.getInstance().checkSmsCodeAsyn(phone, identificationText.getText().toString(), new SmscheckListener() {
             @Override
             public void checkCodeSuccess(final String code) {
@@ -108,7 +117,7 @@ public class RegisterActivity extends BaseActivity {
 
             @Override
             public void checkCodeFail(int errCode, final String errMsg) {
-                Toast.makeText(RegisterActivity.this, errMsg, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(RegisterActivity.this, errMsg, Toast.LENGTH_SHORT).show();
 
             }
         });

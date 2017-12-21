@@ -7,22 +7,38 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
+import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.bean.LoginBean;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.ui.auth.RegisterActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
+import com.stonymoon.bubble.util.HttpUtil;
+import com.stonymoon.bubble.util.LogUtil;
+import com.stonymoon.bubble.util.UrlUtil;
+import com.stonymoon.bubble.view.MyDialog;
+import com.tamic.novate.Throwable;
+import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPermissionsTool;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
+import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 
-public class SplashActivity extends BaseActivity {
+import static com.stonymoon.bubble.base.ActivityCollector.finishAll;
 
+public class SplashActivity extends BaseActivity {
+    private Map<String, Object> parameters = new HashMap<String, Object>();
+    private LoginBean bean;
     @OnClick(R.id.btn_splash_login)
     void login() {
         Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
@@ -61,6 +77,7 @@ public class SplashActivity extends BaseActivity {
         String password = AuthUtil.getPassword();
         if (!token.equals("") && !id.equals("")) {
             //已经登录过，直接进入定位页面
+            //login(phone,password);
             MapActivity.startActivity(SplashActivity.this, id);
             finish();
             JMessageClient.login(phone, password, new BasicCallback() {
@@ -102,4 +119,46 @@ public class SplashActivity extends BaseActivity {
 
 
     }
+
+    private void login(final String phoneNum, final String password) {
+        String url = UrlUtil.getLogin();
+        parameters.put("phone", phoneNum);
+        parameters.put("password", password);
+        HttpUtil.sendHttpRequest(this)
+                .rxPost(url, parameters, new RxStringCallback() {
+                    @Override
+                    public void onNext(Object tag, String response) {
+                        Gson gson = new Gson();
+                        bean = gson.fromJson(response, LoginBean.class);
+                        JUserBean jUserBean = new JUserBean();
+                        jUserBean.setAddress(bean.getContent().getId() + "");
+                        JMessageClient.updateMyInfo(UserInfo.Field.address, jUserBean, new BasicCallback() {
+                            @Override
+                            public void gotResult(int i, String s) {
+                            }
+                        });
+                        AuthUtil.saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
+                        JMessageClient.login(phoneNum, password, new BasicCallback() {
+                            @Override
+                            public void gotResult(int i, String s) {
+
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onError(Object tag, Throwable e) {
+                        LogUtil.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onCancel(Object tag, Throwable e) {
+
+                    }
+                });
+    }
+
+
 }

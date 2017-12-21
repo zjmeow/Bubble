@@ -63,6 +63,7 @@ public class RegisterPhoneActivity extends BaseActivity {
         String password = passwordText.getText().toString();
         if (username == null || username.equals("")) {
             Toast.makeText(RegisterPhoneActivity.this, "请输入正确的用户名", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         boolean isPassword = StringCheckUtil.isPassword(password);

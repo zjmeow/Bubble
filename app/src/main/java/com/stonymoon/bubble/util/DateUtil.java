@@ -68,5 +68,11 @@ public class DateUtil {
     }
 
 
+    public static String getTime() {
+        long nowTime = System.currentTimeMillis();  //获取当前时间的毫秒数
+        Date date = new Date(nowTime - 1000 * 60 * 60 * 24 * 3);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");//指定时间格式
+        return sdf.format(date);
+    }
 
 }

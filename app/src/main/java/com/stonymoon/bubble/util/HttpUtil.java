@@ -7,7 +7,6 @@ import com.tamic.novate.Novate;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,7 +94,6 @@ public class HttpUtil {
 
     public static void updateMap(final Context context, RxStringCallback rxStringCallback, double latitude, double longitude) {
         updateMapParameters.clear();
-        DecimalFormat df = new DecimalFormat("######0.00");
         String bounds = String.format("%.2f", (longitude - 0.2)) + ","
                 + String.format("%.2f", (latitude - 0.2)) + ";" +
                 String.format("%.2f", (longitude + 0.2)) + "," + String.format("%.2f", (latitude + 0.2));

@@ -495,8 +495,8 @@ public class MyProfileActivity extends StatusBarLightActivity {
                 break;
             case R.id.menu_logout:
                 logout();
-                ActivityCollector.finishAll();
                 LoginActivity.startActivity(this);
+                ActivityCollector.finishAll();
                 break;
         }
         return true;

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 
 
 public class StringCheckUtil {
-    private static String passwordRegex = "[a-zA-Z0-9]{1,16}";
+    private static String passwordRegex = "[a-zA-Z0-9]{6,16}";
 
     public static boolean isPassword(String password) {
         return Pattern.matches(passwordRegex, password);
