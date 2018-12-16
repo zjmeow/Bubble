@@ -1,20 +1,15 @@
 package com.stonymoon.bubble.ui.auth;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.telecom.PhoneAccount;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -23,25 +18,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.stonymoon.bubble.R;
-import com.stonymoon.bubble.base.ActivityCollector;
-import com.stonymoon.bubble.base.BaseActivity;
+import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.AuthService;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.bean.LoginBean;
-import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.friend.MapActivity;
 import com.stonymoon.bubble.util.AuthUtil;
-import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
-import com.stonymoon.bubble.util.UrlUtil;
 import com.stonymoon.bubble.view.MyDialog;
-import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxStringCallback;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,6 +35,9 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static android.Manifest.permission.READ_CONTACTS;
 import static com.stonymoon.bubble.base.ActivityCollector.finishAll;
@@ -69,7 +58,6 @@ public class LoginActivity extends AppCompatActivity {
     TextInputLayout wrapperLoginPassword;
     @BindView(R.id.btn_login_sign_in)
     Button submitButton;
-    private Map<String, Object> parameters = new HashMap<String, Object>();
     private LoginBean bean;
 
     public static void startActivity(Context context) {
@@ -155,19 +143,29 @@ public class LoginActivity extends AppCompatActivity {
         if (phoneNum.equals("") || password.equals("")) {
             Toast.makeText(LoginActivity.this, "请输入正确的账户密码", Toast.LENGTH_SHORT).show();
         }
-        String url = UrlUtil.getLogin();
-        parameters.put("phone", phoneNum);
-        parameters.put("password", password);
-
 
         final MyDialog myDialog = new MyDialog(LoginActivity.this);
         myDialog.showProgress("登录中");
-        HttpUtil.sendHttpRequest(this)
-                .rxPost(url, parameters, new RxStringCallback() {
+        BaseDataManager.getHttpManager()
+                .create(AuthService.class)
+                .login(phoneNum, password)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<LoginBean>() {
                     @Override
-                    public void onNext(Object tag, String response) {
-                        Gson gson = new Gson();
-                        bean = gson.fromJson(response, LoginBean.class);
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        myDialog.fail("登录失败");
+                        LogUtil.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(LoginBean loginBean) {
+                        bean = loginBean;
                         JUserBean jUserBean = new JUserBean();
                         jUserBean.setAddress(bean.getContent().getId() + "");
                         JMessageClient.updateMyInfo(UserInfo.Field.address, jUserBean, new BasicCallback() {
@@ -185,19 +183,6 @@ public class LoginActivity extends AppCompatActivity {
 
                             }
                         });
-
-
-                    }
-
-                    @Override
-                    public void onError(Object tag, Throwable e) {
-                        myDialog.fail("登录失败");
-                        LogUtil.e(TAG, e.getMessage());
-                    }
-
-                    @Override
-                    public void onCancel(Object tag, Throwable e) {
-
                     }
                 });
 

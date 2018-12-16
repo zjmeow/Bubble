@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.3'
+    buildToolsVersion '26.0.2'
     defaultConfig {
         applicationId "com.stonymoon.bubble"
         minSdkVersion 18
@@ -50,7 +50,7 @@ dependencies {
     compile 'cn.jiguang.imui:messagelist:0.4.9'
     compile 'cn.jiguang.imui:chatinput:0.4.8'
     compile 'cn.jiguang.sdk:jmessage:2.3.0'
-    compile 'cn.jiguang.sdk:jcore:1.1.7'
+    compile 'cn.jiguang.sdk:jcore:1.2.1'
     compile 'com.github.yalantis:ucrop:2.2.1-native'
     compile 'com.qiniu:qiniu-android-sdk:7.3.+'
     compile 'jp.wasabeef:glide-transformations:2.0.2'
@@ -68,6 +68,15 @@ dependencies {
     compile 'org.jetbrains:annotations-java5:15.0'
     compile 'cn.pedant.sweetalert:library:1.3'
     compile 'jp.wasabeef:picasso-transformations:2.1.2'
+
+    // Dependencies for RxJava and RxAndroid
+    compile 'io.reactivex:rxandroid:1.1.0'
+    compile 'io.reactivex:rxjava:1.1.4'
+    // Dependencies for Retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
+
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 }
