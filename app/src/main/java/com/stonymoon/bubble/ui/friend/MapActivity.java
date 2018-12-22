@@ -30,15 +30,17 @@ import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.UserService;
 import com.stonymoon.bubble.base.BaseActivity;
 import com.stonymoon.bubble.bean.LocationBean;
+import com.stonymoon.bubble.bean.MapUserBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.share.MapShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
@@ -53,8 +55,6 @@ import com.stonymoon.bubble.util.clusterutil.clustering.ClusterItem;
 import com.stonymoon.bubble.util.clusterutil.clustering.ClusterManager;
 import com.stonymoon.bubble.view.FloatingMenu;
 import com.stonymoon.bubble.view.MyDialog;
-import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxImageTool;
 import com.vondear.rxtools.RxTool;
 
@@ -83,6 +83,9 @@ import cn.jpush.im.android.api.event.OfflineMessageEvent;
 import cn.jpush.im.android.api.model.Conversation;
 import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.stonymoon.bubble.util.MapUtil.clearMap;
 import static com.stonymoon.bubble.util.MapUtil.zoomIn;
@@ -270,7 +273,6 @@ public class MapActivity extends BaseActivity {
         });
 
 
-
     }
 
     public void onEvent(NotificationClickEvent event) {
@@ -280,9 +282,6 @@ public class MapActivity extends BaseActivity {
         ChatActivity.startActivity(this, info.getUserName());
 
     }
-
-
-
 
 
     @Override
@@ -632,7 +631,7 @@ public class MapActivity extends BaseActivity {
                 mLocationClient.stop();
                 openBottomSheet();
                 Picasso.with(MapActivity.this).
-                        load(bean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim")
+                        load(bean.getUrl())
                         .into(headImage);
                 bubble.setVisibility(View.VISIBLE);
                 isSelected = true;
@@ -799,6 +798,16 @@ public class MapActivity extends BaseActivity {
             this.poisBean = bean;
         }
 
+        public MyItem(MapUserBean.DataBean bean) {
+            mPosition = new LatLng(bean.getLat(), bean.getLng());
+            this.poisBean = new LocationBean.PoisBean();
+            poisBean.setId(bean.getId() + "");
+            poisBean.setUid(bean.getId());
+            poisBean.setUrl(bean.getAvatar());
+
+        }
+
+
         public LocationBean.PoisBean getPoisBean() {
             return poisBean;
         }
@@ -813,7 +822,7 @@ public class MapActivity extends BaseActivity {
             RelativeLayout userLayout = (RelativeLayout) View.inflate(MapActivity.this, R.layout.view_map_bubble, null);
             QMUIRadiusImageView imageView = (QMUIRadiusImageView) userLayout.findViewById(R.id.iv_bubble_head);
             Picasso.with(MapActivity.this).
-                    load(poisBean.getUrl() + "?imageMogr2/thumbnail/!150x150r/gravity/Center/crop/200x/blur/1x0/quality/20|imageslim").
+                    load(poisBean.getUrl()).
                     placeholder(R.drawable.avatar_holder)
                     .into(imageView);
             return BitmapDescriptorFactory.fromView(userLayout);
@@ -842,7 +851,7 @@ public class MapActivity extends BaseActivity {
 
             double latitude = location.getLatitude();    //获取纬度信息
             double longitude = location.getLongitude();    //获取经度信息
-
+            myLatLng = new LatLng(latitude, longitude);
             //拿到百度地图上定位的id
             if (isFirstLoacted) {
                 myDialog.getInstance().dismiss();
@@ -850,102 +859,75 @@ public class MapActivity extends BaseActivity {
                 isFirstLoacted = false;
             }
 
-            if (locationId == null || locationId.equals("")) {
-                HttpUtil.getUser(MapActivity.this, id, new RxStringCallback() {
-                    @Override
-                    public void onNext(Object tag, String response) {
-
-                        Gson gson = new Gson();
-                        LocationBean bean = gson.fromJson(response, LocationBean.class);
-                        if (bean == null || bean.getPois() == null) {
-                            return;
-                        }
-
-                        locationId = bean.getPois().get(0).getId();
-                        AuthUtil.setLocationId(locationId);
-                    }
-
-                    @Override
-                    public void onError(Object tag, Throwable e) {
-                        LogUtil.e(TAG, e.toString());
-
-                    }
-
-                    @Override
-                    public void onCancel(Object tag, Throwable e) {
-
-                    }
-                });
-            } else {
-                HttpUtil.updateLocate(MapActivity.this, locationId, latitude, longitude);
-            }
-
-
+            HttpUtil.updateLocate(latitude, longitude);
             if (!isUpdateMap) {
                 return;
             }
 
-            HttpUtil.updateMap(MapActivity.this, new RxStringCallback() {
-                @Override
-                public void onNext(Object tag, String response) {
-                    Gson gson = new Gson();
-                    LocationBean bean = gson.fromJson(response, LocationBean.class);
-                    parameters.clear();
-                    if (bean.getPois() == null) {
-                        return;
-                    }
-                    //这里在for循环里判断，如果有移动则重绘，否则不重绘
-                    //需要判断是否存在新的用户，然后判断旧的用户是否移动，移动则重绘。
-                    //mClusterManager.clearItems();
-                    myItems.clear();
-                    for (LocationBean.PoisBean b : bean.getPois()) {
-                        myItems.add(new MyItem(b));
-                    }
-                    for (MyItem newItem : myItems) {
-                        Boolean isInMap = false;
-                        for (MyItem mapItem : cacheItems) {
-                            //如果两个id相同，判断是否移动
-                            if (newItem.getPoisBean().getId().equals(mapItem.getPoisBean().getId())) {
-                                isInMap = true;
-                                if (!mapItem.equals(newItem)) {
-                                    //发生了移动，重绘
-                                    mClusterManager.removeItem(mapItem);
-                                    mClusterManager.addItem(newItem);
-                                } else {
-                                    break;
+
+            BaseDataManager.getHttpManager()
+                    .create(UserService.class)
+                    .getAroundUsers(latitude, longitude)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<MapUserBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(java.lang.Throwable e) {
+                            LogUtil.e(TAG, e.toString());
+                        }
+
+                        @Override
+                        public void onNext(MapUserBean bean) {
+                            parameters.clear();
+                            if (bean.getData() == null) {
+                                return;
+                            }
+                            //这里在for循环里判断，如果有移动则重绘，否则不重绘
+                            //需要判断是否存在新的用户，然后判断旧的用户是否移动，移动则重绘。
+                            //mClusterManager.clearItems();
+                            myItems.clear();
+                            for (MapUserBean.DataBean b : bean.getData()) {
+                                myItems.add(new MyItem(b));
+                            }
+                            for (MyItem newItem : myItems) {
+                                Boolean isInMap = false;
+                                for (MyItem mapItem : cacheItems) {
+                                    //如果两个id相同，判断是否移动
+                                    if (newItem.getPoisBean().getId().equals(mapItem.getPoisBean().getId())) {
+                                        isInMap = true;
+                                        if (!mapItem.equals(newItem)) {
+                                            //发生了移动，重绘
+                                            mClusterManager.removeItem(mapItem);
+                                            mClusterManager.addItem(newItem);
+                                        } else {
+                                            break;
+                                        }
+
+                                    }
+
                                 }
 
+                                if (!isInMap) {
+                                    mClusterManager.addItem(newItem);
+                                }
+
+
                             }
+                            cacheItems.clear();
+                            cacheItems.addAll(myItems);
+                            mClusterManager.cluster();
+                            //addMarkers(myItems);
+                            myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                         }
 
-                        if (!isInMap) {
-                            mClusterManager.addItem(newItem);
-                        }
+                    });
 
-
-                    }
-                    cacheItems.clear();
-                    cacheItems.addAll(myItems);
-                    mClusterManager.cluster();
-                    //addMarkers(myItems);
-                    myLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-
-                }
-
-                @Override
-                public void onError(Object tag, Throwable e) {
-                    //todo 判断是否联网
-
-                    LogUtil.e(TAG, e.toString());
-                }
-
-                @Override
-                public void onCancel(Object tag, Throwable e) {
-
-                }
-            }, latitude, longitude);
 
         }
 

@@ -5,11 +5,7 @@ import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.provider.Settings;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
@@ -22,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.github.chrisbanes.photoview.PhotoView;
 import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
@@ -32,11 +27,9 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.CommentAdapter;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
-import com.stonymoon.bubble.bean.AUserBean;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleDetailBean;
 import com.stonymoon.bubble.bean.CommentBean;
-import com.stonymoon.bubble.bean.UserBean;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
 import com.stonymoon.bubble.util.AuthUtil;
@@ -48,8 +41,6 @@ import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -57,9 +48,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
-import retrofit2.http.HTTP;
-import retrofit2.http.Url;
+
 
 public class BubbleDetailActivity extends StatusBarLightActivity implements View.OnClickListener {
     @BindView(R.id.iv_bubble_detail)
