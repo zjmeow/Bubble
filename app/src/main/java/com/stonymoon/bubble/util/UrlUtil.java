@@ -2,9 +2,6 @@ package com.stonymoon.bubble.util;
 
 
 public class UrlUtil {
-    public static String getCreateUser() {
-        return "user/create";
-    }
 
     public static String getImageToken() {
         return "user/image/imageToken";

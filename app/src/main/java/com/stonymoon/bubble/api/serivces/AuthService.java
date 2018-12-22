@@ -14,12 +14,12 @@ import rx.Observable;
 
 public interface AuthService {
     @FormUrlEncoded
-    @POST
+    @POST("auth/login")
     Observable<LoginBean> login(@Field("phone") String phone, @Field("password") String password);
 
     @FormUrlEncoded
-    @POST
+    @POST("auth/register")
     Observable<RegisterBean> register(@Field("phone") String phone
-            , @Field("password") String password, @Field("username") String username
+            , @Field("psw") String password, @Field("username") String username
             , @Field("token") String token);
 }

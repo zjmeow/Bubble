@@ -30,7 +30,7 @@ public class BaseDataManager {
                 .writeTimeout(10, TimeUnit.SECONDS)
                 .build();
         mRetrofit = new Retrofit.Builder()
-                .baseUrl("http://bubble.zjmeow.info/v1/")
+                .baseUrl("http://www.zjmeow.info/v1/")
                 .client(client)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

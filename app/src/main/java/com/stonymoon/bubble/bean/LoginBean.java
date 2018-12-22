@@ -4,29 +4,39 @@ package com.stonymoon.bubble.bean;
 public class LoginBean {
 
 
-    /**
-     * code : 1
-     * message : 登陆成功！
-     * content : {"id":22,"token":"eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJpZFwiOjIyLFwidXNlcm5hbWVcIjpcInN0b255XCIsXCJwYXNzd29yZFwiOlwiJDJhJDEwJHouZXI0VlBCa3N0VXVOL2JrY2NMQ2VrYXh3WlhaNnJjNEF2cEoubEhoeDJnNGZpaVBwSmlpXCIsXCJwaG9uZVwiOlwiMTMxMDE0MTE5MTFcIn0iLCJleHAiOjE1MDk3MDQyNDN9.IWTie_i6col1mJcmaEJ8RaXmQKxFviRJsF-ukv5K2pXjfV2NxmDHid6j87h1uCgx4BkJdJiZJjsrQE0TNSjT5Q"}
-     */
+    private boolean success;
+    private String message;
+    private DataBean data;
 
-    private ContentBean content;
-
-    public ContentBean getContent() {
-        return content;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setContent(ContentBean content) {
-        this.content = content;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
-    public static class ContentBean {
-        /**
-         * id : 22
-         * token : eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ7XCJpZFwiOjIyLFwidXNlcm5hbWVcIjpcInN0b255XCIsXCJwYXNzd29yZFwiOlwiJDJhJDEwJHouZXI0VlBCa3N0VXVOL2JrY2NMQ2VrYXh3WlhaNnJjNEF2cEoubEhoeDJnNGZpaVBwSmlpXCIsXCJwaG9uZVwiOlwiMTMxMDE0MTE5MTFcIn0iLCJleHAiOjE1MDk3MDQyNDN9.IWTie_i6col1mJcmaEJ8RaXmQKxFviRJsF-ukv5K2pXjfV2NxmDHid6j87h1uCgx4BkJdJiZJjsrQE0TNSjT5Q
-         */
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public DataBean getData() {
+        return data;
+    }
+
+    public void setData(DataBean data) {
+        this.data = data;
+    }
+
+    public static class DataBean {
+
 
         private int id;
+        private String username;
         private String token;
 
         public int getId() {
@@ -35,6 +45,14 @@ public class LoginBean {
 
         public void setId(int id) {
             this.id = id;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
         }
 
         public String getToken() {

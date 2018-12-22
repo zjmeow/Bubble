@@ -2,9 +2,8 @@ package com.stonymoon.bubble.ui.common;
 
 import android.Manifest;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -20,7 +19,6 @@ import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.UrlUtil;
-import com.stonymoon.bubble.view.MyDialog;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPermissionsTool;
@@ -33,8 +31,6 @@ import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
-
-import static com.stonymoon.bubble.base.ActivityCollector.finishAll;
 
 public class SplashActivity extends BaseActivity {
     private Map<String, Object> parameters = new HashMap<String, Object>();
@@ -131,13 +127,13 @@ public class SplashActivity extends BaseActivity {
                         Gson gson = new Gson();
                         bean = gson.fromJson(response, LoginBean.class);
                         JUserBean jUserBean = new JUserBean();
-                        jUserBean.setAddress(bean.getContent().getId() + "");
+                        jUserBean.setAddress(bean.getData().getId() + "");
                         JMessageClient.updateMyInfo(UserInfo.Field.address, jUserBean, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
                             }
                         });
-                        AuthUtil.saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
+                        AuthUtil.saveUser(phoneNum, password, bean.getData().getToken(), bean.getData().getId() + "");
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {

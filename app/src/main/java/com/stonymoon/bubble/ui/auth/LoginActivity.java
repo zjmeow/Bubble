@@ -1,17 +1,13 @@
 package com.stonymoon.bubble.ui.auth;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,7 +35,6 @@ import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static android.Manifest.permission.READ_CONTACTS;
 import static com.stonymoon.bubble.base.ActivityCollector.finishAll;
 
 
@@ -107,28 +102,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    //申请权限
-    private boolean mayRequestContacts() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            return true;
-        }
-        if (checkSelfPermission(READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        }
-        if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(phoneNumberView, "登陆成功", Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
-                        @Override
-                        @TargetApi(Build.VERSION_CODES.M)
-                        public void onClick(View v) {
-                            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-                        }
-                    });
-        } else {
-            requestPermissions(new String[]{READ_CONTACTS}, REQUEST_READ_CONTACTS);
-        }
-        return false;
-    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
@@ -167,19 +141,19 @@ public class LoginActivity extends AppCompatActivity {
                     public void onNext(LoginBean loginBean) {
                         bean = loginBean;
                         JUserBean jUserBean = new JUserBean();
-                        jUserBean.setAddress(bean.getContent().getId() + "");
+                        jUserBean.setAddress(bean.getData().getId() + "");
                         JMessageClient.updateMyInfo(UserInfo.Field.address, jUserBean, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
                             }
                         });
-                        AuthUtil.saveUser(phoneNum, password, bean.getContent().getToken(), bean.getContent().getId() + "");
+                        AuthUtil.saveUser(phoneNum, password, bean.getData().getToken(), bean.getData().getId() + "");
                         JMessageClient.login(phoneNum, password, new BasicCallback() {
                             @Override
                             public void gotResult(int i, String s) {
-                                myDialog.success("登陆成功");
+                                myDialog.success("登录成功");
                                 finishAll();
-                                MapActivity.startActivity(LoginActivity.this, "" + bean.getContent().getId());
+                                MapActivity.startActivity(LoginActivity.this, "" + bean.getData().getId());
 
                             }
                         });

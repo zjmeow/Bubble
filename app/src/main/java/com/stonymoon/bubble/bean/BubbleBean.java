@@ -41,22 +41,6 @@ public class BubbleBean {
     }
 
     public static class ContentBean implements Serializable {
-        /**
-         * id : 179
-         * uid : 42
-         * title : 标题要长才能看
-         * time : 1511872465000
-         * latitude : 26.056899
-         * longitude : 119.198834
-         * image : http://oupl6wdxc.bkt.clouddn.com/EIEELKFHJFHLM
-         * deadline : 1512131665000
-         * anonymous : 0
-         * click : 0
-         * type : 0
-         * comments :
-         * content : UI好难调啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊啊内容要长才能看
-         * miniUser : {"username":"测试20号","phone":"13101411920","image":"http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1511788848933"}
-         */
 
         private int id;
         private int uid;

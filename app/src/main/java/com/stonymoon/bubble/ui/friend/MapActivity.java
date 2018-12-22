@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -30,14 +29,12 @@ import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.model.LatLng;
-
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
-import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.BaseActivity;
@@ -322,7 +319,6 @@ public class MapActivity extends BaseActivity {
             @Override
             public void onFirstClick() {
 
-
                 FriendActivity.startActivity(MapActivity.this);
             }
 
@@ -374,7 +370,7 @@ public class MapActivity extends BaseActivity {
     private void setMap() {
         final BaiduMap baiduMap = mapView.getMap();
         clearMap(mapView);
-        mClusterManager = new ClusterManager<MyItem>(this, baiduMap);
+        mClusterManager = new ClusterManager<>(this, baiduMap);
         mClusterManager.setClusterDistance(100);
         baiduMap.setOnMapStatusChangeListener(mClusterManager);
         baiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);

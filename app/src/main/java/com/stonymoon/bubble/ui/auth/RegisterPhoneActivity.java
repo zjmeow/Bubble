@@ -39,7 +39,6 @@ public class RegisterPhoneActivity extends BaseActivity {
     @BindView(R.id.et_register_password)
     EditText passwordText;
     String phone;
-    private Map<String, Object> parameters = new HashMap<>();
 
     public static void startActivity(Context context, String phone) {
         Intent intent = new Intent(context, RegisterPhoneActivity.class);
@@ -71,7 +70,6 @@ public class RegisterPhoneActivity extends BaseActivity {
             Toast.makeText(RegisterPhoneActivity.this, "密码必须在6位以上", Toast.LENGTH_SHORT).show();
             return;
         }
-
 
         BaseDataManager.getHttpManager()
                 .create(AuthService.class)
