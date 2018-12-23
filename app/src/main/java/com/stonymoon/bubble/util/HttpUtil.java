@@ -5,7 +5,6 @@ import android.widget.Toast;
 
 import com.stonymoon.bubble.api.BaseDataManager;
 import com.stonymoon.bubble.api.serivces.UserService;
-import com.stonymoon.bubble.bean.MapUserBean;
 import com.stonymoon.bubble.bean.UpdateBean;
 import com.tamic.novate.Novate;
 import com.tamic.novate.Throwable;
@@ -25,7 +24,6 @@ public class HttpUtil {
     private static final int pageSize = 40;
     private static final String TAG = "HttpUtil";
     private static Map<String, Object> updateLocateParameters = new HashMap<>();
-    private static Map<String, Object> updateMapParameters = new HashMap<>();
 
     private HttpUtil() {
     }
@@ -60,43 +58,6 @@ public class HttpUtil {
 
                     }
                 });
-
-    }
-
-    public static void updateMap(final Context context, RxStringCallback rxStringCallback, double latitude, double longitude) {
-        BaseDataManager.getHttpManager()
-                .create(UserService.class)
-                .getAroundUsers(latitude, longitude)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<MapUserBean>() {
-                    @Override
-                    public void onCompleted() {
-
-                    }
-
-                    @Override
-                    public void onError(java.lang.Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(MapUserBean updateBean) {
-
-                    }
-                });
-
-
-        updateMapParameters.clear();
-        String bounds = String.format("%.2f", (longitude - 0.2)) + ","
-                + String.format("%.2f", (latitude - 0.2)) + ";" +
-                String.format("%.2f", (longitude + 0.2)) + "," + String.format("%.2f", (latitude + 0.2));
-        updateMapParameters.put("bounds", bounds);
-        updateMapParameters.put("page_size", pageSize);
-        updateMapParameters.put("geotable_id", tableId);
-        updateMapParameters.put("ak", ak);
-        Novate novate = new Novate.Builder(context).baseUrl("http://api.map.baidu.com/").build();
-        novate.rxPost("geodata/v4/poi/list", updateMapParameters, rxStringCallback);
 
     }
 

@@ -799,11 +799,12 @@ public class MapActivity extends BaseActivity {
         }
 
         public MyItem(MapUserBean.DataBean bean) {
-            mPosition = new LatLng(bean.getLat(), bean.getLng());
+            mPosition = new LatLng(bean.getLng(), bean.getLat());
             this.poisBean = new LocationBean.PoisBean();
             poisBean.setId(bean.getId() + "");
             poisBean.setUid(bean.getId());
             poisBean.setUrl(bean.getAvatar());
+
 
         }
 

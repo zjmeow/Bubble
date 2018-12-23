@@ -6,8 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -19,7 +17,6 @@ import com.stonymoon.bubble.util.MessageUtil;
 import java.util.List;
 
 import cn.jpush.im.android.api.model.Conversation;
-import cn.jpush.im.android.api.model.Message;
 import cn.jpush.im.android.api.model.UserInfo;
 
 import static com.stonymoon.bubble.util.DateUtil.CalculateTime;
