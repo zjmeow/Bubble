@@ -11,17 +11,17 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
-import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleListBean;
 import com.stonymoon.bubble.ui.share.BubbleDetailActivity;
 
 import java.util.List;
 
 
 public class ProfileBubbleAdapter extends RecyclerView.Adapter<ProfileBubbleAdapter.ViewHolder> {
-    private List<BubbleBean.DataBean> mList;
+    private List<BubbleListBean.DataBean> mList;
     private Context mContext;
 
-    public ProfileBubbleAdapter(List<BubbleBean.DataBean> list) {
+    public ProfileBubbleAdapter(List<BubbleListBean.DataBean> list) {
         this.mList = list;
     }
 
@@ -36,7 +36,7 @@ public class ProfileBubbleAdapter extends RecyclerView.Adapter<ProfileBubbleAdap
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                BubbleBean.DataBean bean = mList.get(position);
+                BubbleListBean.DataBean bean = mList.get(position);
                 BubbleDetailActivity.startActivity(mContext, bean.getId());
 
             }
@@ -54,13 +54,13 @@ public class ProfileBubbleAdapter extends RecyclerView.Adapter<ProfileBubbleAdap
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BubbleBean.DataBean bean = mList.get(position);
+        BubbleListBean.DataBean bean = mList.get(position);
         Picasso.with(mContext)
                 .load(bean.getPic())
                 .placeholder(R.mipmap.test)
                 .into(holder.ivContent);
-//        holder.tvCommentNum.setText(bean.ge() + "");
-//        holder.tvEmojiNum.setText(bean.g() + "");
+//        holder.tvCommentNum.setText(bean.g() + "");
+        holder.tvEmojiNum.setText(bean.getTap() + "");
         holder.tvContent.setText(bean.getTitle());
     }
 

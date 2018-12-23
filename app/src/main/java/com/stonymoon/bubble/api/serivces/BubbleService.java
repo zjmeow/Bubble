@@ -2,6 +2,7 @@ package com.stonymoon.bubble.api.serivces;
 
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.BubbleDetailBean;
+import com.stonymoon.bubble.bean.BubbleListBean;
 import com.stonymoon.bubble.bean.UpdateBean;
 
 import retrofit2.http.Field;
@@ -30,5 +31,6 @@ public interface BubbleService {
     @GET("bubbles/around")
     Observable<BubbleBean> getAroundBubble(@Query("lng") double lng, @Query("lat") double lat);
 
-
+    @GET("bubbles/user")
+    Observable<BubbleListBean> getBubbleByUserId(@Query("userId") int id);
 }

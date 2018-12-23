@@ -35,10 +35,11 @@ import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
 import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.BubbleService;
 import com.stonymoon.bubble.api.serivces.UserService;
 import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
-import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleListBean;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.bean.UserProfileBean;
@@ -79,6 +80,7 @@ import static com.stonymoon.bubble.util.AuthUtil.logout;
 
 public class MyProfileActivity extends StatusBarLightActivity {
 
+    private static final String TAG = "MyProfileActivity";
     @BindView(R.id.iv_edit_profile_avatar)
     ImageView mIvAvatar;
     @BindView(R.id.tv_edit_profile_username)
@@ -93,9 +95,7 @@ public class MyProfileActivity extends StatusBarLightActivity {
     Toolbar toolbar;
     @BindView(R.id.tv_edit_profile_no_bubble)
     TextView tvNoBubble;
-
-
-    private List<BubbleBean.DataBean> mList = new ArrayList<>();
+    private List<BubbleListBean.DataBean> mList = new ArrayList<>();
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
     private UploadManager mUploadManager;
     private Uri resultUri;
@@ -164,7 +164,6 @@ public class MyProfileActivity extends StatusBarLightActivity {
             actionBar.setDisplayShowTitleEnabled(true);
         }
     }
-
 
 
     protected void initView() {
@@ -463,32 +462,34 @@ public class MyProfileActivity extends StatusBarLightActivity {
     }
 
     private void initBubble() {
-        String url = UrlUtil.getUserBubble(AuthUtil.getId());
-        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                Gson gson = new Gson();
-                BubbleBean bean = gson.fromJson(response, BubbleBean.class);
-                mList.addAll(bean.getData());
-                Collections.reverse(mList);
-                if (mList.isEmpty()) {
-                    tvNoBubble.setVisibility(View.VISIBLE);
-                }
-                adapter.notifyDataSetChanged();
+        BaseDataManager.getHttpManager()
+                .create(BubbleService.class)
+                .getBubbleByUserId(Integer.valueOf(AuthUtil.getId()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<BubbleListBean>() {
+                    @Override
+                    public void onCompleted() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Object tag, com.tamic.novate.Throwable e) {
-                LogUtil.e(TAG, e.getMessage());
-                tvNoBubble.setVisibility(View.VISIBLE);
-            }
+                    @Override
+                    public void onError(Throwable e) {
+                        tvNoBubble.setVisibility(View.VISIBLE);
+                        LogUtil.e(TAG, e.getMessage());
+                    }
 
-            @Override
-            public void onCancel(Object tag, com.tamic.novate.Throwable e) {
+                    @Override
+                    public void onNext(BubbleListBean bubbleListBean) {
 
-            }
-        });
+                        mList.addAll(bubbleListBean.getData());
+                        Collections.reverse(mList);
+                        if (mList.isEmpty()) {
+                            tvNoBubble.setVisibility(View.VISIBLE);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
 
     }

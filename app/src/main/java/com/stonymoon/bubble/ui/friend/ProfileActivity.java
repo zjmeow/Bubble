@@ -15,28 +15,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
 import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.BubbleService;
 import com.stonymoon.bubble.api.serivces.UserService;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
-import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleListBean;
 import com.stonymoon.bubble.bean.UserProfileBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.util.AuthUtil;
-import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
-import com.stonymoon.bubble.util.UrlUtil;
-import com.tamic.novate.Throwable;
-import com.tamic.novate.callback.RxStringCallback;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -52,6 +47,7 @@ import rx.schedulers.Schedulers;
 public class ProfileActivity extends StatusBarLightActivity {
 
 
+    private static final String TAG = "ProfileActivity";
     @BindView(R.id.iv_profile_avatar)
     ImageView mIvAvatar;
     @BindView(R.id.tv_profile_username)
@@ -66,14 +62,11 @@ public class ProfileActivity extends StatusBarLightActivity {
     RecyclerView mRecyclerView;
     @BindView(R.id.tv_profile_no_bubble)
     TextView tvNoBubble;
-
-
     private String phone;
     private String url;
     private String uid;
-    private List<BubbleBean.DataBean> mList = new ArrayList<>();
+    private List<BubbleListBean.DataBean> mList = new ArrayList<>();
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
-
 
     public static void startActivity(Context context, String uid) {
         if (AuthUtil.getId().equals(uid)) {
@@ -199,32 +192,34 @@ public class ProfileActivity extends StatusBarLightActivity {
     }
 
     private void initBubble() {
-        String url = UrlUtil.guestGetBubble(uid);
-        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                Gson gson = new Gson();
-                BubbleBean bean = gson.fromJson(response, BubbleBean.class);
-                mList.addAll(bean.getData());
-                Collections.reverse(mList);
-                if (mList.isEmpty()) {
-                    tvNoBubble.setVisibility(View.VISIBLE);
-                }
-                adapter.notifyDataSetChanged();
+        BaseDataManager.getHttpManager()
+                .create(BubbleService.class)
+                .getBubbleByUserId(Integer.valueOf(uid))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<BubbleListBean>() {
+                    @Override
+                    public void onCompleted() {
 
-            }
+                    }
 
-            @Override
-            public void onError(Object tag, Throwable e) {
-                tvNoBubble.setVisibility(View.VISIBLE);
-                LogUtil.e(TAG, e.getMessage());
-            }
+                    @Override
+                    public void onError(java.lang.Throwable e) {
+                        tvNoBubble.setVisibility(View.VISIBLE);
+                        LogUtil.e(TAG, e.getMessage());
+                    }
 
-            @Override
-            public void onCancel(Object tag, Throwable e) {
+                    @Override
+                    public void onNext(BubbleListBean bubbleListBean) {
 
-            }
-        });
+                        mList.addAll(bubbleListBean.getData());
+                        Collections.reverse(mList);
+                        if (mList.isEmpty()) {
+                            tvNoBubble.setVisibility(View.VISIBLE);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+                });
 
 
     }
