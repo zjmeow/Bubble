@@ -799,12 +799,11 @@ public class MapActivity extends BaseActivity {
         }
 
         public MyItem(MapUserBean.DataBean bean) {
-            mPosition = new LatLng(bean.getLng(), bean.getLat());
+            mPosition = new LatLng(bean.getLat(), bean.getLng());
             this.poisBean = new LocationBean.PoisBean();
             poisBean.setId(bean.getId() + "");
             poisBean.setUid(bean.getId());
             poisBean.setUrl(bean.getAvatar());
-
 
         }
 
@@ -878,7 +877,7 @@ public class MapActivity extends BaseActivity {
                         }
 
                         @Override
-                        public void onError(java.lang.Throwable e) {
+                        public void onError(Throwable e) {
                             LogUtil.e(TAG, e.toString());
                         }
 

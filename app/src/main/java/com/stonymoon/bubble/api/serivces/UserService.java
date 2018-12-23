@@ -18,8 +18,8 @@ import rx.Observable;
 public interface UserService {
     @FormUrlEncoded
     @POST("users/location")
-    Observable<UpdateBean> updateLocation(@Field("lng") double lng
-            , @Field("lat") double lat);
+    Observable<UpdateBean> updateLocation(@Field("lat") double lng
+            , @Field("lng") double lat);
 
     @GET("users/around")
     Observable<MapUserBean> getAroundUsers(@Query("lng") double lng
