@@ -42,7 +42,6 @@ import com.stonymoon.bubble.bean.JUserBean;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
-
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.callback.RxStringCallback;
@@ -52,7 +51,6 @@ import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
 
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -66,7 +64,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import cn.jpush.im.android.api.JMessageClient;
 import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
@@ -93,7 +90,7 @@ public class MyProfileActivity extends StatusBarLightActivity {
     TextView tvNoBubble;
 
 
-    private List<BubbleBean.ContentBean> mList = new ArrayList<>();
+    private List<BubbleBean.DataBean> mList = new ArrayList<>();
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
     private UploadManager mUploadManager;
     private Uri resultUri;
@@ -454,7 +451,7 @@ public class MyProfileActivity extends StatusBarLightActivity {
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
-                mList.addAll(bean.getContent());
+                mList.addAll(bean.getData());
                 Collections.reverse(mList);
                 if (mList.isEmpty()) {
                     tvNoBubble.setVisibility(View.VISIBLE);

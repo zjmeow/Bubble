@@ -24,10 +24,8 @@ public class HttpUtil {
     private static final String ak = "A61df0d768beeecce052cc58283d84c2";
     private static final int pageSize = 40;
     private static final String TAG = "HttpUtil";
-    private static Map<String, Object> createParameters = new HashMap<>();
     private static Map<String, Object> updateLocateParameters = new HashMap<>();
     private static Map<String, Object> updateMapParameters = new HashMap<>();
-    private static Map<String, Object> userParameters = new HashMap<>();
 
     private HttpUtil() {
     }

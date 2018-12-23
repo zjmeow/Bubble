@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
@@ -26,13 +25,15 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
 import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.CommentAdapter;
+import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.BubbleService;
+import com.stonymoon.bubble.api.serivces.CommentService;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
-import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.BubbleCommentBean;
 import com.stonymoon.bubble.bean.BubbleDetailBean;
-import com.stonymoon.bubble.bean.CommentBean;
+import com.stonymoon.bubble.bean.UpdateBean;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
-import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.DateUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
@@ -48,17 +49,21 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class BubbleDetailActivity extends StatusBarLightActivity implements View.OnClickListener {
+    private static final String TAG = "BubbleDetailActivity";
     @BindView(R.id.iv_bubble_detail)
     ImageView ivBubbleDetail;
     @BindView(R.id.toolbar_bubble_detail)
     Toolbar toolbar;
 
-
     @BindView(R.id.recycler_bubble_detail_comment)
     XRecyclerView recyclerComment;
+    BubbleDetailBean.DataBean bean;
     private TextView tvTitle;
     private TextView tvContent;
     private ImageView ivHead;
@@ -68,25 +73,20 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     private ImageView ivComment;
     private ImageView ivAdd;
     private TextView tvEmojiNumber;
-    private BubbleBean.ContentBean bean;
-
     private long survivalMinute;
     private Context mContext;
     private Map<String, Object> parameters = new HashMap<>();
-
-    private List<CommentBean.ContentBean.ListBean> commentBeanList = new ArrayList<>();
+    private List<BubbleCommentBean.DataBean> commentBeanList = new ArrayList<>();
     private CommentAdapter adapter = new CommentAdapter(commentBeanList);
     private int page = 1;
     private int emojiNumber;
     private View headView;
     private boolean isFirstGetComment = true;
 
-    public static void startActivity(Context context, BubbleBean.ContentBean bean) {
+    public static void startActivity(Context context, int id) {
         Intent intent = new Intent(context, BubbleDetailActivity.class);
-        intent.putExtra("bean", bean);
+        intent.putExtra("id", id);
         context.startActivity(intent);
-
-
     }
 
 
@@ -107,15 +107,16 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         setContentView(R.layout.activity_bubble_detail);
         ButterKnife.bind(this);
         mContext = getApplicationContext();
+        getData();
         initView();
         initRecyclerView();
+
 
     }
 
     private void initRecyclerView() {
         recyclerComment.setAdapter(adapter);
         recyclerComment.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        getComment();
         recyclerComment.addHeaderView(headView);
         recyclerComment.setPullRefreshEnabled(false);
         recyclerComment.setLoadingMoreEnabled(true);
@@ -161,9 +162,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     }
 
     private void initView() {
-        Intent intent = getIntent();
-        bean = (BubbleBean.ContentBean) intent.getSerializableExtra("bean");
-        Glide.with(mContext).load(bean.getImage()).into(ivBubbleDetail);
         headView = LayoutInflater.from(this).inflate(R.layout.header_bubble_detail, (ViewGroup) findViewById(R.id.layout_bubble_detail), false);
         tvTitle = (TextView) headView.findViewById(R.id.tv_bubble_detail_title);
         tvContent = (TextView) headView.findViewById(R.id.tv_bubble_detail_content);
@@ -180,8 +178,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
         ivHead.setOnClickListener(this);
         ivComment.setOnClickListener(this);
         ivAdd.setOnClickListener(this);
-        bean.getClick();
-        initDeadline();
+//        bean.getClick();
         setBar();
     }
 
@@ -198,56 +195,45 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     }
 
 
-    private void initDeadline() {
-        String url = UrlUtil.getBubbleDetail(bean.getId() + "");
-        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                Gson gson = new Gson();
-                BubbleDetailBean.ContentBean bean = gson.fromJson(response, BubbleDetailBean.class).getContent();
-                survivalMinute = (bean.getDeadline() - System.currentTimeMillis()) / 60000;
-                if (survivalMinute > 0) {
-                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
-                } else {
-                    tvSurvival.setText("泡泡已过期");
-                }
-
-                tvTitle.setText(bean.getTitle());
-                tvContent.setText(bean.getContent());
-                tvTime.setText(DateUtil.CalculateTime(bean.getTime()));
-
-                emojiNumber = bean.getClick();
-                tvEmojiNumber.setText(emojiNumber + "");
-                if (bean.getAnonymous() == 0) {
-                    Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
-                    tvAuthorName.setText(bean.getMiniUser().getUsername());
-                } else {
-                    Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
-                    tvAuthorName.setText("匿名用户");
-                    ivHead.setClickable(false);
-                }
+//    private void initDeadline() {
+//        String url = UrlUtil.getBubbleDetail(bean.getId() + "");
+//        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
+//            @Override
+//            public void onNext(Object tag, String response) {
+//                Gson gson = new Gson();
+//                BubbleDetailBean.DataBean = gson.fromJson(response, BubbleDetailBean.class).getContent();
 
 
-            }
-
-            @Override
-            public void onError(Object tag, Throwable e) {
-                survivalMinute = (bean.getDeadline() - System.currentTimeMillis()) / 60000;
-                if (survivalMinute > 0) {
-                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
-                } else {
-                    tvSurvival.setText("泡泡已过期");
-                }
-            }
-
-            @Override
-            public void onCancel(Object tag, Throwable e) {
-
-            }
-        });
-
-
-    }
+//                if (bean.getAnonymous() == 0) {
+//                    Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
+//                    tvAuthorName.setText(bean.getMiniUser().getUsername());
+//                } else {
+//                    Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
+//                    tvAuthorName.setText("匿名用户");
+//                    ivHead.setClickable(false);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onError(Object tag, Throwable e) {
+//                survivalMinute = ( System.currentTimeMillis()) / 60000;
+//                if (survivalMinute > 0) {
+//                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+//                } else {
+//                    tvSurvival.setText("泡泡已过期");
+//                }
+//            }
+//
+//            @Override
+//            public void onCancel(Object tag, Throwable e) {
+//
+//            }
+//        });
+//
+//
+//    }
 
 
     private void showEditTextDialog() {
@@ -279,67 +265,76 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     }
 
     private void uploadComment(String content, String id) {
-        parameters.clear();
-        parameters.put("pid", id);
-        parameters.put("token", AuthUtil.getToken());
-        parameters.put("content", content);
-        String url = UrlUtil.postBubbleComments();
-        HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                Toast.makeText(BubbleDetailActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
-                page = 1;
-                commentBeanList.clear();
-                getComment();
-            }
+        BaseDataManager.getHttpManager()
+                .create(CommentService.class)
+                .comment(content, Integer.valueOf(id))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UpdateBean>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onError(Object tag, Throwable e) {
-                Toast.makeText(BubbleDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
-                LogUtil.e(TAG, e.getMessage());
+                    }
 
+                    @Override
+                    public void onError(java.lang.Throwable e) {
+                        Toast.makeText(BubbleDetailActivity.this, "评论失败", Toast.LENGTH_SHORT).show();
+                        LogUtil.e(TAG, e.getMessage());
+                    }
 
-            }
-
-            @Override
-            public void onCancel(Object tag, Throwable e) {
-
-            }
-        });
+                    @Override
+                    public void onNext(UpdateBean bean) {
+                        Toast.makeText(BubbleDetailActivity.this, "评论成功", Toast.LENGTH_SHORT).show();
+                        page = 1;
+                        commentBeanList.clear();
+                        getComment();
+                    }
+                });
 
 
     }
 
     private void getComment() {
-        parameters.clear();
-        String url = UrlUtil.getBubbleComments(bean.getId() + "", page + "");
-        HttpUtil.sendHttpRequest(this).rxGet(url, parameters, new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                Gson gson = new Gson();
-                CommentBean bean = gson.fromJson(response, CommentBean.class);
-                if (bean.getContent().getList().isEmpty() && !isFirstGetComment) {
-                    Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
-                    recyclerComment.loadMoreComplete();
-                    return;
-                }
-                commentBeanList.addAll(bean.getContent().getList());
-                adapter.notifyDataSetChanged();
-                page++;
-                recyclerComment.loadMoreComplete();
-                isFirstGetComment = false;
-            }
+        BaseDataManager.getHttpManager()
+                .create(CommentService.class)
+                .getComment(getIntent().getIntExtra("id", 1))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<BubbleCommentBean>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onError(Object tag, Throwable e) {
-                recyclerComment.refreshComplete();
-            }
+                    }
 
-            @Override
-            public void onCancel(Object tag, Throwable e) {
+                    @Override
+                    public void onError(java.lang.Throwable e) {
+                        recyclerComment.refreshComplete();
+                    }
 
-            }
-        });
+                    @Override
+                    public void onNext(BubbleCommentBean bubbleCommentBean) {
+                        if (bubbleCommentBean.getData().isEmpty() && !isFirstGetComment) {
+                            Toast.makeText(BubbleDetailActivity.this, "没有更多的评论了", Toast.LENGTH_SHORT).show();
+                            recyclerComment.loadMoreComplete();
+                            return;
+                        }
+                        commentBeanList.addAll(bubbleCommentBean.getData());
+                        adapter.notifyDataSetChanged();
+                        page++;
+                        recyclerComment.loadMoreComplete();
+                        isFirstGetComment = false;
+                        getComment();
+
+                        survivalMinute = (bean.getDeadline().getTime() - System.currentTimeMillis()) / 60000;
+                        if (survivalMinute > 0) {
+                            tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
+                        } else {
+                            tvSurvival.setText("泡泡已过期");
+                        }
+
+
+                    }
+                });
 
 
     }
@@ -383,10 +378,10 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 showEditTextDialog();
                 break;
             case R.id.iv_bubble_detail_head:
-                ProfileActivity.startActivity(this, bean.getMiniUser().getPhone(), bean.getUid() + "");
+                ProfileActivity.startActivity(this, bean.getId() + "", bean.getId() + "");
                 break;
             case R.id.iv_bubble_detail:
-                PhotoActivity.startActivity(this, bean.getImage());
+                PhotoActivity.startActivity(this, bean.getPic());
                 break;
             case R.id.iv_bubble_detail_add:
                 add();
@@ -403,4 +398,39 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
     }
 
 
+    public void getData() {
+        BaseDataManager.getHttpManager()
+                .create(BubbleService.class)
+                .getBubbleDetail(getIntent().getIntExtra("id", 1))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<BubbleDetailBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(java.lang.Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(BubbleDetailBean bubbleDetailBean) {
+
+                        BubbleDetailBean.DataBean bean = bubbleDetailBean.getData();
+                        BubbleDetailActivity.this.bean = bean;
+                        Glide.with(mContext).load(bean.getPic()).into(ivBubbleDetail);
+                        tvTitle.setText(bean.getTitle());
+                        tvContent.setText(bean.getContent());
+                        tvTime.setText(DateUtil.CalculateTime(System.currentTimeMillis()));
+                        tvEmojiNumber.setText(bean.getTap() + "");
+                        Glide.with(mContext).load(bean.getAvatar()).into(ivHead);
+                        tvAuthorName.setText(bean.getUsername());
+                        getComment();
+                    }
+                });
+
+
+    }
 }

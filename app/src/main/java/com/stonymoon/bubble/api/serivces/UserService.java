@@ -23,4 +23,6 @@ public interface UserService {
     @GET("users/around")
     Observable<MapUserBean> getAroundUsers(@Query("lng") double lng
             , @Query("lat") double lat);
+
+
 }

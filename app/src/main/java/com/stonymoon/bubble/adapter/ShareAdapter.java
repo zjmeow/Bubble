@@ -1,8 +1,6 @@
 package com.stonymoon.bubble.adapter;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,23 +13,21 @@ import com.bumptech.glide.Glide;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
-import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.ui.share.BubbleDetailActivity;
 import com.stonymoon.bubble.util.DateUtil;
-import com.stonymoon.bubble.view.FloatingMenu;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
-import cn.jpush.im.android.api.model.UserInfo;
+import static com.stonymoon.bubble.bean.BubbleBean.DataBean;
+
+
 
 
 public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> {
-    private List<BubbleBean.ContentBean> mList;
+    private List<DataBean> mList;
     private Context mContext;
 
-    public ShareAdapter(List<BubbleBean.ContentBean> list) {
+    public ShareAdapter(List<DataBean> list) {
         this.mList = list;
     }
 
@@ -46,8 +42,8 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                BubbleBean.ContentBean bean = mList.get(position);
-                BubbleDetailActivity.startActivity(mContext, bean);
+                DataBean bean = mList.get(position);
+                BubbleDetailActivity.startActivity(mContext, bean.getId());
 
             }
 
@@ -64,28 +60,22 @@ public class ShareAdapter extends RecyclerView.Adapter<ShareAdapter.ViewHolder> 
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        BubbleBean.ContentBean bean = mList.get(position);
+        DataBean bean = mList.get(position);
         Glide.with(mContext)
-                .load(bean.getImage())
+                .load(bean.getPic())
                 .placeholder(R.mipmap.test)
                 .into(holder.ivContent);
         holder.tvContent.setText(bean.getTitle());
-//        if (bean.getContent().equals("")) {
-//            holder.tvContent.setVisibility(View.GONE);
-//        } else {
-//            holder.tvContent.setVisibility(View.VISIBLE);
-//            holder.tvContent.setText(bean.getContent());
-//        }
 
-        holder.tvDate.setText(DateUtil.CalculateTime(bean.getTime()));
-        holder.tvCommentNum.setText(bean.getComments() + "");
-        holder.tvEmojiNum.setText(bean.getClick() + "");
-        if (bean.getAnonymous() == 0) {
-            holder.tvName.setText(bean.getMiniUser().getUsername());
-            Picasso.with(mContext)
-                    .load(bean.getMiniUser().getImage())
-                    .placeholder(R.drawable.detail_holder)
-                    .into(holder.ivAvatar);
+        holder.tvDate.setText(DateUtil.CalculateTime(bean.getCreatedTime().getTime()));
+//        holder.tvCommentNum.setText(bean.get() + "");
+//        holder.tvEmojiNum.setText(bean.getTap() + "");
+        if (0 == 0) {
+//            holder.tvName.setText(bean.get());
+//            Picasso.with(mContext)
+//                    .load(bean.getAvatar())
+//                    .placeholder(R.drawable.detail_holder)
+//                    .into(holder.ivAvatar);
         } else {
             holder.tvName.setText("匿名用户");
             Picasso.with(mContext)

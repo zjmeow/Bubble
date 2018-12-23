@@ -13,20 +13,19 @@ import android.widget.Toast;
 import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
-
-import static com.stonymoon.bubble.bean.CommentBean.ContentBean.ListBean;
-
 import com.stonymoon.bubble.ui.friend.ProfileActivity;
 import com.stonymoon.bubble.util.DateUtil;
 
 import java.util.List;
 
+import static com.stonymoon.bubble.bean.BubbleCommentBean.DataBean;
+
 
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHolder> {
-    private List<ListBean> mList;
+    private List<DataBean> mList;
     private Context mContext;
 
-    public CommentAdapter(List<ListBean> list) {
+    public CommentAdapter(List<DataBean> list) {
         this.mList = list;
     }
 
@@ -41,8 +40,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
-                ListBean bean = mList.get(position - 2);
-                ProfileActivity.startActivity(mContext, bean.getMiniUser().getPhone(), bean.getUid() + "");
+                DataBean bean = mList.get(position - 2);
+                ProfileActivity.startActivity(mContext, bean.getUserId() + "", bean.getUserId() + "");
 
             }
 
@@ -69,14 +68,14 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     }
 
     public void onBindViewHolder(ViewHolder holder, int position) {
-        ListBean bean = mList.get(position);
+        DataBean bean = mList.get(position);
         Picasso.with(mContext)
-                .load(bean.getMiniUser().getImage())
+                .load(bean.getAvatar())
                 .into(holder.ivAvatar);
         //.placeholder(R.drawable.icon_placeholder)
-        holder.tvName.setText(bean.getMiniUser().getUsername());
+        holder.tvName.setText(bean.getUsername());
         holder.tvContent.setText(bean.getContent());
-        holder.tvDate.setText(DateUtil.CalculateTime(bean.getTime()));
+        holder.tvDate.setText(DateUtil.CalculateTime(bean.getCreatedTime().getTime()));
 
     }
 

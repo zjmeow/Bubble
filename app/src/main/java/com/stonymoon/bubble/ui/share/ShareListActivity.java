@@ -3,10 +3,8 @@ package com.stonymoon.bubble.ui.share;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ShareAdapter;
@@ -27,7 +25,7 @@ public class ShareListActivity extends StatusBarLightActivity {
 
     @BindView(R.id.recycler_share)
     RecyclerView recyclerShare;
-    List<BubbleBean.ContentBean> mList = new ArrayList<>();
+    List<BubbleBean.DataBean> mList = new ArrayList<>();
     private ShareAdapter adapter = new ShareAdapter(mList);
 
     public static void startActivity(Context context) {

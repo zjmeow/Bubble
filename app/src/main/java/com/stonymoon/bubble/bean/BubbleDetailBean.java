@@ -1,24 +1,18 @@
 package com.stonymoon.bubble.bean;
 
+import java.util.Date;
+
 public class BubbleDetailBean {
-
-
-    /**
-     * code : 1
-     * message : 内容：
-     * content : {"id":182,"uid":42,"title":"呀呀呀","time":1512186717000,"latitude":26.070267,"longitude":119.208032,"image":"http://oupl6wdxc.bkt.clouddn.com/EIEFELJJMLKFG","deadline":1512446157000,"anonymous":0,"click":4,"type":0,"comments":null,"content":null,"miniUser":{"username":"测试20号","phone":"13101411920","image":"http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1512300540962"}}
-     */
-
-    private int code;
+    private boolean success;
     private String message;
-    private ContentBean content;
+    private DataBean data;
 
-    public int getCode() {
-        return code;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setCode(int code) {
-        this.code = code;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
     public String getMessage() {
@@ -29,46 +23,45 @@ public class BubbleDetailBean {
         this.message = message;
     }
 
-    public ContentBean getContent() {
-        return content;
+    public DataBean getData() {
+        return data;
     }
 
-    public void setContent(ContentBean content) {
-        this.content = content;
+    public void setData(DataBean data) {
+        this.data = data;
     }
 
-    public static class ContentBean {
-        /**
-         * id : 182
-         * uid : 42
-         * title : 呀呀呀
-         * time : 1512186717000
-         * latitude : 26.070267
-         * longitude : 119.208032
-         * image : http://oupl6wdxc.bkt.clouddn.com/EIEFELJJMLKFG
-         * deadline : 1512446157000
-         * anonymous : 0
-         * click : 4
-         * type : 0
-         * comments : null
-         * content : null
-         * miniUser : {"username":"测试20号","phone":"13101411920","image":"http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1512300540962"}
-         */
-
+    public static class DataBean {
         private int id;
-        private int uid;
+        private double lat;
+        private double lng;
         private String title;
-        private long time;
-        private double latitude;
-        private double longitude;
-        private String image;
-        private long deadline;
-        private int anonymous;
-        private int click;
-        private int type;
-        private int comments;
         private String content;
-        private MiniUserBean miniUser;
+        private String pic;
+        private int userId;
+        private Date createdTime;
+        private int tap;
+        private Date deadline;
+        private String avatar;
+        private String username;
+
+        public String getAvatar() {
+            return avatar;
+        }
+
+        public void setAvatar(String avatar) {
+            this.avatar = avatar;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+
+
 
         public int getId() {
             return id;
@@ -78,12 +71,20 @@ public class BubbleDetailBean {
             this.id = id;
         }
 
-        public int getUid() {
-            return uid;
+        public double getLat() {
+            return lat;
         }
 
-        public void setUid(int uid) {
-            this.uid = uid;
+        public void setLat(double lat) {
+            this.lat = lat;
+        }
+
+        public double getLng() {
+            return lng;
+        }
+
+        public void setLng(double lng) {
+            this.lng = lng;
         }
 
         public String getTitle() {
@@ -94,78 +95,6 @@ public class BubbleDetailBean {
             this.title = title;
         }
 
-        public long getTime() {
-            return time;
-        }
-
-        public void setTime(long time) {
-            this.time = time;
-        }
-
-        public double getLatitude() {
-            return latitude;
-        }
-
-        public void setLatitude(double latitude) {
-            this.latitude = latitude;
-        }
-
-        public double getLongitude() {
-            return longitude;
-        }
-
-        public void setLongitude(double longitude) {
-            this.longitude = longitude;
-        }
-
-        public String getImage() {
-            return image;
-        }
-
-        public void setImage(String image) {
-            this.image = image;
-        }
-
-        public long getDeadline() {
-            return deadline;
-        }
-
-        public void setDeadline(long deadline) {
-            this.deadline = deadline;
-        }
-
-        public int getAnonymous() {
-            return anonymous;
-        }
-
-        public void setAnonymous(int anonymous) {
-            this.anonymous = anonymous;
-        }
-
-        public int getClick() {
-            return click;
-        }
-
-        public void setClick(int click) {
-            this.click = click;
-        }
-
-        public int getType() {
-            return type;
-        }
-
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public int getComments() {
-            return comments;
-        }
-
-        public void setComments(int comments) {
-            this.comments = comments;
-        }
-
         public String getContent() {
             return content;
         }
@@ -174,48 +103,44 @@ public class BubbleDetailBean {
             this.content = content;
         }
 
-        public MiniUserBean getMiniUser() {
-            return miniUser;
+        public String getPic() {
+            return pic;
         }
 
-        public void setMiniUser(MiniUserBean miniUser) {
-            this.miniUser = miniUser;
+        public void setPic(String pic) {
+            this.pic = pic;
         }
 
-        public static class MiniUserBean {
-            /**
-             * username : 测试20号
-             * phone : 13101411920
-             * image : http://oupl6wdxc.bkt.clouddn.com/AELFGLMGFHG1512300540962
-             */
+        public int getUserId() {
+            return userId;
+        }
 
-            private String username;
-            private String phone;
-            private String image;
+        public void setUserId(int userId) {
+            this.userId = userId;
+        }
 
-            public String getUsername() {
-                return username;
-            }
+        public Date getCreatedTime() {
+            return createdTime;
+        }
 
-            public void setUsername(String username) {
-                this.username = username;
-            }
+        public void setCreatedTime(Date createdTime) {
+            this.createdTime = createdTime;
+        }
 
-            public String getPhone() {
-                return phone;
-            }
+        public int getTap() {
+            return tap;
+        }
 
-            public void setPhone(String phone) {
-                this.phone = phone;
-            }
+        public void setTap(int tap) {
+            this.tap = tap;
+        }
 
-            public String getImage() {
-                return image;
-            }
+        public Date getDeadline() {
+            return deadline;
+        }
 
-            public void setImage(String image) {
-                this.image = image;
-            }
+        public void setDeadline(Date deadline) {
+            this.deadline = deadline;
         }
     }
 }

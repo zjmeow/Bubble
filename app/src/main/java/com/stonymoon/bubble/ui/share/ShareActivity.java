@@ -3,7 +3,6 @@ package com.stonymoon.bubble.ui.share;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,14 +22,15 @@ import com.qiniu.android.storage.Recorder;
 import com.qiniu.android.storage.UpCompletionHandler;
 import com.qiniu.android.storage.UploadManager;
 import com.stonymoon.bubble.R;
+import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.BubbleService;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.ContentBean;
-import com.stonymoon.bubble.util.AuthUtil;
+import com.stonymoon.bubble.bean.UpdateBean;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.stonymoon.bubble.view.MyDialog;
-import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPhotoTool;
 import com.yalantis.ucrop.UCrop;
@@ -49,8 +49,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.pedant.SweetAlert.SweetAlertDialog;
-
-import static com.vondear.rxtools.view.dialog.RxDialogChooseImage.LayoutType.TITLE;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class ShareActivity extends StatusBarLightActivity {
@@ -70,7 +71,6 @@ public class ShareActivity extends StatusBarLightActivity {
 
     private double latitude;
     private double longitude;
-    private Uri resultUri;
     private UploadManager mUploadManager;
     private String imageUrl;
 
@@ -105,11 +105,12 @@ public class ShareActivity extends StatusBarLightActivity {
             return;
 
         } else if (imageUrl == null || imageUrl.equals("")) {
-            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-                    .setTitleText("请上传一张图片")
-                    .setConfirmText("嗯")
-                    .show();
-            return;
+//            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+//                    .setTitleText("请上传一张图片")
+//                    .setConfirmText("嗯")
+//                    .show();
+            imageUrl = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=46753002,1263792215&fm=27&gp=0.jpg";
+//            return;
         }
         int anonymous;
         if (checkBox.isChecked()) {
@@ -121,35 +122,29 @@ public class ShareActivity extends StatusBarLightActivity {
 
         final MyDialog myDialog = new MyDialog(this);
         myDialog.showProgress("发送中");
-        String token = AuthUtil.getToken();
-        parameters.put("token", token);
-        parameters.put("content", content);
-        parameters.put("title", title);
-        parameters.put("image", imageUrl);
-        parameters.put("latitude", latitude);
-        parameters.put("longitude", longitude);
-        parameters.put("anonymous", anonymous);
-        parameters.put("type", 0);
-        String url = UrlUtil.getShare();
-        HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
-                myDialog.success("发送成功");
-                finish();
-            }
+        BaseDataManager.getHttpManager()
+                .create(BubbleService.class)
+                .uploadBubble(longitude, latitude, title, content, imageUrl)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UpdateBean>() {
+                    @Override
+                    public void onCompleted() {
 
-            @Override
-            public void onError(Object tag, Throwable e) {
-                LogUtil.e(TAG, e.toString());
-                myDialog.fail("发送失败");
-            }
+                    }
 
-            @Override
-            public void onCancel(Object tag, Throwable e) {
+                    @Override
+                    public void onError(java.lang.Throwable e) {
+                        LogUtil.e(TAG, e.toString());
+                        myDialog.fail("发送失败");
+                    }
 
-            }
-        });
-
+                    @Override
+                    public void onNext(UpdateBean updateBean) {
+                        myDialog.success("发送成功");
+                        finish();
+                    }
+                });
 
     }
 

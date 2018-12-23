@@ -9,7 +9,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -21,23 +20,16 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
-import com.stonymoon.bubble.adapter.ShareAdapter;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
-
-import com.stonymoon.bubble.ui.share.ShareActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.UrlUtil;
 import com.tamic.novate.Throwable;
 import com.tamic.novate.callback.RxStringCallback;
-import com.vondear.rxtools.activity.ActivityBase;
-
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -73,12 +65,10 @@ public class ProfileActivity extends StatusBarLightActivity {
     TextView tvNoBubble;
 
 
-
-
     private String phone;
     private String url;
     private String uid;
-    private List<BubbleBean.ContentBean> mList = new ArrayList<>();
+    private List<BubbleBean.DataBean> mList = new ArrayList<>();
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
 
 
@@ -200,7 +190,7 @@ public class ProfileActivity extends StatusBarLightActivity {
             public void onNext(Object tag, String response) {
                 Gson gson = new Gson();
                 BubbleBean bean = gson.fromJson(response, BubbleBean.class);
-                mList.addAll(bean.getContent());
+                mList.addAll(bean.getData());
                 Collections.reverse(mList);
                 if (mList.isEmpty()) {
                     tvNoBubble.setVisibility(View.VISIBLE);
