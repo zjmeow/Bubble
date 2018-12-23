@@ -34,11 +34,14 @@ import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
+import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.UserService;
 import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
 import com.stonymoon.bubble.bean.ContentBean;
 import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.bean.UserProfileBean;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.HttpUtil;
@@ -65,10 +68,12 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetUserInfoCallback;
 import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 import static com.stonymoon.bubble.util.AuthUtil.logout;
 
@@ -117,22 +122,35 @@ public class MyProfileActivity extends StatusBarLightActivity {
     }
 
     private void setProfile() {
+        BaseDataManager.getHttpManager()
+                .create(UserService.class)
+                .getUserDetail(Integer.valueOf(AuthUtil.getId()))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UserProfileBean>() {
+                    @Override
+                    public void onCompleted() {
 
-        JMessageClient.getUserInfo(AuthUtil.getPhone(), new GetUserInfoCallback() {
-            @Override
-            public void gotResult(int i, String s, UserInfo userInfo) {
-                tvUsername.setText(userInfo.getDisplayName());
-                tvSignature.setText(userInfo.getSignature());
-                url = userInfo.getExtra("url");
-                Picasso.with(MyProfileActivity.this).load(url).into(mIvAvatar);
-                Picasso.with(MyProfileActivity.this)
-                        .load(url)
-                        .transform(new jp.wasabeef.picasso.transformations.BlurTransformation(MyProfileActivity.this, 14, 5))
-                        .into(ivBackground);
+                    }
 
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
 
+                    }
+
+                    @Override
+                    public void onNext(UserProfileBean userProfileBean) {
+                        UserProfileBean.DataBean bean = userProfileBean.getData();
+                        tvUsername.setText(bean.getUsername());
+                        tvSignature.setText(bean.getInfo());
+                        url = bean.getAvatar();
+                        Picasso.with(MyProfileActivity.this).load(url).into(mIvAvatar);
+                        Picasso.with(MyProfileActivity.this)
+                                .load(url)
+                                .transform(new jp.wasabeef.picasso.transformations.BlurTransformation(MyProfileActivity.this, 14, 5))
+                                .into(ivBackground);
+                    }
+                });
     }
 
     private void setBar() {

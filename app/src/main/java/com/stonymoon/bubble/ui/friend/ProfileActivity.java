@@ -20,8 +20,11 @@ import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
 import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
+import com.stonymoon.bubble.api.BaseDataManager;
+import com.stonymoon.bubble.api.serivces.UserService;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleBean;
+import com.stonymoon.bubble.bean.UserProfileBean;
 import com.stonymoon.bubble.ui.common.MyProfileActivity;
 import com.stonymoon.bubble.ui.common.PhotoActivity;
 import com.stonymoon.bubble.util.AuthUtil;
@@ -40,10 +43,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.jpush.im.android.api.ContactManager;
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.callback.GetUserInfoCallback;
-import cn.jpush.im.android.api.model.UserInfo;
 import cn.jpush.im.api.BasicCallback;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class ProfileActivity extends StatusBarLightActivity {
@@ -72,13 +75,12 @@ public class ProfileActivity extends StatusBarLightActivity {
     private ProfileBubbleAdapter adapter = new ProfileBubbleAdapter(mList);
 
 
-    public static void startActivity(Context context, String phone, String uid) {
-        if (AuthUtil.getPhone().equals(phone)) {
+    public static void startActivity(Context context, String uid) {
+        if (AuthUtil.getId().equals(uid)) {
             MyProfileActivity.startActivity(context);
             return;
         }
         Intent intent = new Intent(context, ProfileActivity.class);
-        intent.putExtra("phone", phone);
         intent.putExtra("uid", uid);
         context.startActivity(intent);
 
@@ -114,27 +116,40 @@ public class ProfileActivity extends StatusBarLightActivity {
         initView();
         initBubble();
 
-
     }
 
 
     protected void initView() {
+        BaseDataManager.getHttpManager()
+                .create(UserService.class)
+                .getUserDetail(Integer.valueOf(uid))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UserProfileBean>() {
+                    @Override
+                    public void onCompleted() {
 
-        JMessageClient.getUserInfo(phone, new GetUserInfoCallback() {
-            @Override
-            public void gotResult(int i, String s, UserInfo userInfo) {
+                    }
 
-                tvUsername.setText(userInfo.getDisplayName());
-                tvSignature.setText(userInfo.getSignature());
-                url = userInfo.getExtra("url");
-                Picasso.with(ProfileActivity.this).load(url).into(mIvAvatar);
-                Picasso.with(ProfileActivity.this)
-                        .load(url)
-                        .transform(new jp.wasabeef.picasso.transformations.BlurTransformation(ProfileActivity.this, 14, 5))
-                        .into(ivBackground);
+                    @Override
+                    public void onError(java.lang.Throwable e) {
 
-            }
-        });
+                    }
+
+                    @Override
+                    public void onNext(UserProfileBean userProfileBean) {
+                        UserProfileBean.DataBean bean = userProfileBean.getData();
+                        tvUsername.setText(bean.getUsername());
+                        tvSignature.setText(bean.getInfo());
+                        url = bean.getAvatar();
+                        Picasso.with(ProfileActivity.this).load(url).into(mIvAvatar);
+                        Picasso.with(ProfileActivity.this)
+                                .load(url)
+                                .transform(new jp.wasabeef.picasso.transformations.BlurTransformation(ProfileActivity.this, 14, 5))
+                                .into(ivBackground);
+                    }
+                });
+
 
         mIvAvatar.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

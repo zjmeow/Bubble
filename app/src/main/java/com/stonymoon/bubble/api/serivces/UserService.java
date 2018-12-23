@@ -2,6 +2,7 @@ package com.stonymoon.bubble.api.serivces;
 
 import com.stonymoon.bubble.bean.MapUserBean;
 import com.stonymoon.bubble.bean.UpdateBean;
+import com.stonymoon.bubble.bean.UserProfileBean;
 
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
@@ -24,5 +25,8 @@ public interface UserService {
     Observable<MapUserBean> getAroundUsers(@Query("lng") double lng
             , @Query("lat") double lat);
 
+
+    @GET("users/detail")
+    Observable<UserProfileBean> getUserDetail(@Query("id") int id);
 
 }

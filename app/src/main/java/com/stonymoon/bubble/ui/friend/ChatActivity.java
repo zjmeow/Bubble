@@ -5,25 +5,18 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-
-import android.graphics.Color;
-import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.Target;
-import com.qmuiteam.qmui.util.QMUIStatusBarHelper;
-import com.squareup.picasso.Picasso;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.DefaultUser;
 import com.stonymoon.bubble.bean.MyMessage;
-import com.stonymoon.bubble.util.AuthUtil;
 import com.stonymoon.bubble.util.LogUtil;
 import com.stonymoon.bubble.util.MessageUtil;
 import com.stonymoon.bubble.view.ChatView;
@@ -213,7 +206,7 @@ public class ChatActivity extends StatusBarLightActivity {
             @Override
             public void onAvatarClick(MyMessage message) {
 
-                ProfileActivity.startActivity(ChatActivity.this, message.getFromUser().getId(), otherUserId);
+                ProfileActivity.startActivity(ChatActivity.this, message.getFromUser().getId());
 
             }
         });

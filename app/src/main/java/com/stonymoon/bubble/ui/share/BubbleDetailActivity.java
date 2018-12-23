@@ -152,7 +152,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            getComment();
+                            //getComment();
                         }
                     });
                 }
@@ -193,47 +193,6 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
             actionBar.setDisplayShowTitleEnabled(true);
         }
     }
-
-
-//    private void initDeadline() {
-//        String url = UrlUtil.getBubbleDetail(bean.getId() + "");
-//        HttpUtil.sendHttpRequest(this).rxGet(url, new HashMap<String, Object>(), new RxStringCallback() {
-//            @Override
-//            public void onNext(Object tag, String response) {
-//                Gson gson = new Gson();
-//                BubbleDetailBean.DataBean = gson.fromJson(response, BubbleDetailBean.class).getContent();
-
-
-//                if (bean.getAnonymous() == 0) {
-//                    Glide.with(mContext).load(bean.getMiniUser().getImage()).into(ivHead);
-//                    tvAuthorName.setText(bean.getMiniUser().getUsername());
-//                } else {
-//                    Glide.with(mContext).load(R.drawable.anonymous).into(ivHead);
-//                    tvAuthorName.setText("匿名用户");
-//                    ivHead.setClickable(false);
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onError(Object tag, Throwable e) {
-//                survivalMinute = ( System.currentTimeMillis()) / 60000;
-//                if (survivalMinute > 0) {
-//                    tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
-//                } else {
-//                    tvSurvival.setText("泡泡已过期");
-//                }
-//            }
-//
-//            @Override
-//            public void onCancel(Object tag, Throwable e) {
-//
-//            }
-//        });
-//
-//
-//    }
 
 
     private void showEditTextDialog() {
@@ -323,16 +282,12 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                         page++;
                         recyclerComment.loadMoreComplete();
                         isFirstGetComment = false;
-                        getComment();
-
                         survivalMinute = (bean.getDeadline().getTime() - System.currentTimeMillis()) / 60000;
                         if (survivalMinute > 0) {
                             tvSurvival.setText((survivalMinute / 60) + "小时" + survivalMinute % 60 + "分钟");
                         } else {
                             tvSurvival.setText("泡泡已过期");
                         }
-
-
                     }
                 });
 
@@ -378,7 +333,7 @@ public class BubbleDetailActivity extends StatusBarLightActivity implements View
                 showEditTextDialog();
                 break;
             case R.id.iv_bubble_detail_head:
-                ProfileActivity.startActivity(this, bean.getId() + "", bean.getId() + "");
+                ProfileActivity.startActivity(this, bean.getUserId() + "");
                 break;
             case R.id.iv_bubble_detail:
                 PhotoActivity.startActivity(this, bean.getPic());

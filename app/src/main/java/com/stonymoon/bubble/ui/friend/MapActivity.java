@@ -508,7 +508,7 @@ public class MapActivity extends BaseActivity {
                     @Override
                     public void onClick(QMUIDialog dialog, int index) {
                         ProfileActivity.startActivity(MapActivity.this,
-                                chosenUserBean.getPhone(), chosenUserBean.getUid() + ""
+                                chosenUserBean.getUid() + ""
 
                         );
                         dialog.dismiss();
