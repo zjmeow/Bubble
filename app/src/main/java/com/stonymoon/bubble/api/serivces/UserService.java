@@ -29,4 +29,13 @@ public interface UserService {
     @GET("users/detail")
     Observable<UserProfileBean> getUserDetail(@Query("id") int id);
 
+    @FormUrlEncoded
+    @POST("users/info")
+    Observable<UpdateBean> updateInfo(@Field("info") String info);
+
+
+    @FormUrlEncoded
+    @POST("users/avatar")
+    Observable<UpdateBean> updateAvatar(@Field("avatar") String avatar);
+
 }

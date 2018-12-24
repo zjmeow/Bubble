@@ -793,10 +793,6 @@ public class MapActivity extends BaseActivity {
         private final LatLng mPosition;
         private final LocationBean.PoisBean poisBean;
 
-        public MyItem(LocationBean.PoisBean bean) {
-            mPosition = new LatLng(bean.getLocation().get(1), bean.getLocation().get(0));
-            this.poisBean = bean;
-        }
 
         public MyItem(MapUserBean.DataBean bean) {
             mPosition = new LatLng(bean.getLat(), bean.getLng());
@@ -804,7 +800,7 @@ public class MapActivity extends BaseActivity {
             poisBean.setId(bean.getId() + "");
             poisBean.setUid(bean.getId());
             poisBean.setUrl(bean.getAvatar());
-
+            poisBean.setModifyTime(bean.getLoginTime());
         }
 
 

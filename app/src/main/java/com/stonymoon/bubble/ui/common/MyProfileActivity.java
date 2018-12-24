@@ -22,7 +22,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.Priority;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.Recorder;
@@ -36,19 +35,17 @@ import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.adapter.ProfileBubbleAdapter;
 import com.stonymoon.bubble.api.BaseDataManager;
 import com.stonymoon.bubble.api.serivces.BubbleService;
+import com.stonymoon.bubble.api.serivces.ImageService;
 import com.stonymoon.bubble.api.serivces.UserService;
 import com.stonymoon.bubble.base.ActivityCollector;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
 import com.stonymoon.bubble.bean.BubbleListBean;
-import com.stonymoon.bubble.bean.ContentBean;
-import com.stonymoon.bubble.bean.JUserBean;
+import com.stonymoon.bubble.bean.ImageTokenBean;
+import com.stonymoon.bubble.bean.UpdateBean;
 import com.stonymoon.bubble.bean.UserProfileBean;
 import com.stonymoon.bubble.ui.auth.LoginActivity;
 import com.stonymoon.bubble.util.AuthUtil;
-import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
-import com.stonymoon.bubble.util.UrlUtil;
-import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPhotoTool;
 import com.vondear.rxtools.RxSPTool;
 import com.yalantis.ucrop.UCrop;
@@ -68,9 +65,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import cn.jpush.im.android.api.JMessageClient;
-import cn.jpush.im.android.api.model.UserInfo;
-import cn.jpush.im.api.BasicCallback;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -333,79 +327,62 @@ public class MyProfileActivity extends StatusBarLightActivity {
                         } else {
                             Toast.makeText(MyProfileActivity.this, "请检查网络或者文件大小不能超过5M", Toast.LENGTH_SHORT).show();
                         }
-                        uploadUrl("http://oupl6wdxc.bkt.clouddn.com/" + key, (String) parameters.get("token"));
+                        uploadUrl("http://pk8gu0szp.bkt.clouddn.com/" + key);
 
                     }
                 }, null);
     }
 
     private void uploadHead(final File file) {
-        String token = AuthUtil.getToken();
-        String url = UrlUtil.getImageToken();
-        parameters.clear();
-        parameters.put("token", token);
-        final String name = generateName(AuthUtil.getId());
-        parameters.put("name", name);
-
-        HttpUtil.sendHttpRequest(MyProfileActivity.this).rxPost(url, parameters, new RxStringCallback() {
+        BaseDataManager.getHttpManager()
+                .create(ImageService.class)
+                .getImageToken()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ImageTokenBean>() {
                     @Override
-                    public void onNext(Object tag, String response) {
-                        Gson gson = new Gson();
-                        String token = gson.fromJson(response, ContentBean.class).getContent();
-                        upload(file, token, name);
+                    public void onCompleted() {
 
                     }
 
                     @Override
-                    public void onCancel(Object tag, com.tamic.novate.Throwable e) {
-
+                    public void onError(java.lang.Throwable e) {
+                        LogUtil.e(TAG, e.toString());
                     }
 
                     @Override
-                    public void onError(Object tag, com.tamic.novate.Throwable e) {
+                    public void onNext(ImageTokenBean updateBean) {
 
-
+                        upload(file, updateBean.getData().getToken(), updateBean.getData().getImageName());
                     }
-                }
+                });
 
-
-        );
 
     }
 
     //上传新的头像地址到java服务器和极光服务器上
-    private void uploadUrl(final String headUrl, String token) {
-        parameters.clear();
-        parameters.put("token", token);
-        parameters.put("url", headUrl);
-        String url = UrlUtil.getImageUpload();
-        JUserBean bean = new JUserBean();
-        bean.setUserExtras("url", headUrl);
-        JMessageClient.updateMyInfo(UserInfo.Field.extras, bean, new BasicCallback() {
-            @Override
-            public void gotResult(int i, String s) {
-                LogUtil.v("MyProfile", s);
-            }
-        });
+    private void uploadUrl(final String headUrl) {
+        BaseDataManager.getHttpManager()
+                .create(UserService.class)
+                .updateAvatar(headUrl)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UpdateBean>() {
+                    @Override
+                    public void onCompleted() {
 
+                    }
 
-        HttpUtil.sendHttpRequest(this).rxPost(url, parameters, new RxStringCallback() {
-            @Override
-            public void onNext(Object tag, String response) {
+                    @Override
+                    public void onError(Throwable e) {
+                        LogUtil.e(TAG, e.toString());
+                    }
 
-            }
+                    @Override
+                    public void onNext(UpdateBean updateBean) {
 
-            @Override
-            public void onCancel(Object tag, com.tamic.novate.Throwable e) {
-
-            }
-
-            @Override
-            public void onError(Object tag, com.tamic.novate.Throwable e) {
-                Toast.makeText(MyProfileActivity.this, "上传失败", Toast.LENGTH_SHORT).show();
-            }
-        });
-        HttpUtil.updateHead(this, AuthUtil.getLocationId(), headUrl);
+                    }
+                });
 
     }
 
@@ -441,18 +418,8 @@ public class MyProfileActivity extends StatusBarLightActivity {
                     public void onClick(QMUIDialog dialog, int index) {
                         CharSequence text = builder.getEditText().getText();
                         if (text != null && text.length() > 0) {
-                            JUserBean bean = new JUserBean();
-                            final String sign = text.toString();
-                            bean.setSignature(sign);
-                            JMessageClient.updateMyInfo(UserInfo.Field.signature, bean, new BasicCallback() {
-                                @Override
-                                public void gotResult(int i, String s) {
-                                    LogUtil.v("MyProfile", s);
-                                    Toast.makeText(MyProfileActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
-                                    tvSignature.setText(sign);
-                                }
-                            });
-                            dialog.dismiss();
+                            updateInfo(text.toString(), dialog);
+
                         } else {
                             Toast.makeText(MyProfileActivity.this, "请输入内容", Toast.LENGTH_SHORT).show();
                         }
@@ -481,13 +448,40 @@ public class MyProfileActivity extends StatusBarLightActivity {
 
                     @Override
                     public void onNext(BubbleListBean bubbleListBean) {
-
                         mList.addAll(bubbleListBean.getData());
                         Collections.reverse(mList);
                         if (mList.isEmpty()) {
                             tvNoBubble.setVisibility(View.VISIBLE);
                         }
                         adapter.notifyDataSetChanged();
+                    }
+                });
+
+
+    }
+
+    private void updateInfo(final String info, final QMUIDialog dialog) {
+        BaseDataManager.getHttpManager()
+                .create(UserService.class)
+                .updateInfo(info)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UpdateBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(UpdateBean updateBean) {
+                        Toast.makeText(MyProfileActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                        tvSignature.setText(info);
+                        dialog.dismiss();
                     }
                 });
 

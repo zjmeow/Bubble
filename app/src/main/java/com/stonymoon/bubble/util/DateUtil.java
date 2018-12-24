@@ -1,9 +1,5 @@
 package com.stonymoon.bubble.util;
 
-import android.util.Log;
-
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -53,17 +49,8 @@ public class DateUtil {
     }
 
 
-    public static String formatTime(String time) {
-        Date date = null;
-        SimpleDateFormat df = (SimpleDateFormat) DateFormat.getDateInstance();
-        df.applyPattern("yyyy-MM-dd HH:mm:ss");
-        try {
-            date = df.parse(time);
-        } catch (Exception e) {
-            LogUtil.e("DateUtil", "解析时间错误错误");
-
-        }
-        return CalculateTime(date.getTime());
+    public static String formatTime(Date time) {
+        return CalculateTime(time.getTime());
 
     }
 

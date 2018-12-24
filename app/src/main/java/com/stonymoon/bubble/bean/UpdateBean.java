@@ -5,4 +5,5 @@ package com.stonymoon.bubble.bean;
  */
 
 public class UpdateBean {
+
 }

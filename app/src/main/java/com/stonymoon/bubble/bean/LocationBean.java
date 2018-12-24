@@ -2,6 +2,7 @@ package com.stonymoon.bubble.bean;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,9 +36,13 @@ public class LocationBean {
         private String username;
         private String url;
         @SerializedName("modify_time")
-        private String modifyTime;
+        private Date modifyTime;
         private String phone;
         private List<Double> location;
+
+        public void setModifyTime(Date modifyTime) {
+            this.modifyTime = modifyTime;
+        }
 
         public String getPhone() {
             return phone;
@@ -81,11 +86,11 @@ public class LocationBean {
             this.url = url;
         }
 
-        public String getModifTime() {
+        public Date getModifTime() {
             return modifyTime;
         }
 
-        public void getModifTime(String modifyTime) {
+        public void getModifTime(Date modifyTime) {
             this.modifyTime = modifyTime;
         }
 

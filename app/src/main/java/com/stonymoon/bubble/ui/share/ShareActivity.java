@@ -2,7 +2,6 @@ package com.stonymoon.bubble.ui.share;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,7 +14,6 @@ import android.widget.Toast;
 import com.baidu.mapapi.map.MapView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
 import com.qiniu.android.http.ResponseInfo;
 import com.qiniu.android.storage.Configuration;
 import com.qiniu.android.storage.Recorder;
@@ -24,14 +22,12 @@ import com.qiniu.android.storage.UploadManager;
 import com.stonymoon.bubble.R;
 import com.stonymoon.bubble.api.BaseDataManager;
 import com.stonymoon.bubble.api.serivces.BubbleService;
+import com.stonymoon.bubble.api.serivces.ImageService;
 import com.stonymoon.bubble.base.StatusBarLightActivity;
-import com.stonymoon.bubble.bean.ContentBean;
+import com.stonymoon.bubble.bean.ImageTokenBean;
 import com.stonymoon.bubble.bean.UpdateBean;
-import com.stonymoon.bubble.util.HttpUtil;
 import com.stonymoon.bubble.util.LogUtil;
-import com.stonymoon.bubble.util.UrlUtil;
 import com.stonymoon.bubble.view.MyDialog;
-import com.tamic.novate.callback.RxStringCallback;
 import com.vondear.rxtools.RxPhotoTool;
 import com.yalantis.ucrop.UCrop;
 import com.yalantis.ucrop.UCropActivity;
@@ -105,12 +101,12 @@ public class ShareActivity extends StatusBarLightActivity {
             return;
 
         } else if (imageUrl == null || imageUrl.equals("")) {
-//            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
-//                    .setTitleText("请上传一张图片")
-//                    .setConfirmText("嗯")
-//                    .show();
-            imageUrl = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=46753002,1263792215&fm=27&gp=0.jpg";
-//            return;
+            new SweetAlertDialog(this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("请上传一张图片")
+                    .setConfirmText("嗯")
+                    .show();
+//            imageUrl = "https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=46753002,1263792215&fm=27&gp=0.jpg";
+            return;
         }
         int anonymous;
         if (checkBox.isChecked()) {
@@ -169,34 +165,31 @@ public class ShareActivity extends StatusBarLightActivity {
     }
 
     private void uploadPicture(final File file) {
-        SharedPreferences sharedPreferences = getSharedPreferences("login", MODE_PRIVATE);
-        String token = sharedPreferences.getString("token", "");
-        String url = UrlUtil.getImageToken();
-        parameters.clear();
-        parameters.put("token", token);
-        final String name = generateName();
-        parameters.put("name", name);
-        HttpUtil.sendHttpRequest(ShareActivity.this).rxPost(url, parameters, new RxStringCallback() {
-                    @Override
-                    public void onNext(Object tag, String response) {
-                        Gson gson = new Gson();
-                        String token = gson.fromJson(response, ContentBean.class).getContent();
-                        upload(file, token, name);
-                    }
 
+
+        BaseDataManager.getHttpManager()
+                .create(ImageService.class)
+                .getImageToken()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<ImageTokenBean>() {
                     @Override
-                    public void onCancel(Object tag, com.tamic.novate.Throwable e) {
+                    public void onCompleted() {
 
                     }
 
                     @Override
-                    public void onError(Object tag, com.tamic.novate.Throwable e) {
-
+                    public void onError(java.lang.Throwable e) {
+                        LogUtil.e(TAG, e.toString());
                     }
-                }
 
+                    @Override
+                    public void onNext(ImageTokenBean updateBean) {
 
-        );
+                        upload(file, updateBean.getData().getToken(), updateBean.getData().getImageName());
+                    }
+                });
+
 
     }
 
@@ -208,7 +201,7 @@ public class ShareActivity extends StatusBarLightActivity {
                     @Override
                     public void complete(String key, ResponseInfo info, JSONObject res) {
                         //  res 包含hash、key等信息，具体字段取决于上传策略的设置。
-                        imageUrl = "http://oupl6wdxc.bkt.clouddn.com/" + key;
+                        imageUrl = "http://pk8gu0szp.bkt.clouddn.com/" + key;
                         Log.i("qiniu", key + ",\r\n " + info + ",\r\n " + res);
                         if (info.isOK()) {
                             Toast.makeText(ShareActivity.this, "上传成功", Toast.LENGTH_SHORT).show();
